@@ -1,7 +1,4 @@
 
-
-
-
 import 'package:appointment_app_v2/state_management/state.dart';
 import 'package:appointment_app_v2/ui/auth/register/fill_profile.dart';
 import 'package:appointment_app_v2/ui/main_page.dart';
@@ -20,8 +17,8 @@ import '../../../ui_items/my_button.dart';
 import '../../../ui_items/my_label.dart';
 import '../../../ui_items/my_responsive_layout.dart';
 import '../../../utils/method_helper.dart';
+import '../../../utils/validators.dart';
 import '../../../view_model/create_password/create_password_view_model_imp.dart';
-import '../login.dart';
 
 class CreatePassword extends ConsumerStatefulWidget {
   const CreatePassword({Key? key}): super(key: key);
@@ -45,24 +42,27 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
 
   Future _signUpAndAddUserDetails() async{
 
-    final firstName = ref.watch(firstNameProvider);
-    final lastName = ref.watch(lastNameProvider);
-    final dateOfBirth = ref.watch(dateOfBirthProvider);
-    final email = ref.watch(emailProvider);
-    final phone = ref.watch(phoneNumberProvider);
+    if(_formKey.currentState!.validate()){
+      final firstName = ref.watch(firstNameProvider);
+      final lastName = ref.watch(lastNameProvider);
+      final dateOfBirth = ref.watch(dateOfBirthProvider);
+      final email = ref.watch(emailProvider);
+      final phone = ref.watch(phoneNumberProvider);
 
-    /// Create user in FireAuth
-    await _signUp(email);
-    /// Create user in FireStore Database
-    await _addUserDetails(firstName,lastName,dateOfBirth,email,phone);
+      /// Create user in FireAuth
+      await _signUp(email,_passwordController.text);
+      /// Create user in FireStore Database
+      await _addUserDetails(firstName,lastName,dateOfBirth,email,phone);
 
-    MethodHelper.transitionPage(context, widget, MainPage(),PageNavigatorType.PUSH_REPLACEMENT, PageTransitionType.rightToLeftJoined);
+      MethodHelper.transitionPage(context, widget, MainPage(),PageNavigatorType.PUSH_REPLACEMENT, PageTransitionType.rightToLeftJoined);
+    }
+
   }
 
-  Future _signUp(String email) async{
+  Future _signUp(String email,String password) async{
     await CreatePasswordModelImp().signUp(
         email.trim(),
-        _passwordController.text.trim()
+        password.trim()
     );
   }
 
@@ -134,17 +134,35 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
               autovalidateMode: AutovalidateMode.disabled,
               child: Column(
                 children: [
-                  MyTextFormField(type: MyTextFormFieldType.PREFIX,textEditingController: _passwordController, prefixIcon: CupertinoIcons.lock_fill, label: 'Password',isPassword: true,
-                  validator: (value){
-
-                  },),
+                  MyTextFormField(
+                    type: MyTextFormFieldType.PREFIX,
+                    textEditingController: _passwordController,
+                    prefixIcon: CupertinoIcons.lock_fill,
+                    label: 'Password',
+                    isPassword: true,
+                    validator: (value){
+                      if(value == null || value.isEmpty || !Validators.isPasswordValid(value)){
+                        return '';
+                      }
+                      return null;
+                    }
+                  ),
 
                   SizedBox(height: 24.h,),
 
-                  MyTextFormField(type: MyTextFormFieldType.PREFIX,textEditingController: _confirmPasswordController,prefixIcon: CupertinoIcons.lock_fill, label: 'Password',isPassword: true,
+                  MyTextFormField(
+                    type: MyTextFormFieldType.PREFIX,
+                    textEditingController: _confirmPasswordController,
+                    prefixIcon: CupertinoIcons.lock_fill,
+                    label: 'Password',
+                    isPassword: true,
                     validator: (value){
-
-                  },),
+                      if(value == null || value.isEmpty || _passwordController.text.trim() != _confirmPasswordController.text.trim()){
+                        return '';
+                      }
+                      return null;
+                    }
+                  ),
 
                   SizedBox(height: 24.h,),
 

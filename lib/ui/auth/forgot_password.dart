@@ -1,8 +1,6 @@
 
-
 import 'package:appointment_app_v2/ui_items/my_text_form_field.dart';
 import 'package:appointment_app_v2/utils/enums.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,6 +13,8 @@ import '../../ui_items/my_button.dart';
 import '../../ui_items/my_label.dart';
 import '../../ui_items/my_responsive_layout.dart';
 import '../../utils/method_helper.dart';
+import '../../utils/validators.dart';
+import '../../view_model/forgot_password/forgot_password_view_model_imp.dart';
 import '../main_page.dart';
 
 class ForgotPassword extends ConsumerStatefulWidget {
@@ -36,7 +36,9 @@ class ForgotPasswordState extends ConsumerState<ForgotPassword> {
   }
 
   Future _sendPasswordResetByEmail(String email) async{
-    await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+    if(_formKey.currentState!.validate()){
+      await ForgotPasswordModelImp().sendPasswordResetEmail(email);
+    }
   }
 
   @override
@@ -94,15 +96,22 @@ class ForgotPasswordState extends ConsumerState<ForgotPassword> {
               child: Column(
                 children: [
 
-                  MyTextFormField(type: MyTextFormFieldType.SUFFIX,textEditingController: _emailController,suffixIcon: CupertinoIcons.mail, label: 'Email',validator: (value){
-
-                  }),
+                  MyTextFormField(
+                    type: MyTextFormFieldType.SUFFIX,
+                    textEditingController: _emailController,
+                    suffixIcon: CupertinoIcons.mail,
+                    label: 'Email',
+                    validator: (value){
+                      if(value == null || value.isEmpty || !Validators.isEmailValid(value)){
+                        return '';
+                      }
+                      return null;
+                    }
+                  ),
 
                   SizedBox(height: 20.h,),
 
-                  MyButton(type: MyButtonType.FILLED, label: 'Recover Password',onPressed: () async{
-                    await _sendPasswordResetByEmail(_emailController.text.trim());
-                  }),
+                  MyButton(type: MyButtonType.FILLED, label: 'Recover Password',onPressed: () => _sendPasswordResetByEmail(_emailController.text.trim())),
 
                 ],
               ),

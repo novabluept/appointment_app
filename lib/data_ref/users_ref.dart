@@ -14,6 +14,7 @@ Future signInRef(String email,String password) async{
   );
 }
 
+/// Register User
 Future signUpRef(String email,String password) async{
   await FirebaseAuth.instance.createUserWithEmailAndPassword(
       email: email,
@@ -28,4 +29,14 @@ Future addUserDetailsRef(UserModel user) async{
 
   final json = user.toJson();
   await docUser.set(json);
+}
+/// Register User
+
+Future sendPasswordResetEmailRef(String email) async{
+  await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+}
+
+Future sendEmailVerificationRef() async{
+  final user = FirebaseAuth.instance.currentUser!;
+  await user.sendEmailVerification();
 }

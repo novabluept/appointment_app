@@ -1,9 +1,6 @@
 
-
 import 'dart:async';
-
-import 'package:appointment_app_v2/ui/auth/login.dart';
-import 'package:appointment_app_v2/ui_items/my_text_form_field.dart';
+import 'package:appointment_app_v2/ui/main/home.dart';
 import 'package:appointment_app_v2/utils/enums.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,14 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:page_transition/page_transition.dart';
 import '../../style/general_style.dart';
 import '../../ui_items/my_app_bar.dart';
 import '../../ui_items/my_button.dart';
 import '../../ui_items/my_label.dart';
 import '../../ui_items/my_responsive_layout.dart';
-import '../../utils/method_helper.dart';
-import '../main_page.dart';
+import '../../view_model/verify_email/verify_email_view_model_imp.dart';
 
 class VerifyEmail extends ConsumerStatefulWidget {
   const VerifyEmail({Key? key}): super(key: key);
@@ -35,11 +30,11 @@ class VerifyEmailState extends ConsumerState<VerifyEmail> {
   @override
   void initState() {
     super.initState();
+
     _isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
 
-    if(_isEmailVerified){
+    if(!_isEmailVerified){
       _sendVerificationEmail();
-
       _timer = Timer.periodic(Duration(seconds: 3),(_) => _checkEmailVerified());
     }
   }
@@ -51,8 +46,7 @@ class VerifyEmailState extends ConsumerState<VerifyEmail> {
   }
 
   Future _sendVerificationEmail() async{
-    final user = FirebaseAuth.instance.currentUser!;
-    await user.sendEmailVerification();
+    await VerifyEmailModelImp().sendEmailVerification();
   }
 
   Future _checkEmailVerified() async{
@@ -73,15 +67,14 @@ class VerifyEmailState extends ConsumerState<VerifyEmail> {
 
   @override
   Widget build(BuildContext context) {
-    return _isEmailVerified ? Login() : WillPopScope(
+    return _isEmailVerified ? Home() : WillPopScope(
       onWillPop: () async{
         await _signOut();
         return false;
       },
       child: Scaffold(
           appBar: MyAppBar(
-            type: MyAppBarType.LEADING_ICON,
-            leadingIcon: CupertinoIcons.arrow_left,
+            type: MyAppBarType.GENERAL,
             label: 'VerifyEmailState',
             onTap: _signOut,
           ),
@@ -117,7 +110,7 @@ class VerifyEmailState extends ConsumerState<VerifyEmail> {
 
           SizedBox(height: 24.h,),
 
-          MyButton(type: MyButtonType.FILLED, label: 'Resend email',onPressed: (){}),
+          MyButton(type: MyButtonType.FILLED, label: 'Resend email',onPressed: _sendVerificationEmail),
 
           SizedBox(height: 24.h,),
 

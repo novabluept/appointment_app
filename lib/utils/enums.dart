@@ -7,4 +7,4 @@ enum MyLabelType { H1, H2, H3, H4, H5, H6, BODY_LARGE , BODY_XLARGE, BODY_MEDIUM
 enum MyTextFormFieldType { GENERAL, PREFIX, SUFFIX, PREFIX_SUFIX, PHONE, PASSWORD }
 enum MyButtonType { FILLED, OUTLINED, IMAGE }
 enum MyDividerType { GENERAL }
-enum MyAppBarType { LEADING_ICON }
+enum MyAppBarType { GENERAL, LEADING_ICON }

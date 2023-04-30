@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'auth/login.dart';
-import 'main/home.dart';
 
 
 class MainPage extends ConsumerStatefulWidget{

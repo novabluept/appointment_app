@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '../style/general_style.dart';
 import '../utils/enums.dart';
 import 'my_label.dart';
@@ -23,6 +22,8 @@ class MyAppBar extends ConsumerWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     switch (type) {
+      case MyAppBarType.GENERAL:
+        return generalAppBar(label!,null);
       case MyAppBarType.LEADING_ICON:
         return generalAppBar(label!,leadingIcon!);
       default:
@@ -30,7 +31,7 @@ class MyAppBar extends ConsumerWidget implements PreferredSizeWidget {
     }
   }
 
-  Widget generalAppBar(String label,IconData leadingIcon) {
+  Widget generalAppBar(String label,IconData? leadingIcon) {
     return PreferredSize(
       preferredSize: Size.fromHeight(kToolbarHeight.sp),
       child: AppBar(

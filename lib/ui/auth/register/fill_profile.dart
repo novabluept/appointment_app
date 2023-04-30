@@ -13,6 +13,7 @@ import '../../../ui_items/my_app_bar.dart';
 import '../../../ui_items/my_button.dart';
 import '../../../ui_items/my_responsive_layout.dart';
 import '../../../utils/method_helper.dart';
+import '../../../utils/validators.dart';
 import '../../../view_model/fill_profile/fill_profile_view_model_imp.dart';
 import '../../main_page.dart';
 
@@ -44,13 +45,15 @@ class FillProfileState extends ConsumerState<FillProfile> {
 
   Future _saveValues() async{
 
-    await FillProfileModelImp().setValue(firstNameProvider.notifier, ref, _firstNameController.text.trim());
-    await FillProfileModelImp().setValue(lastNameProvider.notifier, ref, _lastNameController.text.trim());
-    await FillProfileModelImp().setValue(dateOfBirthProvider.notifier, ref, _dateOfBirthController.text.trim());
-    await FillProfileModelImp().setValue(emailProvider.notifier, ref, _emailController.text.trim());
-    await FillProfileModelImp().setValue(phoneNumberProvider.notifier, ref, _phoneNumberController.text.trim());
+    if(_formKey.currentState!.validate()){
+      await FillProfileModelImp().setValue(firstNameProvider.notifier, ref, _firstNameController.text.trim());
+      await FillProfileModelImp().setValue(lastNameProvider.notifier, ref, _lastNameController.text.trim());
+      await FillProfileModelImp().setValue(dateOfBirthProvider.notifier, ref, _dateOfBirthController.text.trim());
+      await FillProfileModelImp().setValue(emailProvider.notifier, ref, _emailController.text.trim());
+      await FillProfileModelImp().setValue(phoneNumberProvider.notifier, ref, _phoneNumberController.text.trim());
 
-    MethodHelper.transitionPage(context, widget, CreatePassword(), PageNavigatorType.PUSH_REPLACEMENT, PageTransitionType.rightToLeftJoined);
+      MethodHelper.transitionPage(context, widget, CreatePassword(), PageNavigatorType.PUSH_REPLACEMENT, PageTransitionType.rightToLeftJoined);
+    }
   }
 
   @override
@@ -115,33 +118,80 @@ class FillProfileState extends ConsumerState<FillProfile> {
               autovalidateMode: AutovalidateMode.disabled,
               child: Column(
                 children: [
-                  MyTextFormField(type: MyTextFormFieldType.GENERAL,textEditingController: _firstNameController, label: 'First name',contentPaddingHeight: 18,validator: (value){
-
-                  }),
-
-                  SizedBox(height: 24.h,),
-
-                  MyTextFormField(type: MyTextFormFieldType.GENERAL,textEditingController: _lastNameController, label: 'Last name',contentPaddingHeight: 18,validator: (value){
-
-                  }),
-
-                  SizedBox(height: 24.h,),
-
-                  MyTextFormField(type: MyTextFormFieldType.SUFFIX,textEditingController: _dateOfBirthController,suffixIcon: CupertinoIcons.calendar, label: 'Date of Birth',contentPaddingHeight: 18,validator: (value){
-
-                  }),
+                  MyTextFormField(
+                    type: MyTextFormFieldType.GENERAL,
+                    textEditingController: _firstNameController,
+                    label: 'First name',
+                    contentPaddingHeight: 18,
+                    validator: (value){
+                      if(value == null || value.isEmpty || !Validators.hasMinimumAndMaxCharacters(value)){
+                        return '';
+                      }
+                      return null;
+                    }
+                  ),
 
                   SizedBox(height: 24.h,),
 
-                  MyTextFormField(type: MyTextFormFieldType.SUFFIX,textEditingController: _emailController,suffixIcon: CupertinoIcons.mail, label: 'Email',contentPaddingHeight: 18,validator: (value){
-
-                  }),
+                  MyTextFormField(
+                    type: MyTextFormFieldType.GENERAL,
+                    textEditingController: _lastNameController,
+                    label: 'Last name',
+                    contentPaddingHeight: 18,
+                    validator: (value){
+                      if(value == null || value.isEmpty || !Validators.hasMinimumAndMaxCharacters(value)){
+                        return '';
+                      }
+                      return null;
+                    }
+                  ),
 
                   SizedBox(height: 24.h,),
 
-                  MyTextFormField(type: MyTextFormFieldType.PHONE,textEditingController: _phoneNumberController,label: 'Phone number',contentPaddingHeight: 18,validator: (value){
+                  MyTextFormField(
+                    type: MyTextFormFieldType.SUFFIX,
+                    textEditingController: _dateOfBirthController,
+                    suffixIcon: CupertinoIcons.calendar,
+                    label: 'Date of Birth',
+                    contentPaddingHeight: 18,
+                    validator: (value){
+                      if(value == null || value.isEmpty || !Validators.hasMinimumAndMaxCharacters(value)){
+                        return '';
+                      }
+                      return null;
+                    }
+                  ),
 
-                  }),
+                  SizedBox(height: 24.h,),
+
+                  MyTextFormField(
+                    type: MyTextFormFieldType.SUFFIX,
+                    textEditingController: _emailController,
+                    suffixIcon: CupertinoIcons.mail,
+                    label: 'Email',
+                    contentPaddingHeight: 18,
+                    validator: (value){
+                      if(value == null || value.isEmpty || !Validators.isEmailValid(value)){
+                        return '';
+                      }
+                      return null;
+                    }
+                  ),
+
+                  SizedBox(height: 24.h,),
+
+                  MyTextFormField(
+                    type: MyTextFormFieldType.PHONE,
+                    textEditingController: _phoneNumberController,
+                    label: 'Phone number',
+                    contentPaddingHeight: 18,
+                    validator: (value){
+                      if(value == null || value.isEmpty || !Validators.isPhoneValid(value)){
+                        return '';
+                      }
+                      return null;
+                    }
+                  ),
 
                   SizedBox(height: 24.h,),
 
