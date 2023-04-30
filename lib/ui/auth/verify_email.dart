@@ -1,6 +1,6 @@
 
 import 'dart:async';
-import 'package:appointment_app_v2/ui/main/home.dart';
+import 'package:appointment_app_v2/ui/home/home.dart';
 import 'package:appointment_app_v2/utils/enums.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
