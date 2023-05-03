@@ -1,4 +1,5 @@
 
+import 'dart:io';
 import 'package:appointment_app_v2/ui/auth/register/create_password.dart';
 import 'package:appointment_app_v2/ui_items/my_text_form_field.dart';
 import 'package:appointment_app_v2/utils/enums.dart';
@@ -6,6 +7,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:iconly/iconly.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:page_transition/page_transition.dart';
 import '../../../state_management/state.dart';
 import '../../../style/general_style.dart';
@@ -32,6 +35,21 @@ class FillProfileState extends ConsumerState<FillProfile> {
   final TextEditingController _dateOfBirthController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
+  File? image;
+  bool _firstNameHasError = false;
+  bool _lastNameHasError = false;
+  bool _dateOfBirthHasError = false;
+  bool _emailHasError = false;
+  bool _phoneNumberHasError = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _insertInitialTextEditingControllersValues();
+    });
+
+  }
 
   @override
   void dispose() {
@@ -41,6 +59,22 @@ class FillProfileState extends ConsumerState<FillProfile> {
     _emailController.dispose();
     _phoneNumberController.dispose();
     super.dispose();
+  }
+
+  _insertInitialTextEditingControllersValues(){
+    _firstNameController.text = ref.watch(firstNameProvider);
+    _lastNameController.text = ref.watch(lastNameProvider);
+    _dateOfBirthController.text = ref.watch(dateOfBirthProvider);
+    _emailController.text = ref.watch(emailProvider);
+    _phoneNumberController.text = ref.watch(phoneNumberProvider);
+  }
+
+  _clearTextEditingControllers() async{
+    await FillProfileModelImp().setValue(firstNameProvider.notifier, ref, '');
+    await FillProfileModelImp().setValue(lastNameProvider.notifier, ref, '');
+    await FillProfileModelImp().setValue(dateOfBirthProvider.notifier, ref, '');
+    await FillProfileModelImp().setValue(emailProvider.notifier, ref, '');
+    await FillProfileModelImp().setValue(phoneNumberProvider.notifier, ref, '');
   }
 
   Future _saveValues() async{
@@ -56,24 +90,36 @@ class FillProfileState extends ConsumerState<FillProfile> {
     }
   }
 
+  Future pickImage() async{
+    ///TODO: Fazer try catch e tratar de configurações
+    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (image == null) return;
+
+    final imageTemporary = File(image.path);
+    setState(() { this.image = imageTemporary;});
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async{
+        _clearTextEditingControllers();
         MethodHelper.transitionPage(context, widget, MainPage(), PageNavigatorType.PUSH_REPLACEMENT,PageTransitionType.leftToRightJoined);
         return false;
       },
       child: Scaffold(
-          resizeToAvoidBottomInset : true,
-          appBar: MyAppBar(
-            type: MyAppBarType.LEADING_ICON,
-            leadingIcon: CupertinoIcons.arrow_left,
-            label: 'Fill your profile',
-            onTap: (){
-              MethodHelper.transitionPage(context, widget, MainPage(), PageNavigatorType.PUSH_REPLACEMENT, PageTransitionType.leftToRightJoined);
-            },
-          ),
-          body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody(),)
+        backgroundColor: white,
+        resizeToAvoidBottomInset : true,
+        appBar: MyAppBar(
+          type: MyAppBarType.LEADING_ICON,
+          leadingIcon: IconlyLight.arrow_left,
+          label: 'Fill your profile',
+          onTap: (){
+            _clearTextEditingControllers();
+            MethodHelper.transitionPage(context, widget, MainPage(), PageNavigatorType.PUSH_REPLACEMENT, PageTransitionType.leftToRightJoined);
+          },
+        ),
+        body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody(),)
       ),
     );
   }
@@ -87,26 +133,30 @@ class FillProfileState extends ConsumerState<FillProfile> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
-              width: 200.h,
-              height: 200.h,
-              child: CircleAvatar(
-                radius: 58,
-                child: Stack(
-                  children: [
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: SizedBox(
-                        width: 50.w,
-                        height: 50.h,
-                        child: CircleAvatar(
-                          radius: 18,
-                          backgroundColor: Colors.white70,
-                          child: Icon(CupertinoIcons.camera),
+            GestureDetector(
+              onTap: pickImage,
+              child: SizedBox(
+                width: 200.h,
+                height: 200.h,
+                child: CircleAvatar(
+                  radius: 58,
+                  backgroundImage: image != null ? Image.file(image!).image : Image.asset('images/fill_profile_image.png').image,
+                  child: Stack(
+                    children: [
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: SizedBox(
+                          width: 50.w,
+                          height: 50.h,
+                          child: CircleAvatar(
+                            radius: 18,
+                            backgroundColor: Colors.transparent,
+                            child: Icon(IconlyBold.editSquare,color: blue,size: 50.sp,),
+                          ),
                         ),
                       ),
-                    ),
-                  ]
+                    ]
+                  ),
                 ),
               ),
             ),
@@ -123,10 +173,14 @@ class FillProfileState extends ConsumerState<FillProfile> {
                     textEditingController: _firstNameController,
                     label: 'First name',
                     contentPaddingHeight: 18,
+                    hasError: _firstNameHasError,
+                    errorText: 'Please enter a valid first name',
                     validator: (value){
                       if(value == null || value.isEmpty || !Validators.hasMinimumAndMaxCharacters(value)){
+                        setState(() {_firstNameHasError = true;});
                         return '';
                       }
+                      setState(() {_firstNameHasError = false;});
                       return null;
                     }
                   ),
@@ -138,10 +192,14 @@ class FillProfileState extends ConsumerState<FillProfile> {
                     textEditingController: _lastNameController,
                     label: 'Last name',
                     contentPaddingHeight: 18,
+                    hasError: _lastNameHasError,
+                    errorText: 'Please enter a valid last name',
                     validator: (value){
                       if(value == null || value.isEmpty || !Validators.hasMinimumAndMaxCharacters(value)){
+                        setState(() {_lastNameHasError = true;});
                         return '';
                       }
+                      setState(() {_lastNameHasError = false;});
                       return null;
                     }
                   ),
@@ -151,13 +209,17 @@ class FillProfileState extends ConsumerState<FillProfile> {
                   MyTextFormField(
                     type: MyTextFormFieldType.SUFFIX,
                     textEditingController: _dateOfBirthController,
-                    suffixIcon: CupertinoIcons.calendar,
-                    label: 'Date of Birth',
+                    suffixIcon: IconlyLight.calendar,
+                    label: 'Date of birth',
                     contentPaddingHeight: 18,
+                    hasError: _dateOfBirthHasError,
+                    errorText: 'Please enter a valid date of birth',
                     validator: (value){
                       if(value == null || value.isEmpty || !Validators.hasMinimumAndMaxCharacters(value)){
+                        setState(() {_dateOfBirthHasError = true;});
                         return '';
                       }
+                      setState(() {_dateOfBirthHasError = false;});
                       return null;
                     }
                   ),
@@ -167,13 +229,17 @@ class FillProfileState extends ConsumerState<FillProfile> {
                   MyTextFormField(
                     type: MyTextFormFieldType.SUFFIX,
                     textEditingController: _emailController,
-                    suffixIcon: CupertinoIcons.mail,
+                    suffixIcon: IconlyLight.message,
                     label: 'Email',
                     contentPaddingHeight: 18,
+                    hasError: _emailHasError,
+                    errorText: 'Please enter a valid email',
                     validator: (value){
                       if(value == null || value.isEmpty || !Validators.isEmailValid(value)){
+                        setState(() {_emailHasError = true;});
                         return '';
                       }
+                      setState(() {_emailHasError = false;});
                       return null;
                     }
                   ),
@@ -185,10 +251,14 @@ class FillProfileState extends ConsumerState<FillProfile> {
                     textEditingController: _phoneNumberController,
                     label: 'Phone number',
                     contentPaddingHeight: 18,
+                    hasError: _phoneNumberHasError,
+                    errorText: 'Phone number should have the format: 9XYYYYYYY',
                     validator: (value){
                       if(value == null || value.isEmpty || !Validators.isPhoneValid(value)){
+                        setState(() {_phoneNumberHasError = true;});
                         return '';
                       }
+                      setState(() {_phoneNumberHasError = false;});
                       return null;
                     }
                   ),

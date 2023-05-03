@@ -73,6 +73,7 @@ class VerifyEmailState extends ConsumerState<VerifyEmail> {
         return false;
       },
       child: Scaffold(
+          backgroundColor: white,
           appBar: MyAppBar(
             type: MyAppBarType.GENERAL,
             label: 'VerifyEmailState',

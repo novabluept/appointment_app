@@ -4,11 +4,13 @@ import 'package:appointment_app_v2/ui/auth/register/fill_profile.dart';
 import 'package:appointment_app_v2/ui_items/my_text_form_field.dart';
 import 'package:appointment_app_v2/utils/enums.dart';
 import 'package:appointment_app_v2/utils/method_helper.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:iconly/iconly.dart';
 import 'package:page_transition/page_transition.dart';
 import '../../style/general_style.dart';
 import '../../ui_items/my_button.dart';
@@ -30,17 +32,20 @@ class LoginState extends ConsumerState<Login> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _emailHasError = false;
+  bool _passwordHasError = false;
 
   @override
   void dispose() {
-    super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: white,
       resizeToAvoidBottomInset : true,
       body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody(),)
     );
@@ -48,10 +53,22 @@ class LoginState extends ConsumerState<Login> {
 
   Future _signIn() async{
     if(_formKey.currentState!.validate()){
-      LoginViewModelImp().signIn(
-        _emailController.text.trim(),
-        _passwordController.text.trim(),
-      );
+      try{
+        LoginViewModelImp().signIn(
+          _emailController.text.trim(),
+          _passwordController.text.trim(),
+        );
+      }on FirebaseAuthException catch(e){
+        if(e.code == 'invalid-email'){
+          print('Email address is not valid.');
+        }else if(e.code == 'user-disabled'){
+          print('The user corresponding to the given email has been disabled.');
+        }else if(e.code == 'user-not-found'){
+          print('No user found for that email.');
+        }else if(e.code == 'wrong-password'){
+          print('Wrong password provided for that user.');
+        }
+      }
     }
   }
 
@@ -59,7 +76,7 @@ class LoginState extends ConsumerState<Login> {
     return SingleChildScrollView(
       child: Container(
         color: white,
-        padding: EdgeInsets.only(left: 24.w, right: 24.w, bottom: 48.h),
+        padding: EdgeInsets.only(left: 24.w, right: 24.w, bottom: 0.h),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -87,12 +104,16 @@ class LoginState extends ConsumerState<Login> {
                   MyTextFormField(
                     type: MyTextFormFieldType.PREFIX,
                     textEditingController: _emailController,
-                    prefixIcon: CupertinoIcons.mail_solid,
+                    prefixIcon: IconlyBold.message,
                     label: 'Email',
+                    hasError: _emailHasError,
+                    errorText: 'Please enter a valid email',
                     validator: (value){
                       if(value == null || value.isEmpty || !Validators.isEmailValid(value)){
+                        setState(() {_emailHasError = true;});
                         return '';
                       }
+                      setState(() {_emailHasError = false;});
                       return null;
                     }
                   ),
@@ -102,13 +123,12 @@ class LoginState extends ConsumerState<Login> {
                   MyTextFormField(
                     type: MyTextFormFieldType.PREFIX,
                     textEditingController: _passwordController,
-                    prefixIcon: CupertinoIcons.lock_fill,
+                    prefixIcon: IconlyBold.lock,
                     label: 'Password',
                     isPassword: true,
+                    hasError: _passwordHasError,
+                    errorText: '',
                     validator: (value){
-                      if (value == null || value.isEmpty || !Validators.isPasswordValid(value)) {
-                        return '';
-                      }
                       return null;
                     }
                   ),

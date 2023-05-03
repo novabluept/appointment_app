@@ -1,4 +1,6 @@
-import 'dart:typed_data';
+
+import '../utils/constants.dart';
+import '../utils/enums.dart';
 
 class UserModel {
 
@@ -39,7 +41,7 @@ class UserModel {
     required this.dateOfBirth,
     required this.email,
     required this.phone,
-    this.role = 'user',
+    this.role = USER_ROLE,
     this.imagePath = '',
   });
 

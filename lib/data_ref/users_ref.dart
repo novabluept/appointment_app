@@ -24,7 +24,7 @@ Future signUpRef(String email,String password) async{
 
 Future addUserDetailsRef(UserModel user) async{
   final userId = FirebaseAuth.instance.currentUser?.uid;
-  final docUser = FirebaseFirestore.instance.collection(USER).doc();
+  final docUser = FirebaseFirestore.instance.collection(USER_COLLECTION).doc();
   user.userId = userId!;
 
   final json = user.toJson();

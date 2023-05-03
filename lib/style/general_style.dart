@@ -20,4 +20,5 @@ final blue = const Color(0xFF246BFD);
 
 /// Cores de aviso
 final red = const Color(0xFFF44336);
+final pink = const Color(0xFFf5CACB);
 

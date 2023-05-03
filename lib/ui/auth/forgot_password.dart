@@ -1,11 +1,13 @@
 
 import 'package:appointment_app_v2/ui_items/my_text_form_field.dart';
 import 'package:appointment_app_v2/utils/enums.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:iconly/iconly.dart';
 import 'package:page_transition/page_transition.dart';
 import '../../style/general_style.dart';
 import '../../ui_items/my_app_bar.dart';
@@ -28,16 +30,37 @@ class ForgotPasswordState extends ConsumerState<ForgotPassword> {
 
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
+  bool _emailHasError = false;
 
   @override
   void dispose() {
-    super.dispose();
     _emailController.dispose();
+    super.dispose();
   }
 
   Future _sendPasswordResetByEmail(String email) async{
     if(_formKey.currentState!.validate()){
-      await ForgotPasswordModelImp().sendPasswordResetEmail(email);
+      try{
+        await ForgotPasswordModelImp().sendPasswordResetEmail(email);
+      } on FirebaseAuthException catch (e) {
+        if(e.code == 'auth/invalid-email'){
+          print('');
+        }else if(e.code == 'auth/missing-android-pkg-name'){
+          print('');
+        }else if(e.code == 'auth/missing-continue-uri'){
+          print('');
+        }else if(e.code == 'auth/missing-ios-bundle-id'){
+          print('');
+        }else if(e.code == 'auth/invalid-continue-uri'){
+          print('');
+        }else if(e.code == 'auth/unauthorized-continue-uri'){
+          print('');
+        }else if(e.code == 'auth/user-not-found'){
+          print('');
+        }else if(e.code == 'auth/unauthorized-continue-uri'){
+          print('');
+        }
+      }
     }
   }
 
@@ -49,9 +72,10 @@ class ForgotPasswordState extends ConsumerState<ForgotPassword> {
         return false;
       },
       child: Scaffold(
+        backgroundColor: white,
         appBar: MyAppBar(
           type: MyAppBarType.LEADING_ICON,
-          leadingIcon: CupertinoIcons.arrow_left,
+          leadingIcon: IconlyLight.arrow_left,
           label: 'Forgot password',
           onTap: (){
             MethodHelper.transitionPage(context, widget, MainPage(), PageNavigatorType.PUSH_REPLACEMENT, PageTransitionType.leftToRightJoined);
@@ -99,12 +123,16 @@ class ForgotPasswordState extends ConsumerState<ForgotPassword> {
                   MyTextFormField(
                     type: MyTextFormFieldType.SUFFIX,
                     textEditingController: _emailController,
-                    suffixIcon: CupertinoIcons.mail,
+                    suffixIcon: IconlyLight.message,
                     label: 'Email',
+                    hasError: _emailHasError,
+                    errorText: 'hrello',
                     validator: (value){
                       if(value == null || value.isEmpty || !Validators.isEmailValid(value)){
+                        setState(() {_emailHasError = true;});
                         return '';
                       }
+                      setState(() {_emailHasError = false;});
                       return null;
                     }
                   ),

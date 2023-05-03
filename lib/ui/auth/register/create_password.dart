@@ -4,11 +4,13 @@ import 'package:appointment_app_v2/ui/auth/register/fill_profile.dart';
 import 'package:appointment_app_v2/ui/main_page.dart';
 import 'package:appointment_app_v2/ui_items/my_text_form_field.dart';
 import 'package:appointment_app_v2/utils/enums.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:iconly/iconly.dart';
 import 'package:page_transition/page_transition.dart';
 import '../../../model/user_model.dart';
 import '../../../style/general_style.dart';
@@ -32,6 +34,8 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
+  bool _passwordHasError = false;
+  bool _confirmPasswordHasError = false;
 
   @override
   void dispose() {
@@ -60,10 +64,19 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
   }
 
   Future _signUp(String email,String password) async{
-    await CreatePasswordModelImp().signUp(
-        email.trim(),
-        password.trim()
-    );
+    try {
+      await CreatePasswordModelImp().signUp(email.trim(),password.trim());
+    } on FirebaseAuthException catch (e){
+      if (e.code == 'email-already-in-use'){
+        print('The account already exists for that email.');
+      }else if(e.code == 'invalid-email'){
+        print('The email address is not valid.');
+      }else if(e.code == 'operation-not-allowed'){
+        print('The email/password accounts are not enabled.');
+      }else if(e.code == 'weak-password'){
+        print('The password provided is too weak.');
+      }
+    }
   }
 
   Future _addUserDetails(String firstName,String lastName,String dateOfBirth,String email,String phone) async{
@@ -88,16 +101,17 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
         return false;
       },
       child: Scaffold(
-          resizeToAvoidBottomInset : true,
-          appBar: MyAppBar(
-            type: MyAppBarType.LEADING_ICON,
-            leadingIcon: CupertinoIcons.arrow_left,
-            label: 'Create password',
-            onTap: (){
-              MethodHelper.transitionPage(context, widget, FillProfile(), PageNavigatorType.PUSH_REPLACEMENT, PageTransitionType.leftToRightJoined);
-            },
-          ),
-          body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody(),)
+        backgroundColor: white,
+        resizeToAvoidBottomInset : true,
+        appBar: MyAppBar(
+          type: MyAppBarType.LEADING_ICON,
+          leadingIcon: IconlyLight.arrow_left,
+          label: 'Create password',
+          onTap: (){
+            MethodHelper.transitionPage(context, widget, FillProfile(), PageNavigatorType.PUSH_REPLACEMENT, PageTransitionType.leftToRightJoined);
+          },
+        ),
+        body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody(),)
       ),
     );
   }
@@ -137,13 +151,17 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
                   MyTextFormField(
                     type: MyTextFormFieldType.PREFIX,
                     textEditingController: _passwordController,
-                    prefixIcon: CupertinoIcons.lock_fill,
+                    prefixIcon: IconlyBold.lock,
                     label: 'Password',
                     isPassword: true,
+                    hasError: _passwordHasError,
+                    errorText: 'Password must contain at least 6 characters',
                     validator: (value){
                       if(value == null || value.isEmpty || !Validators.isPasswordValid(value)){
+                        setState(() {_passwordHasError = true;});
                         return '';
                       }
+                      setState(() {_passwordHasError = false;});
                       return null;
                     }
                   ),
@@ -153,13 +171,17 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
                   MyTextFormField(
                     type: MyTextFormFieldType.PREFIX,
                     textEditingController: _confirmPasswordController,
-                    prefixIcon: CupertinoIcons.lock_fill,
-                    label: 'Password',
+                    prefixIcon: IconlyBold.lock,
+                    label: 'Confirm password',
                     isPassword: true,
+                    hasError: _confirmPasswordHasError,
+                    errorText: 'Password does\'t match',
                     validator: (value){
                       if(value == null || value.isEmpty || _passwordController.text.trim() != _confirmPasswordController.text.trim()){
+                        setState(() {_confirmPasswordHasError = true;});
                         return '';
                       }
+                      setState(() {_confirmPasswordHasError = false;});
                       return null;
                     }
                   ),

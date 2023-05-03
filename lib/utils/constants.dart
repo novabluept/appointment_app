@@ -2,5 +2,9 @@
 /// Page transitions
 const PAGE_TRANSITION_DURATION = 350;
 
-/// Firebase
-const USER = 'user';
+/// User Roles
+const USER_ROLE = 'user';
+const ADMIN_ROLE = 'admin';
+
+/// Firebase collections
+const USER_COLLECTION = 'user';
