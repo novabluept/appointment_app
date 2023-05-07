@@ -1,10 +1,20 @@
 
 
+import 'dart:io';
+
+import 'package:appointment_app_v2/utils/method_helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:intl/intl.dart';
 import '../model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
+import 'dart:math';
 import '../utils/constants.dart';
+import '../utils/enums.dart';
 
 
 Future signInRef(String email,String password) async{
@@ -12,6 +22,69 @@ Future signInRef(String email,String password) async{
       email: email,
       password: password
   );
+}
+
+Future signInWithGoogleRef() async{
+  // Trigger the authentication flow
+  final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+  // Obtain the auth details from the request
+  final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+  // Create a new credential
+  final credential = GoogleAuthProvider.credential(
+    accessToken: googleAuth?.accessToken,
+    idToken: googleAuth?.idToken,
+  );
+
+  UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+  User? userCredentialUser = userCredential.user;
+
+  // Add user data to firebase
+  if(userCredentialUser != null && userCredential.additionalUserInfo!.isNewUser){
+
+    List<String> nameList = userCredentialUser.displayName!.split(" ");
+    String firstName = nameList[0];
+    String lastName = nameList[1];
+
+    String? phone = userCredentialUser.phoneNumber;
+
+    /// User Model
+    UserModel user = UserModel(
+        userId: userCredentialUser.uid,
+        firstname: firstName,
+        lastname: lastName,
+        dateOfBirth: '',
+        phone: phone != null ? userCredentialUser.phoneNumber! : '',
+        email: userCredentialUser.email!,
+        imagePath: '/${FirebaseCollections.USER.name}/${userCredentialUser.uid}',
+        role: UserRole.USER.name
+    );
+
+    /// Add user details
+    await addUserDetailsRef(user);
+
+    /// Add image
+    File file = await _urlToFile(userCredentialUser.photoURL!);
+    await addProfilePictureRef(file,'/${FirebaseCollections.USER.name}/${userCredentialUser.uid}');
+  }
+
+}
+
+Future<File> _urlToFile(String imageUrl) async {
+  var rng = new Random();
+
+  Directory tempDir = await getTemporaryDirectory();
+
+  String tempPath = tempDir.path;
+
+  File file = new File('$tempPath'+ (rng.nextInt(100)).toString() +'.png');
+
+  http.Response response = await http.get(Uri.parse(imageUrl));
+
+  await file.writeAsBytes(response.bodyBytes);
+
+  return file;
 }
 
 /// Register User
@@ -23,12 +96,16 @@ Future signUpRef(String email,String password) async{
 }
 
 Future addUserDetailsRef(UserModel user) async{
-  final userId = FirebaseAuth.instance.currentUser?.uid;
-  final docUser = FirebaseFirestore.instance.collection(USER_COLLECTION).doc();
-  user.userId = userId!;
+  final docUser = FirebaseFirestore.instance.collection(FirebaseCollections.USER.name).doc();
 
   final json = user.toJson();
   await docUser.set(json);
+}
+
+Future addProfilePictureRef(File file,String pathToSave) async{
+  File? imagedCompressed = await MethodHelper.testCompressAndGetFile(file);
+  final ref = FirebaseStorage.instance.ref().child(pathToSave);
+  ref.putFile(imagedCompressed ?? file);
 }
 /// Register User
 

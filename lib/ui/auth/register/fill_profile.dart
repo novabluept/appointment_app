@@ -9,12 +9,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconly/iconly.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 import '../../../state_management/state.dart';
 import '../../../style/general_style.dart';
 import '../../../ui_items/my_app_bar.dart';
 import '../../../ui_items/my_button.dart';
 import '../../../ui_items/my_responsive_layout.dart';
+import '../../../utils/constants.dart';
 import '../../../utils/method_helper.dart';
 import '../../../utils/validators.dart';
 import '../../../view_model/fill_profile/fill_profile_view_model_imp.dart';
@@ -35,7 +37,7 @@ class FillProfileState extends ConsumerState<FillProfile> {
   final TextEditingController _dateOfBirthController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
-  File? image;
+  File? _image;
   bool _firstNameHasError = false;
   bool _lastNameHasError = false;
   bool _dateOfBirthHasError = false;
@@ -62,19 +64,13 @@ class FillProfileState extends ConsumerState<FillProfile> {
   }
 
   _insertInitialTextEditingControllersValues(){
+    String imagePath = ref.watch(imagePathProvider);
+    _image = File(imagePath);
     _firstNameController.text = ref.watch(firstNameProvider);
     _lastNameController.text = ref.watch(lastNameProvider);
     _dateOfBirthController.text = ref.watch(dateOfBirthProvider);
     _emailController.text = ref.watch(emailProvider);
     _phoneNumberController.text = ref.watch(phoneNumberProvider);
-  }
-
-  _clearTextEditingControllers() async{
-    await FillProfileModelImp().setValue(firstNameProvider.notifier, ref, '');
-    await FillProfileModelImp().setValue(lastNameProvider.notifier, ref, '');
-    await FillProfileModelImp().setValue(dateOfBirthProvider.notifier, ref, '');
-    await FillProfileModelImp().setValue(emailProvider.notifier, ref, '');
-    await FillProfileModelImp().setValue(phoneNumberProvider.notifier, ref, '');
   }
 
   Future _saveValues() async{
@@ -95,15 +91,18 @@ class FillProfileState extends ConsumerState<FillProfile> {
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (image == null) return;
 
-    final imageTemporary = File(image.path);
-    setState(() { this.image = imageTemporary;});
+    String imagePath = image.path;
+
+    final imageTemporary = File(imagePath);
+    await FillProfileModelImp().setValue(imagePathProvider.notifier, ref, imagePath);
+    setState(() { this._image = imageTemporary;});
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async{
-        _clearTextEditingControllers();
+        MethodHelper.clearFillProfileControllers(ref);
         MethodHelper.transitionPage(context, widget, MainPage(), PageNavigatorType.PUSH_REPLACEMENT,PageTransitionType.leftToRightJoined);
         return false;
       },
@@ -115,7 +114,7 @@ class FillProfileState extends ConsumerState<FillProfile> {
           leadingIcon: IconlyLight.arrow_left,
           label: 'Fill your profile',
           onTap: (){
-            _clearTextEditingControllers();
+            MethodHelper.clearFillProfileControllers(ref);
             MethodHelper.transitionPage(context, widget, MainPage(), PageNavigatorType.PUSH_REPLACEMENT, PageTransitionType.leftToRightJoined);
           },
         ),
@@ -140,7 +139,8 @@ class FillProfileState extends ConsumerState<FillProfile> {
                 height: 200.h,
                 child: CircleAvatar(
                   radius: 58,
-                  backgroundImage: image != null ? Image.file(image!).image : Image.asset('images/fill_profile_image.png').image,
+                  backgroundColor: white,
+                  backgroundImage: ref.watch(imagePathProvider) != '' ? Image.file(File(ref.watch(imagePathProvider))).image : Image.asset('images/fill_profile_image.png').image,
                   child: Stack(
                     children: [
                       Align(
@@ -150,8 +150,8 @@ class FillProfileState extends ConsumerState<FillProfile> {
                           height: 50.h,
                           child: CircleAvatar(
                             radius: 18,
-                            backgroundColor: Colors.transparent,
-                            child: Icon(IconlyBold.editSquare,color: blue,size: 50.sp,),
+                            backgroundColor: blue,
+                            child: Icon(IconlyBold.edit,color: white,size: 30.sp),
                           ),
                         ),
                       ),
@@ -214,8 +214,22 @@ class FillProfileState extends ConsumerState<FillProfile> {
                     contentPaddingHeight: 18,
                     hasError: _dateOfBirthHasError,
                     errorText: 'Please enter a valid date of birth',
+                    isDate: true,
+                    isReadOnly: true,
+                    showDateDialog: () async{
+                      await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(1970),
+                        lastDate: DateTime(2025),
+                      ).then((selectedDate) {
+                        if (selectedDate != null) {
+                          _dateOfBirthController.text = DateFormat(DATE_FORMAT).format(selectedDate);
+                        }
+                      });
+                    },
                     validator: (value){
-                      if(value == null || value.isEmpty || !Validators.hasMinimumAndMaxCharacters(value)){
+                      if(value == null || value.isEmpty){
                         setState(() {_dateOfBirthHasError = true;});
                         return '';
                       }

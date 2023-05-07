@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "922246399122-j5qch0dumj7hr2b40n3egv2p1cjo5459.apps.googleusercontent.com",
+          "client_id": "922246399122-vlfi4b0r1of1741s9mcb9fu0ou5mg8cq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.appointment_app_v2",
+            "certificate_hash": "0654a6beb59663408181f02cbc2b3814fd86eb57"
+          }
+        },
+        {
+          "client_id": "922246399122-jihh1ke72mo19cj4db6vev2esk8qi71o.apps.googleusercontent.com",
           "client_type": 3
         }
       ],

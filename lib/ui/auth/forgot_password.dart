@@ -39,28 +39,30 @@ class ForgotPasswordState extends ConsumerState<ForgotPassword> {
   }
 
   Future _sendPasswordResetByEmail(String email) async{
-    if(_formKey.currentState!.validate()){
-      try{
-        await ForgotPasswordModelImp().sendPasswordResetEmail(email);
-      } on FirebaseAuthException catch (e) {
-        if(e.code == 'auth/invalid-email'){
-          print('');
-        }else if(e.code == 'auth/missing-android-pkg-name'){
-          print('');
-        }else if(e.code == 'auth/missing-continue-uri'){
-          print('');
-        }else if(e.code == 'auth/missing-ios-bundle-id'){
-          print('');
-        }else if(e.code == 'auth/invalid-continue-uri'){
-          print('');
-        }else if(e.code == 'auth/unauthorized-continue-uri'){
-          print('');
-        }else if(e.code == 'auth/user-not-found'){
-          print('');
-        }else if(e.code == 'auth/unauthorized-continue-uri'){
-          print('');
-        }
+    if(await MethodHelper.hasInternetConnection()){
+      if(_formKey.currentState!.validate()){
+        await ForgotPasswordModelImp().sendPasswordResetEmail(email).catchError((e){
+          if(e.code == 'auth/invalid-email'){
+            MethodHelper.showSnackBar(context, SnackBarType.WARNING, 'auth/invalid-email');
+          }else if(e.code == 'auth/missing-android-pkg-name'){
+            MethodHelper.showSnackBar(context, SnackBarType.WARNING, 'auth/missing-android-pkg-name');
+          }else if(e.code == 'auth/missing-continue-uri'){
+            MethodHelper.showSnackBar(context, SnackBarType.WARNING, 'auth/missing-continue-uri');
+          }else if(e.code == 'auth/missing-ios-bundle-id'){
+            MethodHelper.showSnackBar(context, SnackBarType.WARNING, 'auth/missing-ios-bundle-id');
+          }else if(e.code == 'auth/invalid-continue-uri'){
+            MethodHelper.showSnackBar(context, SnackBarType.WARNING, 'auth/invalid-continue-uri');
+          }else if(e.code == 'auth/unauthorized-continue-uri'){
+            MethodHelper.showSnackBar(context, SnackBarType.WARNING, 'auth/unauthorized-continue-uri');
+          }else if(e.code == 'auth/user-not-found'){
+            MethodHelper.showSnackBar(context, SnackBarType.WARNING, 'auth/user-not-found');
+          }else if(e.code == 'auth/unauthorized-continue-uri'){
+            MethodHelper.showSnackBar(context, SnackBarType.WARNING, 'auth/unauthorized-continue-uri');
+          }
+        });
       }
+    }else{
+      MethodHelper.showSnackBar(context, SnackBarType.WARNING, 'Sem ligação à internet.');
     }
   }
 

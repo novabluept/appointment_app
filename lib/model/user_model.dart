@@ -41,7 +41,7 @@ class UserModel {
     required this.dateOfBirth,
     required this.email,
     required this.phone,
-    this.role = USER_ROLE,
+    required this.role,
     this.imagePath = '',
   });
 

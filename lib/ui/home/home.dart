@@ -93,16 +93,8 @@ class HomeState extends ConsumerState<Home> {
         return false;
       },
       child: Scaffold(
-          appBar: MyAppBar(
-            type: MyAppBarType.LEADING_ICON,
-            leadingIcon: IconlyLight.document,
-            label: 'Home',
-            onTap: (){
-              //MethodHelper.transitionPage(context, widget, Login(), PageTransitionType.leftToRightJoined);
-            },
-          ),
-          resizeToAvoidBottomInset : false,
-          body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())
+        resizeToAvoidBottomInset : false,
+        body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())
       ),
     );
   }
@@ -113,6 +105,7 @@ class HomeState extends ConsumerState<Home> {
       controller: _controller,
       screens: _buildScreens(),
       items: _navBarsItems(),
+      navBarHeight: kBottomNavigationBarHeight.h,
       confineInSafeArea: true,
       backgroundColor: white, // Default is Colors.white.
       handleAndroidBackButtonPress: true, // Default is true.

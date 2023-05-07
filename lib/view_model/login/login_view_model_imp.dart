@@ -10,4 +10,11 @@ class LoginViewModelImp implements LoginViewModel{
     return signInRef(email,password);
   }
 
+  @override
+  Future signInWithGoogle() {
+    return signInWithGoogleRef();
+  }
+
+
+
 }

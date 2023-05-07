@@ -34,6 +34,7 @@ class LoginState extends ConsumerState<Login> {
   final _passwordController = TextEditingController();
   bool _emailHasError = false;
   bool _passwordHasError = false;
+  bool _showPasswordText = true;
 
   @override
   void dispose() {
@@ -52,23 +53,35 @@ class LoginState extends ConsumerState<Login> {
   }
 
   Future _signIn() async{
-    if(_formKey.currentState!.validate()){
-      try{
+    if(await MethodHelper.hasInternetConnection()){
+      if(_formKey.currentState!.validate()){
         LoginViewModelImp().signIn(
           _emailController.text.trim(),
           _passwordController.text.trim(),
-        );
-      }on FirebaseAuthException catch(e){
-        if(e.code == 'invalid-email'){
-          print('Email address is not valid.');
-        }else if(e.code == 'user-disabled'){
-          print('The user corresponding to the given email has been disabled.');
-        }else if(e.code == 'user-not-found'){
-          print('No user found for that email.');
-        }else if(e.code == 'wrong-password'){
-          print('Wrong password provided for that user.');
-        }
+        ).catchError((e){
+          if(e.code == 'invalid-email'){
+            MethodHelper.showSnackBar(context, SnackBarType.WARNING, 'Email address is not valid.');
+          }else if(e.code == 'user-disabled'){
+            MethodHelper.showSnackBar(context, SnackBarType.WARNING, 'The user corresponding to the given email has been disabled.');
+          }else if(e.code == 'user-not-found'){
+            MethodHelper.showSnackBar(context, SnackBarType.WARNING, 'No user found for that email.');
+          }else if(e.code == 'wrong-password'){
+            MethodHelper.showSnackBar(context, SnackBarType.WARNING, 'Wrong password provided for that user.');
+          }
+        });
       }
+    }else{
+      MethodHelper.showSnackBar(context, SnackBarType.WARNING, 'Sem ligação à internet.');
+    }
+  }
+
+  Future _signInWithGoogle() async{
+    if(await MethodHelper.hasInternetConnection()){
+      LoginViewModelImp().signInWithGoogle().catchError((e){
+        print(e);
+      });
+    }else{
+      MethodHelper.showSnackBar(context, SnackBarType.WARNING, 'Sem ligação à internet.');
     }
   }
 
@@ -121,16 +134,20 @@ class LoginState extends ConsumerState<Login> {
                   SizedBox(height: 20.h,),
 
                   MyTextFormField(
-                    type: MyTextFormFieldType.PREFIX,
+                    type: MyTextFormFieldType.PREFIX_SUFIX,
                     textEditingController: _passwordController,
                     prefixIcon: IconlyBold.lock,
                     label: 'Password',
-                    isPassword: true,
+                    isObscure: true,
+                    showObscureText: _showPasswordText,
                     hasError: _passwordHasError,
                     errorText: '',
                     validator: (value){
                       return null;
-                    }
+                    },
+                    triggerObscureTextVisibility: (){
+                      setState(() {_showPasswordText = !_showPasswordText;});
+                    },
                   ),
 
                   SizedBox(height: 20.h,),
@@ -164,9 +181,7 @@ class LoginState extends ConsumerState<Login> {
 
             SizedBox(height: 30.h,),
 
-            MyButton(type: MyButtonType.IMAGE, label: 'Continue with google',imgUrl: 'images/google_logo.svg',onPressed: (){
-              print('olaaaa');
-            }),
+            MyButton(type: MyButtonType.IMAGE, label: 'Continue with google',imgUrl: 'images/google_logo.svg',onPressed: _signInWithGoogle),
 
             SizedBox(height: 27.h,),
 

@@ -1,8 +1,8 @@
 import 'dart:ui';
 
+/// Cores neutras
 final black = const Color(0xFF000000);
 final white = const Color(0xFFFFFFFF);
-
 final grey900 = const Color(0xFF212121);
 final grey800 = const Color(0xFF424242);
 final grey700 = const Color(0xFF616161);
@@ -17,8 +17,8 @@ final grey50 = const Color(0xFFFAFAFA);
 /// Cores principais da app
 final blue = const Color(0xFF246BFD);
 
-
 /// Cores de aviso
 final red = const Color(0xFFF44336);
-final pink = const Color(0xFFf5CACB);
+final green = const Color(0xFF4CAF50);
+
 

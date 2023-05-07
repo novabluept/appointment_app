@@ -8,11 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:iconly/iconly.dart';
 import '../../style/general_style.dart';
 import '../../ui_items/my_app_bar.dart';
 import '../../ui_items/my_button.dart';
 import '../../ui_items/my_label.dart';
 import '../../ui_items/my_responsive_layout.dart';
+import '../../utils/method_helper.dart';
 import '../../view_model/verify_email/verify_email_view_model_imp.dart';
 
 class VerifyEmail extends ConsumerStatefulWidget {
@@ -46,7 +48,9 @@ class VerifyEmailState extends ConsumerState<VerifyEmail> {
   }
 
   Future _sendVerificationEmail() async{
-    await VerifyEmailModelImp().sendEmailVerification();
+    await VerifyEmailModelImp().sendEmailVerification().catchError((e){
+      MethodHelper.showSnackBar(context, SnackBarType.WARNING, 'Ocorreu algo inesperado. Por favor, tente mais tarde.');
+    });
   }
 
   Future _checkEmailVerified() async{
@@ -75,8 +79,9 @@ class VerifyEmailState extends ConsumerState<VerifyEmail> {
       child: Scaffold(
           backgroundColor: white,
           appBar: MyAppBar(
-            type: MyAppBarType.GENERAL,
-            label: 'VerifyEmailState',
+            type: MyAppBarType.LEADING_ICON,
+            leadingIcon: IconlyLight.arrow_left,
+            label: 'Verify Email',
             onTap: _signOut,
           ),
           resizeToAvoidBottomInset : false,
