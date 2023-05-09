@@ -1,10 +1,10 @@
 
-import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../utils/constants.dart';
 
 /// Fill Profile
-final imagePathProvider = StateProvider<String>((ref) => '');
+final imagePathProvider = StateProvider<String>((ref) => PROFILE_IMAGE_DIRECTORY);
 final firstNameProvider = StateProvider<String>((ref) => '');
 final lastNameProvider = StateProvider<String>((ref) => '');
 final dateOfBirthProvider = StateProvider<String>((ref) => '');

@@ -3,6 +3,7 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -75,24 +76,38 @@ class MethodHelper{
 
     var dir = await getTemporaryDirectory();
     var targetPath = dir.absolute.path + "/temp.$fileFormat";
+    var result;
 
-    var result = await FlutterImageCompress.compressAndGetFile(
-      format: fileFormat == 'png' ? CompressFormat.png : CompressFormat.jpeg,
-      file.absolute.path,
-      targetPath,
-      quality: 80,
-    );
+    try{
+      result = await FlutterImageCompress.compressAndGetFile(
+        format: fileFormat == 'png' ? CompressFormat.png : CompressFormat.jpeg,
+        file.absolute.path,
+        targetPath,
+        quality: 80,
+      );
+    }catch(e){
+      print(e);
+    }
+
 
     return result;
   }
 
   static clearFillProfileControllers(WidgetRef ref) async{
-    await FillProfileModelImp().setValue(imagePathProvider.notifier, ref, '');
+    await FillProfileModelImp().setValue(imagePathProvider.notifier, ref, PROFILE_IMAGE_DIRECTORY);
     await FillProfileModelImp().setValue(firstNameProvider.notifier, ref, '');
     await FillProfileModelImp().setValue(lastNameProvider.notifier, ref, '');
     await FillProfileModelImp().setValue(dateOfBirthProvider.notifier, ref, '');
     await FillProfileModelImp().setValue(emailProvider.notifier, ref, '');
     await FillProfileModelImp().setValue(phoneNumberProvider.notifier, ref, '');
+  }
+
+  static Future<File> returnFillProfileImage(String localImageDirectory) async {
+    var bytes = await rootBundle.load(localImageDirectory);
+    String tempPath = (await getTemporaryDirectory()).path;
+    File file = File('$tempPath/profile.png');
+    await file.writeAsBytes(bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));
+    return file;
   }
 
 

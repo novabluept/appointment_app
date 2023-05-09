@@ -30,9 +30,9 @@ class MainPageState extends ConsumerState<MainPage> {
       body: StreamBuilder<User?>(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context,snapshot){
-            if( snapshot.connectionState == ConnectionState.waiting){
+            if(snapshot.connectionState == ConnectionState.waiting){
               return Text('waiting');
-            } else if(snapshot.hasError){
+            }else if(snapshot.hasError) {
               return Text('has error');
             }else if(snapshot.hasData){
               //return Home();

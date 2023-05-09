@@ -53,25 +53,12 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
   Future _signUpAndAddUserDetails() async{
     if(await MethodHelper.hasInternetConnection()){
       if(_formKey.currentState!.validate()){
-        String imagePath = ref.watch(imagePathProvider);
-        final image = File(imagePath);
-        final firstName = ref.watch(firstNameProvider);
-        final lastName = ref.watch(lastNameProvider);
-        final dateOfBirth = ref.watch(dateOfBirthProvider);
+
         final email = ref.watch(emailProvider);
-        final phone = ref.watch(phoneNumberProvider);
+        final password = _passwordController.text;
 
-        /// Create user in FireAuth
-        await _signUp(email,_passwordController.text);
-
-        /// Get user Id
-        final userId = FirebaseAuth.instance.currentUser?.uid;
-        if(userId != null){
-          /// Create user in FireStore Database
-          await _addUserDetails(userId,image,firstName,lastName,dateOfBirth,email,phone);
-        }
-        MethodHelper.clearFillProfileControllers(ref);
-        MethodHelper.transitionPage(context, widget, MainPage(),PageNavigatorType.PUSH_REPLACEMENT, PageTransitionType.rightToLeftJoined);
+        /// Create user and add details in FireAuth
+        await _signUp(email,password);
       }
     }else{
       MethodHelper.showSnackBar(context, SnackBarType.WARNING, 'Sem ligação à internet.');
@@ -79,7 +66,21 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
   }
 
   Future _signUp(String email,String password) async{
-    await CreatePasswordModelImp().signUp(email.trim(),password.trim()).catchError((e){
+    await CreatePasswordModelImp().signUp(email.trim(),password.trim()).then((value) async {
+
+      String imagePath = ref.watch(imagePathProvider);
+      final image = File(imagePath);
+      final firstName = ref.watch(firstNameProvider);
+      final lastName = ref.watch(lastNameProvider);
+      final dateOfBirth = ref.watch(dateOfBirthProvider);
+      final email = ref.watch(emailProvider);
+      final phone = ref.watch(phoneNumberProvider);
+
+      final userId = FirebaseAuth.instance.currentUser?.uid;
+
+      await _addUserDetails(userId!,image,firstName,lastName,dateOfBirth,email,phone);
+
+    }).catchError((e){
       if (e.code == 'email-already-in-use'){
         MethodHelper.showSnackBar(context, SnackBarType.WARNING, 'The account already exists for that email.');
       }else if(e.code == 'invalid-email'){
@@ -106,12 +107,22 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
       role: UserRole.USER.name
     );
 
-    await CreatePasswordModelImp().addUserDetails(userId,user);
-    await _addProfilePicture(image,user.imagePath);
+    await CreatePasswordModelImp().addUserDetails(userId,user).then((value) async {
+      await _addProfilePicture(image,user.imagePath);
+    }).catchError((onError){
+      MethodHelper.showSnackBar(context, SnackBarType.WARNING, 'Ocorreu algo inesperado. Por favor, tente mais tarde.');
+    });
+
   }
 
   Future _addProfilePicture(File file,String pathToSave) async{
-    await CreatePasswordModelImp().addProfilePicture(file,pathToSave);
+    await CreatePasswordModelImp().addProfilePicture(file,pathToSave).then((value) {
+      MethodHelper.clearFillProfileControllers(ref);
+      MethodHelper.transitionPage(context, widget, MainPage(),PageNavigatorType.PUSH_REPLACEMENT, PageTransitionType.rightToLeftJoined);
+    }).catchError((onError){
+      MethodHelper.showSnackBar(context, SnackBarType.WARNING, 'Ocorreu algo inesperado. Por favor, tente mais tarde.');
+    });
+
   }
 
   @override

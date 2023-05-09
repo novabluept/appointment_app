@@ -103,6 +103,9 @@ Future addUserDetailsRef(UserModel user) async{
 }
 
 Future addProfilePictureRef(File file,String pathToSave) async{
+  if(file.path == PROFILE_IMAGE_DIRECTORY){ /// Se for a imagem default converter para file
+    file = await MethodHelper.returnFillProfileImage(PROFILE_IMAGE_DIRECTORY);
+  }
   File? imagedCompressed = await MethodHelper.testCompressAndGetFile(file);
   final ref = FirebaseStorage.instance.ref().child(pathToSave);
   ref.putFile(imagedCompressed ?? file);
@@ -116,4 +119,28 @@ Future sendPasswordResetEmailRef(String email) async{
 Future sendEmailVerificationRef() async{
   final user = FirebaseAuth.instance.currentUser!;
   await user.sendEmailVerification();
+}
+
+Future<UserRole> getUserRoleRef() async{
+  String userId = FirebaseAuth.instance.currentUser!.uid;
+  String role = "";
+
+  await FirebaseFirestore.instance
+      .collection(FirebaseCollections.USER.name)
+      .where("userId", isEqualTo: userId)
+      .get()
+      .then((querySnapshot) {
+          print("Successfully completed");
+          var doc = querySnapshot.docs.first;
+          role = doc.data()['role'];
+        },
+        onError: (e) => print("Error completing: $e"),
+      );
+
+  switch(role){
+    case 'WORKER':
+      return UserRole.WORKER;
+    default:
+      return UserRole.USER;
+  }
 }
