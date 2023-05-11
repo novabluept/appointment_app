@@ -1,4 +1,5 @@
 
+import 'package:appointment_app_v2/ui/home/user/appointments_history.dart';
 import 'package:appointment_app_v2/utils/enums.dart';
 import 'package:appointment_app_v2/view_model/home/home_view_model_imp.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -45,10 +46,10 @@ class HomeState extends ConsumerState<Home> {
     ];
   }
 
-  List<Widget> _buildScreens() {
+  List<Widget> _buildScreensUser() {
     return [
       Container(color: Colors.blue,),
-      Container(color: Colors.red,),
+      AppointmentsHistory(),
       Container(
         color: Colors.green,
         child: Column(
@@ -85,7 +86,7 @@ class HomeState extends ConsumerState<Home> {
     ];
   }
 
-  List<PersistentBottomNavBarItem> _navBarsItems() {
+  List<PersistentBottomNavBarItem> _navBarsItemsUser() {
     return [
       PersistentBottomNavBarItem(
         icon: Icon(IconlyBold.home,size: 24.sp,),
@@ -140,8 +141,8 @@ class HomeState extends ConsumerState<Home> {
 
           UserRole? role = snapshot.data;
 
-          List<Widget> screens = role == UserRole.USER ? _buildScreensTest() : _buildScreens();
-          List<PersistentBottomNavBarItem> navBarsItems = role == UserRole.USER ? _navBarsItemsTest() : _navBarsItems();
+          List<Widget> screens = role == UserRole.USER ? _buildScreensUser() : _buildScreensTest();
+          List<PersistentBottomNavBarItem> navBarsItems = role == UserRole.USER ? _navBarsItemsUser() : _navBarsItemsTest();
 
           return PersistentTabView(
             context,

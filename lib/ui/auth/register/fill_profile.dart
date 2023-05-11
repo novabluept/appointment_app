@@ -140,7 +140,7 @@ class FillProfileState extends ConsumerState<FillProfile> {
                 child: CircleAvatar(
                   radius: 58,
                   backgroundColor: white,
-                  backgroundImage: ref.watch(imagePathProvider) != PROFILE_IMAGE_DIRECTORY ? Image.file(File(ref.watch(imagePathProvider))).image : Image.asset('images/fill_profile_image.png').image,
+                  backgroundImage: ref.watch(imagePathProvider) != PROFILE_IMAGE_DIRECTORY ? Image.file(File(ref.watch(imagePathProvider))).image : Image.asset(PROFILE_IMAGE_DIRECTORY).image,
                   child: Stack(
                     children: [
                       Align(

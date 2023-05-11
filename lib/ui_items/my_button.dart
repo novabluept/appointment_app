@@ -15,19 +15,21 @@ class MyButton extends ConsumerWidget {
   final MyButtonType type;
   final String label;
   final String? imgUrl;
+  final int height;
+  final int verticalPadding;
   final Function() onPressed;
 
 
-  const MyButton({super.key, required this.type, required this.label, this.imgUrl, required this.onPressed});
+  const MyButton({super.key, required this.type, required this.label, this.imgUrl,this.height = 60,this.verticalPadding = 18, required this.onPressed});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
     switch (type) {
       case MyButtonType.FILLED:
-        return generalButton(label,white,blue,white,onPressed);
+        return generalButton(label,white,blue,white,height,verticalPadding,onPressed);
       case MyButtonType.OUTLINED:
-        return generalButton(label,blue,white,blue,onPressed);
+        return generalButton(label,blue,white,blue,height,verticalPadding,onPressed);
       case MyButtonType.IMAGE:
         return buttonImage(label,imgUrl!,onPressed);
       default:
@@ -36,13 +38,13 @@ class MyButton extends ConsumerWidget {
 
   }
 
-  Widget generalButton(String label,Color labelColor,Color backgroundColor,Color foregroundColor,Function() onPressed){
+  Widget generalButton(String label,Color labelColor,Color backgroundColor,Color foregroundColor,int height,int verticalPadding,Function() onPressed){
     return SizedBox(
       width: double.infinity,
-      height: 60.h,
+      height: height.h,
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(
-          padding: EdgeInsets.symmetric(vertical: 18.h),
+          padding: EdgeInsets.symmetric(vertical: verticalPadding.h),
           foregroundColor: foregroundColor,
           backgroundColor: backgroundColor,
           side: BorderSide(color: blue)
@@ -61,7 +63,7 @@ class MyButton extends ConsumerWidget {
   Widget buttonImage(String label,String imgUrl,Function() onPressed){
     return SizedBox(
       width: double.infinity,
-      height: 60.h,
+      height: height.h,
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(
             padding: EdgeInsets.symmetric(vertical: 18.h),
