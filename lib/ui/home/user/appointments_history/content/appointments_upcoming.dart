@@ -7,10 +7,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconly/iconly.dart';
 
-import '../../../../ui_items/my_appointment_tile.dart';
-import '../../../../ui_items/my_button.dart';
-import '../../../../ui_items/my_label.dart';
-import '../../../../ui_items/my_responsive_layout.dart';
+import '../../../../../ui_items/my_appointment_tile.dart';
+import '../../../../../ui_items/my_button.dart';
+import '../../../../../ui_items/my_label.dart';
+import '../../../../../ui_items/my_responsive_layout.dart';
 
 class AppointmentsUpcoming extends ConsumerStatefulWidget {
   const AppointmentsUpcoming({Key? key}): super(key: key);
@@ -33,7 +33,6 @@ class AppointmentsUpcomingState extends ConsumerState<AppointmentsUpcoming> {
 
   Widget mobileBody(){
     return Container(
-      color: grey100,
       padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: ListView.separated(
         separatorBuilder: (context, index) => SizedBox(height: 20.h,),

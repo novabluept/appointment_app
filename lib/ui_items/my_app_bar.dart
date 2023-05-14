@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iconly/iconly.dart';
 import '../style/general_style.dart';
+import '../utils/constants.dart';
 import '../utils/enums.dart';
 import 'my_label.dart';
 
@@ -14,35 +16,41 @@ class MyAppBar extends ConsumerWidget implements PreferredSizeWidget {
   final MyAppBarType type;
   final double height;
   final IconData? leadingIcon;
+  final IconData? suffixIcon;
   final String? label;
   final GlobalKey<ScaffoldState>? scaffoldKey;
   final bool isTabBar;
   final Function()? onTap;
 
-  const MyAppBar({super.key, required this.type, this.height = kToolbarHeight, this.leadingIcon,
+  const MyAppBar({super.key, required this.type, this.height = kToolbarHeight, this.leadingIcon, this.suffixIcon,
     this.label, this.scaffoldKey, this.isTabBar = false,this.onTap});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     switch (type) {
       case MyAppBarType.GENERAL:
-        return generalAppBar(label!,null,isTabBar);
+        return generalAppBar(label!,null,null,isTabBar);
       case MyAppBarType.LEADING_ICON:
-        return generalAppBar(label!,leadingIcon!,isTabBar);
+        return generalAppBar(label!,leadingIcon!,null,isTabBar);
       case MyAppBarType.BOTTOM_TAB:
-        return generalAppBar(label!,null,isTabBar);
+        return generalAppBar(label!,null,null,isTabBar);
+      case MyAppBarType.LEADING_SUFFIX_ICON:
+        return homeAppBar(label!,leadingIcon!,suffixIcon!,isTabBar);
       default:
         return Container();
     }
   }
 
-  Widget generalAppBar(String label,IconData? leadingIcon,bool isTabBar) {
+  Widget generalAppBar(String label,IconData? leadingIcon,IconData? suffixIcon,bool isTabBar) {
     return PreferredSize(
       preferredSize: Size.fromHeight(kToolbarHeight.sp),
       child: AppBar(
         backgroundColor: white,
         elevation: 0,
         scrolledUnderElevation: 0,
+        titleSpacing: leadingIcon != null ? 0 : 24.w,
+        leadingWidth: 48.w,
+        centerTitle: false,
         leading: leadingIcon != null ? GestureDetector(
             onTap: onTap,
             child: Icon(leadingIcon, size: 20.sp, color: black,)
@@ -68,6 +76,37 @@ class MyAppBar extends ConsumerWidget implements PreferredSizeWidget {
             Tab(text: 'Cancelled')
           ],
         ) : null,
+      ),
+    );
+  }
+
+
+  Widget homeAppBar(String label,IconData? leadingIcon,IconData? suffixIcon,bool isTabBar) {
+    return PreferredSize(
+      preferredSize: Size.fromHeight(kToolbarHeight.sp),
+      child: AppBar(
+        backgroundColor: white,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        titleSpacing: 0,
+        leadingWidth: 80.w,
+        centerTitle: false,
+
+        leading: IconButton(
+          icon: Image.asset(PROFILE_IMAGE_DIRECTORY,width: 48.h,height: 48.h,),
+          onPressed: null,
+        ),
+        actions: <Widget>[
+          Padding(
+              padding: EdgeInsets.only(right: 24.w),
+              child: GestureDetector(
+                onTap: () {},
+                child: Icon(
+                    IconlyLight.notification,size: 28.sp,color: black
+                ),
+              )
+          ),
+        ],
       ),
     );
   }

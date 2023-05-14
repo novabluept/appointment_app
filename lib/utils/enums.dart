@@ -12,6 +12,9 @@ enum MyLabelType { H1, H2, H3, H4, H5, H6, BODY_LARGE , BODY_XLARGE, BODY_MEDIUM
 enum MyTextFormFieldType { GENERAL, PREFIX, SUFFIX, PREFIX_SUFIX, PHONE }
 enum MyButtonType { FILLED, OUTLINED, IMAGE }
 enum MyDividerType { GENERAL }
-enum MyAppBarType { GENERAL, LEADING_ICON, BOTTOM_TAB }
+enum MyAppBarType { GENERAL, LEADING_ICON, BOTTOM_TAB, LEADING_SUFFIX_ICON }
 enum SnackBarType { WARNING, SUCCESS }
 enum MyAppointmentTileType { GENERAL }
+enum MyProfileTileType { GENERAL }
+enum MyPillType { PRIMARY, DANGER, SUCCESS }
+enum MyHomeShopType { GENERAL }

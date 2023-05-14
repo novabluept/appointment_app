@@ -1,5 +1,7 @@
 
-import 'package:appointment_app_v2/ui/home/user/appointments_history.dart';
+import 'package:appointment_app_v2/ui/home/user/appointments_history/appointments_history.dart';
+import 'package:appointment_app_v2/ui/home/user/home/home_user.dart';
+import 'package:appointment_app_v2/ui/home/user/profile/profile.dart';
 import 'package:appointment_app_v2/utils/enums.dart';
 import 'package:appointment_app_v2/view_model/home/home_view_model_imp.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -48,20 +50,9 @@ class HomeState extends ConsumerState<Home> {
 
   List<Widget> _buildScreensUser() {
     return [
-      Container(color: Colors.blue,),
+      HomeUser(),
       AppointmentsHistory(),
-      Container(
-        color: Colors.green,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            MyButton(type: MyButtonType.FILLED, label: 'Sign out',onPressed:() async{
-              await FirebaseAuth.instance.signOut();
-            }),
-          ],
-        )
-      ),
+      Profile(),
     ];
   }
 

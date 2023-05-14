@@ -90,12 +90,13 @@ class MyAppointmentTile extends ConsumerWidget {
                   ),
                   Center(
                     child: CircleAvatar(
-                      backgroundColor: blue,
+                      radius: 20.w,
+                      backgroundColor: lightBlue,
                       child: IconButton(
                         icon: Icon(
                           IconlyBold.chat,
                           size: 24.sp,
-                          color: white,
+                          color: blue,
                         ),
                         onPressed: () {},
                       ),

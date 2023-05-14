@@ -6,9 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconly/iconly.dart';
 
-import '../../../../style/general_style.dart';
-import '../../../../ui_items/my_appointment_tile.dart';
-import '../../../../ui_items/my_responsive_layout.dart';
+import '../../../../../style/general_style.dart';
+import '../../../../../ui_items/my_appointment_tile.dart';
+import '../../../../../ui_items/my_responsive_layout.dart';
 
 class AppointmentsCancelled extends ConsumerStatefulWidget {
   const AppointmentsCancelled({Key? key}): super(key: key);
@@ -31,7 +31,6 @@ class AppointmentsHistoryState extends ConsumerState<AppointmentsCancelled> {
 
   Widget mobileBody(){
     return Container(
-        color: grey100,
         padding: EdgeInsets.symmetric(horizontal: 24.w),
         child: ListView.separated(
           separatorBuilder: (context, index) => SizedBox(height: 20.h,),
