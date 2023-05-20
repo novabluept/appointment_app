@@ -1,6 +1,7 @@
 
 import 'package:appointment_app_v2/style/general_style.dart';
 import 'package:appointment_app_v2/ui/home/user/home/content/choose_professional.dart';
+import 'package:appointment_app_v2/ui/home/user/home/notifications.dart';
 import 'package:appointment_app_v2/utils/enums.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +44,14 @@ class HomeUserState extends ConsumerState<HomeUser> {
           height: kToolbarHeight,
           leadingIcon: IconlyLight.notification,
           suffixIcon: IconlyLight.notification,
+          onTap: (){
+            pushNewScreen(
+              context,
+              screen: Notifications(),
+              withNavBar: false, // OPTIONAL VALUE. True by default.
+              pageTransitionAnimation: PageTransitionAnimation.cupertino,
+            );
+          },
         ),
         resizeToAvoidBottomInset : true,
         body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody(),)

@@ -22,3 +22,4 @@ enum MyChooseProfessionalTileType { GENERAL }
 enum MyInkwellType { GENERAL }
 enum MyChooseServiceTileType { GENERAL }
 enum MyChooseShopTileType { GENERAL }
+enum MyNotificationTileType { GENERAL }

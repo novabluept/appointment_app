@@ -95,7 +95,6 @@ class MyAppBar extends ConsumerWidget implements PreferredSizeWidget {
         titleSpacing: 0,
         leadingWidth: 80.w,
         centerTitle: false,
-
         leading: IconButton(
           icon: Image.asset(PROFILE_IMAGE_DIRECTORY,width: 48.h,height: 48.h,),
           onPressed: null,
@@ -104,7 +103,7 @@ class MyAppBar extends ConsumerWidget implements PreferredSizeWidget {
           Padding(
               padding: EdgeInsets.only(right: 24.w),
               child: GestureDetector(
-                onTap: () {},
+                onTap: onTap,
                 child: Icon(
                     IconlyLight.notification,size: 28.sp,color: dark1
                 ),

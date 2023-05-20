@@ -115,7 +115,7 @@ class MyAppointmentTile extends ConsumerWidget {
                   ),
                   Center(
                     child: CircleAvatar(
-                      radius: 20.w,
+                      radius: 28.sp,
                       backgroundColor: lightBlue,
                       child: IconButton(
                         icon: Icon(
