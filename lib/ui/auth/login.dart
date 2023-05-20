@@ -35,6 +35,13 @@ class LoginState extends ConsumerState<Login> {
   bool _emailHasError = false;
   bool _passwordHasError = false;
   bool _showPasswordText = true;
+  bool _isEmailFocused = false;
+  bool _isPasswordFocused = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -43,10 +50,11 @@ class LoginState extends ConsumerState<Login> {
     super.dispose();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: white,
+      backgroundColor: light1,
       resizeToAvoidBottomInset : true,
       body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody(),)
     );
@@ -88,7 +96,7 @@ class LoginState extends ConsumerState<Login> {
   Widget mobileBody(){
     return SingleChildScrollView(
       child: Container(
-        color: white,
+        color: light1,
         padding: EdgeInsets.only(left: 24.w, right: 24.w, bottom: 0.h),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -121,6 +129,10 @@ class LoginState extends ConsumerState<Login> {
                     label: 'Email',
                     hasError: _emailHasError,
                     errorText: 'Please enter a valid email',
+                    isFieldFocused: _isEmailFocused,
+                    onFocusChange: (hasFocus){
+                      setState(() {_isEmailFocused = hasFocus;});
+                    },
                     validator: (value){
                       if(value == null || value.isEmpty || !Validators.isEmailValid(value)){
                         setState(() {_emailHasError = true;});
@@ -142,6 +154,10 @@ class LoginState extends ConsumerState<Login> {
                     showObscureText: _showPasswordText,
                     hasError: _passwordHasError,
                     errorText: '',
+                    isFieldFocused: _isPasswordFocused,
+                    onFocusChange: (hasFocus){
+                      setState(() {_isPasswordFocused = hasFocus;});
+                    },
                     validator: (value){
                       return null;
                     },

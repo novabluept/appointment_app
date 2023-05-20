@@ -9,7 +9,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import '../../style/general_style.dart';
@@ -62,7 +61,11 @@ class HomeState extends ConsumerState<Home> {
         icon: Icon(IconlyBold.home,size: 24.sp,),
         inactiveIcon: Icon(IconlyLight.home,size: 24.sp,),
         title: "Home",
-        textStyle: GoogleFonts.urbanist(fontSize: 10.sp,fontWeight: MyLabel.MEDIUM),
+        textStyle: TextStyle(
+          fontFamily: 'Urbanist',
+          fontSize: 10.sp,
+          fontWeight: MyLabel.MEDIUM,
+        ),
         activeColorPrimary: blue,
         inactiveColorPrimary: grey500,
       ),
@@ -70,7 +73,11 @@ class HomeState extends ConsumerState<Home> {
         icon: Icon(IconlyBold.calendar,size: 24.sp,),
         inactiveIcon: Icon(IconlyLight.calendar,size: 24.sp,),
         title: "Appointments",
-        textStyle: GoogleFonts.urbanist(fontSize: 10.sp,fontWeight: MyLabel.MEDIUM),
+        textStyle: TextStyle(
+          fontFamily: 'Urbanist',
+          fontSize: 10.sp,
+          fontWeight: MyLabel.MEDIUM,
+        ),
         activeColorPrimary: blue,
         inactiveColorPrimary: grey500,
       ),
@@ -83,7 +90,11 @@ class HomeState extends ConsumerState<Home> {
         icon: Icon(IconlyBold.home,size: 24.sp,),
         inactiveIcon: Icon(IconlyLight.home,size: 24.sp,),
         title: "Home",
-        textStyle: GoogleFonts.urbanist(fontSize: 10.sp,fontWeight: MyLabel.MEDIUM),
+        textStyle: TextStyle(
+          fontFamily: 'Urbanist',
+          fontSize: 10.sp,
+          fontWeight: MyLabel.MEDIUM,
+        ),
         activeColorPrimary: blue,
         inactiveColorPrimary: grey500,
       ),
@@ -91,7 +102,11 @@ class HomeState extends ConsumerState<Home> {
         icon: Icon(IconlyBold.calendar,size: 24.sp,),
         inactiveIcon: Icon(IconlyLight.calendar,size: 24.sp,),
         title: "Appointments",
-        textStyle: GoogleFonts.urbanist(fontSize: 10.sp,fontWeight: MyLabel.MEDIUM),
+        textStyle: TextStyle(
+          fontFamily: 'Urbanist',
+          fontSize: 10.sp,
+          fontWeight: MyLabel.MEDIUM,
+        ),
         activeColorPrimary: blue,
         inactiveColorPrimary: grey500,
       ),
@@ -99,7 +114,11 @@ class HomeState extends ConsumerState<Home> {
         icon: Icon(IconlyBold.profile,size: 24.sp,),
         inactiveIcon: Icon(IconlyLight.profile,size: 24.sp,),
         title: "Profile",
-        textStyle: GoogleFonts.urbanist(fontSize: 10.sp,fontWeight: MyLabel.MEDIUM),
+        textStyle: TextStyle(
+          fontFamily: 'Urbanist',
+          fontSize: 10.sp,
+          fontWeight: MyLabel.MEDIUM,
+        ),
         activeColorPrimary: blue,
         inactiveColorPrimary: grey500,
       ),
@@ -142,13 +161,13 @@ class HomeState extends ConsumerState<Home> {
             items: navBarsItems,
             navBarHeight: kBottomNavigationBarHeight.h,
             confineInSafeArea: true,
-            backgroundColor: white, // Default is Colors.white.
+            backgroundColor: light1, // Default is Colors.white.
             handleAndroidBackButtonPress: true, // Default is true.
             resizeToAvoidBottomInset: true, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
             stateManagement: true, // Default is true.
             hideNavigationBarWhenKeyboardShows: true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
             decoration: NavBarDecoration(
-              colorBehindNavBar: white,
+              colorBehindNavBar: light1,
             ),
             popAllScreensOnTapOfSelectedTab: true,
             popActionScreens: PopActionScreensType.all,

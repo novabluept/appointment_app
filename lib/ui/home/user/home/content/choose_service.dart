@@ -5,6 +5,7 @@ import 'package:appointment_app_v2/ui/home/user/appointments_history/content/app
 import 'package:appointment_app_v2/ui/home/user/appointments_history/content/appointments_upcoming.dart';
 import 'package:appointment_app_v2/ui/home/user/home/content/choose_professional.dart';
 import 'package:appointment_app_v2/ui/home/user/home/content/choose_schedule.dart';
+import 'package:appointment_app_v2/ui_items/my_choose_service_tile.dart';
 import 'package:appointment_app_v2/utils/enums.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,6 +20,7 @@ import 'package:page_transition/page_transition.dart';
 import '../../../../../style/general_style.dart';
 import '../../../../../ui_items/my_app_bar.dart';
 import '../../../../../ui_items/my_button.dart';
+import '../../../../../ui_items/my_choose_professional_tile.dart';
 import '../../../../../ui_items/my_responsive_layout.dart';
 import '../../../../../ui_items/my_text_form_field.dart';
 import '../../../../../utils/constants.dart';
@@ -42,11 +44,12 @@ class ChooseServiceState extends ConsumerState<ChooseService> {
         return false;
       },
       child: Scaffold(
-          backgroundColor: white,
+          backgroundColor: grey50,
           resizeToAvoidBottomInset : true,
           appBar: MyAppBar(
             type: MyAppBarType.LEADING_ICON,
             leadingIcon: IconlyLight.arrow_left,
+            backgroundColor: grey50,
             label: 'Choose Service',
             onTap: (){
               Navigator.of(context).pop();
@@ -58,19 +61,18 @@ class ChooseServiceState extends ConsumerState<ChooseService> {
   }
 
   Widget mobileBody(){
-    return SingleChildScrollView(
-      child: Container(
+    return Container(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            MyButton(type: MyButtonType.FILLED, label: 'Continue',onPressed: (){
+        child: ListView.separated(
+          padding: EdgeInsets.symmetric(vertical: 24.h),
+          separatorBuilder: (context, index) => SizedBox(height: 20.h,),
+          itemCount: 10,
+          itemBuilder: (context, index) {
+            return MyChooseServiceTile(type: MyChooseServiceTileType.GENERAL,index: index,onTap: (){
               MethodHelper.transitionPage(context, widget, ChooseSchedule(), PageNavigatorType.PUSH, PageTransitionType.rightToLeftJoined);
-            }),
-          ],
-        ),
-      ),
+            });
+          },
+        )
     );
   }
 

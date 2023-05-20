@@ -3,7 +3,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../style/general_style.dart';
 import '../utils/enums.dart';
 
@@ -28,37 +27,44 @@ class MyLabel extends ConsumerWidget {
 
     switch (type) {
       case MyLabelType.H1:
-        return generalText(label,fontWeight ?? NORMAL,fontSize ?? 48,color ?? black,height ?? 1.2);
+        return generalText(label,fontWeight ?? NORMAL,fontSize ?? 48,color ?? dark1,height ?? 1.2);
       case MyLabelType.H2:
-        return generalText(label,fontWeight ?? NORMAL,fontSize ?? 40,color ?? black,height ?? 1.2);
+        return generalText(label,fontWeight ?? NORMAL,fontSize ?? 40,color ?? dark1,height ?? 1.2);
       case MyLabelType.H3:
-        return generalText(label,fontWeight ?? NORMAL,fontSize ?? 32,color ?? black,height ?? 1.2);
+        return generalText(label,fontWeight ?? NORMAL,fontSize ?? 32,color ?? dark1,height ?? 1.2);
       case MyLabelType.H4:
-        return generalText(label,fontWeight ?? NORMAL,fontSize ?? 24,color ?? black,height ?? 1.2);
+        return generalText(label,fontWeight ?? NORMAL,fontSize ?? 24,color ?? dark1,height ?? 1.2);
       case MyLabelType.H5:
-        return generalText(label,fontWeight ?? NORMAL,fontSize ?? 20,color ?? black,height ?? 1.2);
+        return generalText(label,fontWeight ?? NORMAL,fontSize ?? 20,color ?? dark1,height ?? 1.2);
       case MyLabelType.H6:
-        return generalText(label,fontWeight ?? NORMAL,fontSize ?? 18,color ?? black,height ?? 1.2);
+        return generalText(label,fontWeight ?? NORMAL,fontSize ?? 18,color ?? dark1,height ?? 1.2);
       case MyLabelType.BODY_XLARGE:
-        return generalText(label,fontWeight ?? NORMAL,fontSize ?? 18,color ?? black,height ?? 1.4);
+        return generalText(label,fontWeight ?? NORMAL,fontSize ?? 18,color ?? dark1,height ?? 1.4);
       case MyLabelType.BODY_LARGE:
-        return generalText(label,fontWeight ?? NORMAL,fontSize ?? 16,color ?? black,height ?? 1.4);
+        return generalText(label,fontWeight ?? NORMAL,fontSize ?? 16,color ?? dark1,height ?? 1.4);
       case MyLabelType.BODY_MEDIUM:
-        return generalText(label,fontWeight ?? NORMAL,fontSize ?? 14,color ?? black,height ?? 1.4);
+        return generalText(label,fontWeight ?? NORMAL,fontSize ?? 14,color ?? dark1,height ?? 1.4);
       case MyLabelType.BODY_SMALL:
-        return generalText(label,fontWeight ?? NORMAL,fontSize ?? 12,color ?? black,height ?? 1.0);
+        return generalText(label,fontWeight ?? NORMAL,fontSize ?? 12,color ?? dark1,height ?? 1.0);
       case MyLabelType.BODY_XSMALL:
-        return generalText(label,fontWeight ?? NORMAL,fontSize ?? 10,color ?? black,height ?? 1.0);
+        return generalText(label,fontWeight ?? NORMAL,fontSize ?? 10,color ?? dark1,height ?? 1.0);
       default:
         return Container();
     }
 
   }
 
+
   Widget generalText(String label,FontWeight fontWeight,int fontSize,Color color,double height){
     return Text(
       label,
-      style: GoogleFonts.urbanist(fontSize: fontSize.sp,fontWeight: fontWeight,color: color, height: height),
+      style: TextStyle(
+        fontFamily: 'Urbanist',
+        fontSize: fontSize.sp,
+        fontWeight: fontWeight,
+        color: color,
+        height: height,
+      ),
     );
   }
 

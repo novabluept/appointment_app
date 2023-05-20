@@ -35,16 +35,11 @@ class AppointmentsUpcomingState extends ConsumerState<AppointmentsUpcoming> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: ListView.separated(
+        padding: EdgeInsets.symmetric(vertical: 24.h),
         separatorBuilder: (context, index) => SizedBox(height: 20.h,),
-        itemCount: 10,
+        itemCount: 1,
         itemBuilder: (context, index) {
-          if(index == 0){
-            return Padding(padding: EdgeInsets.only(top: 24.h),child: MyAppointmentTile(type: MyAppointmentTileType.GENERAL,hasButtons: true,));
-          } else if(index == 10 - 1){
-            return Padding(padding: EdgeInsets.only(bottom: 24.h),child: MyAppointmentTile(type: MyAppointmentTileType.GENERAL,hasButtons: true,));
-          }else {
-            return MyAppointmentTile(type: MyAppointmentTileType.GENERAL,hasButtons: true,);
-          }
+          return MyAppointmentTile(type: MyAppointmentTileType.UPCOMMING,index: index,hasButtons: true,);
         },
       )
     );

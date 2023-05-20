@@ -27,9 +27,9 @@ class MyButton extends ConsumerWidget {
 
     switch (type) {
       case MyButtonType.FILLED:
-        return generalButton(label,white,blue,white,height,verticalPadding,onPressed);
+        return generalButton(label,light1,blue,light1,height,verticalPadding,onPressed);
       case MyButtonType.OUTLINED:
-        return generalButton(label,blue,white,blue,height,verticalPadding,onPressed);
+        return generalButton(label,blue,Colors.transparent,blue,height,verticalPadding,onPressed);
       case MyButtonType.IMAGE:
         return buttonImage(label,imgUrl!,onPressed);
       default:

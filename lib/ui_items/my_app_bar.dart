@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
 import '../style/general_style.dart';
 import '../utils/constants.dart';
@@ -20,32 +19,33 @@ class MyAppBar extends ConsumerWidget implements PreferredSizeWidget {
   final String? label;
   final GlobalKey<ScaffoldState>? scaffoldKey;
   final bool isTabBar;
+  final Color? backgroundColor;
   final Function()? onTap;
 
   const MyAppBar({super.key, required this.type, this.height = kToolbarHeight, this.leadingIcon, this.suffixIcon,
-    this.label, this.scaffoldKey, this.isTabBar = false,this.onTap});
+    this.label, this.scaffoldKey, this.isTabBar = false, this.backgroundColor,this.onTap});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     switch (type) {
       case MyAppBarType.GENERAL:
-        return generalAppBar(label!,null,null,isTabBar);
+        return generalAppBar(label!,null,null,backgroundColor,isTabBar);
       case MyAppBarType.LEADING_ICON:
-        return generalAppBar(label!,leadingIcon!,null,isTabBar);
+        return generalAppBar(label!,leadingIcon!,null,backgroundColor,isTabBar);
       case MyAppBarType.BOTTOM_TAB:
-        return generalAppBar(label!,null,null,isTabBar);
+        return generalAppBar(label!,null,null,backgroundColor,isTabBar);
       case MyAppBarType.LEADING_SUFFIX_ICON:
-        return homeAppBar(label!,leadingIcon!,suffixIcon!,isTabBar);
+        return homeAppBar(label!,leadingIcon!,suffixIcon!,backgroundColor,isTabBar);
       default:
         return Container();
     }
   }
 
-  Widget generalAppBar(String label,IconData? leadingIcon,IconData? suffixIcon,bool isTabBar) {
+  Widget generalAppBar(String label,IconData? leadingIcon,IconData? suffixIcon,Color? backgroundColor,bool isTabBar) {
     return PreferredSize(
       preferredSize: Size.fromHeight(kToolbarHeight.sp),
       child: AppBar(
-        backgroundColor: white,
+        backgroundColor: backgroundColor != null ? backgroundColor : light1,
         elevation: 0,
         scrolledUnderElevation: 0,
         titleSpacing: leadingIcon != null ? 0 : 24.w,
@@ -53,7 +53,7 @@ class MyAppBar extends ConsumerWidget implements PreferredSizeWidget {
         centerTitle: false,
         leading: leadingIcon != null ? GestureDetector(
             onTap: onTap,
-            child: Icon(leadingIcon, size: 20.sp, color: black,)
+            child: Icon(leadingIcon, size: 20.sp, color: dark1,)
         ) : null,
         title: MyLabel(
           type: MyLabelType.H4,
@@ -61,7 +61,11 @@ class MyAppBar extends ConsumerWidget implements PreferredSizeWidget {
           label: label,
         ),
         bottom: isTabBar ? TabBar(
-          labelStyle: GoogleFonts.urbanist(fontSize: 18.sp,fontWeight: MyLabel.SEMI_BOLD),
+          labelStyle: TextStyle(
+            fontFamily: 'Urbanist',
+            fontSize: 18.sp,
+            fontWeight: MyLabel.SEMI_BOLD,
+          ),
           labelColor: blue,
           unselectedLabelColor: grey500,
           indicatorSize: TabBarIndicatorSize.tab,
@@ -81,11 +85,11 @@ class MyAppBar extends ConsumerWidget implements PreferredSizeWidget {
   }
 
 
-  Widget homeAppBar(String label,IconData? leadingIcon,IconData? suffixIcon,bool isTabBar) {
+  Widget homeAppBar(String label,IconData? leadingIcon,IconData? suffixIcon,Color? backgroundColor,bool isTabBar) {
     return PreferredSize(
       preferredSize: Size.fromHeight(kToolbarHeight.sp),
       child: AppBar(
-        backgroundColor: white,
+        backgroundColor: backgroundColor != null ? backgroundColor : light1,
         elevation: 0,
         scrolledUnderElevation: 0,
         titleSpacing: 0,
@@ -102,7 +106,7 @@ class MyAppBar extends ConsumerWidget implements PreferredSizeWidget {
               child: GestureDetector(
                 onTap: () {},
                 child: Icon(
-                    IconlyLight.notification,size: 28.sp,color: black
+                    IconlyLight.notification,size: 28.sp,color: dark1
                 ),
               )
           ),

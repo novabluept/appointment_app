@@ -14,7 +14,11 @@ enum MyButtonType { FILLED, OUTLINED, IMAGE }
 enum MyDividerType { GENERAL }
 enum MyAppBarType { GENERAL, LEADING_ICON, BOTTOM_TAB, LEADING_SUFFIX_ICON }
 enum SnackBarType { WARNING, SUCCESS }
-enum MyAppointmentTileType { GENERAL }
+enum MyAppointmentTileType { UPCOMMING, COMPLETED, CANCELLED }
 enum MyProfileTileType { GENERAL }
-enum MyPillType { PRIMARY, DANGER, SUCCESS }
+enum MyPillType { PRIMARY_OUTLINED, DANGER_OUTLINED, SUCCESS_OUTLINED ,PRIMARY_FILLED_TRANSPARENT, DANGER_FILLED_TRANSPARENT, SUCCESS_FILLED_TRANSPARENT }
 enum MyHomeShopType { GENERAL }
+enum MyChooseProfessionalTileType { GENERAL }
+enum MyInkwellType { GENERAL }
+enum MyChooseServiceTileType { GENERAL }
+enum MyChooseShopTileType { GENERAL }

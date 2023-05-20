@@ -56,7 +56,7 @@ class MethodHelper{
         type: MyLabelType.BODY_MEDIUM,
         fontWeight: MyLabel.MEDIUM,
         label: label,
-        color: white,
+        color: light1,
       ),
     );
 

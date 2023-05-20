@@ -77,7 +77,7 @@ class VerifyEmailState extends ConsumerState<VerifyEmail> {
         return false;
       },
       child: Scaffold(
-          backgroundColor: white,
+          backgroundColor: light1,
           appBar: MyAppBar(
             type: MyAppBarType.LEADING_ICON,
             leadingIcon: IconlyLight.arrow_left,
@@ -92,7 +92,7 @@ class VerifyEmailState extends ConsumerState<VerifyEmail> {
 
   Widget mobileBody(){
     return Container(
-      color: white,
+      color: light1,
       padding: EdgeInsets.only(left: 24.w, right: 24.w, bottom: 48.h),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,

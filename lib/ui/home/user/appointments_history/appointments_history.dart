@@ -32,9 +32,10 @@ class AppointmentsHistoryState extends ConsumerState<AppointmentsHistory> {
       length: 3,
       child: Scaffold(
         backgroundColor: grey50,
-        appBar: const MyAppBar(
+        appBar: MyAppBar(
           type: MyAppBarType.BOTTOM_TAB,
           label: 'Appointments',
+          backgroundColor: grey50,
           height: kToolbarHeight * 2,
           isTabBar: true,
         ),

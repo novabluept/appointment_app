@@ -41,17 +41,17 @@ class MyProfileTile extends ConsumerWidget {
         children: [
           Row(
             children: [
-              Icon(icon,size: 28.sp,color: isLogout ? red : black),
+              Icon(icon,size: 28.sp,color: isLogout ? red : dark1),
               SizedBox(width: 20.w,),
               MyLabel(
                 type: MyLabelType.BODY_XLARGE,
                 fontWeight: MyLabel.SEMI_BOLD,
                 label: label,
-                color: isLogout ? red : black,
+                color: isLogout ? red : dark1,
               ),
             ],
           ),
-          Icon(IconlyLight.arrow_right_2,size: 28.sp,color: isLogout ? red : black),
+          Icon(IconlyLight.arrow_right_2,size: 28.sp,color: isLogout ? red : dark1),
         ],
       ),
     );

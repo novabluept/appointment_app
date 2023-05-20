@@ -42,6 +42,8 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
   bool _confirmPasswordHasError = false;
   bool _showPasswordText = true;
   bool _showConfirmPasswordText = true;
+  bool _isPasswordFocused = false;
+  bool _isConfirmPasswordFocused = false;
 
   @override
   void dispose() {
@@ -133,7 +135,7 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
         return false;
       },
       child: Scaffold(
-        backgroundColor: white,
+        backgroundColor: light1,
         resizeToAvoidBottomInset : true,
         appBar: MyAppBar(
           type: MyAppBarType.LEADING_ICON,
@@ -151,7 +153,7 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
   Widget mobileBody(){
     return SingleChildScrollView(
       child: Container(
-        color: white,
+        color: light1,
         padding: EdgeInsets.only(left: 24.w, right: 24.w, bottom: 48.h),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -189,6 +191,10 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
                     showObscureText: _showPasswordText,
                     hasError: _passwordHasError,
                     errorText: 'Password must contain at least 6 characters',
+                    isFieldFocused: _isPasswordFocused,
+                    onFocusChange: (hasFocus){
+                      setState(() {_isPasswordFocused = hasFocus;});
+                    },
                     validator: (value){
                       if(value == null || value.isEmpty || !Validators.isPasswordValid(value)){
                         setState(() {_passwordHasError = true;});
@@ -214,6 +220,10 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
                     showObscureText: _showConfirmPasswordText,
                     hasError: _confirmPasswordHasError,
                     errorText: 'Password does\'t match',
+                    isFieldFocused: _isConfirmPasswordFocused,
+                    onFocusChange: (hasFocus){
+                      setState(() {_isConfirmPasswordFocused = hasFocus;});
+                    },
                     validator: (value){
                       if(value == null || value.isEmpty || _passwordController.text.trim() != _confirmPasswordController.text.trim()){
                         setState(() {_confirmPasswordHasError = true;});

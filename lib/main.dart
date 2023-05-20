@@ -3,6 +3,7 @@ import 'package:appointment_app_v2/style/general_style.dart';
 import 'package:appointment_app_v2/ui/main_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -11,6 +12,11 @@ import 'package:page_transition/page_transition.dart';
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized(); /// Firebase
   await Firebase.initializeApp(); /// Firebase
+
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
 
   runApp(ProviderScope(child: MyApp()));
 }
@@ -40,7 +46,7 @@ class MyApp extends StatelessWidget {
               nextScreen: MainPage(),
               splashTransition: SplashTransition.fadeTransition,
               pageTransitionType: PageTransitionType.fade,
-              backgroundColor: white),
+              backgroundColor: light1),
         );
       },
     );

@@ -41,11 +41,12 @@ class ChooseScheduleState extends ConsumerState<ChooseSchedule> {
         return false;
       },
       child: Scaffold(
-          backgroundColor: white,
+          backgroundColor: grey50,
           resizeToAvoidBottomInset : true,
           appBar: MyAppBar(
             type: MyAppBarType.LEADING_ICON,
             leadingIcon: IconlyLight.arrow_left,
+            backgroundColor: grey50,
             label: 'Choose Schedule',
             onTap: (){
               Navigator.of(context).pop();

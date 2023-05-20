@@ -31,6 +31,7 @@ class ForgotPasswordState extends ConsumerState<ForgotPassword> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   bool _emailHasError = false;
+  bool _isEmailFocused = false;
 
   @override
   void dispose() {
@@ -74,7 +75,7 @@ class ForgotPasswordState extends ConsumerState<ForgotPassword> {
         return false;
       },
       child: Scaffold(
-        backgroundColor: white,
+        backgroundColor: light1,
         appBar: MyAppBar(
           type: MyAppBarType.LEADING_ICON,
           leadingIcon: IconlyLight.arrow_left,
@@ -92,7 +93,7 @@ class ForgotPasswordState extends ConsumerState<ForgotPassword> {
   Widget mobileBody(){
     return SingleChildScrollView(
       child: Container(
-        color: white,
+        color: light1,
         padding: EdgeInsets.only(left: 24.w, right: 24.w, bottom: 48.h),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -129,6 +130,10 @@ class ForgotPasswordState extends ConsumerState<ForgotPassword> {
                     label: 'Email',
                     hasError: _emailHasError,
                     errorText: 'hrello',
+                    isFieldFocused: _isEmailFocused,
+                    onFocusChange: (hasFocus){
+                      setState(() {_isEmailFocused = hasFocus;});
+                    },
                     validator: (value){
                       if(value == null || value.isEmpty || !Validators.isEmailValid(value)){
                         setState(() {_emailHasError = true;});

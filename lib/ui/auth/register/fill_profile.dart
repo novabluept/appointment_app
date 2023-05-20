@@ -37,12 +37,16 @@ class FillProfileState extends ConsumerState<FillProfile> {
   final TextEditingController _dateOfBirthController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
-  File? _image;
   bool _firstNameHasError = false;
   bool _lastNameHasError = false;
   bool _dateOfBirthHasError = false;
   bool _emailHasError = false;
   bool _phoneNumberHasError = false;
+  bool _isFirstNameFocused = false;
+  bool _isLastNameFocused = false;
+  bool _isDateOfBirthFocused = false;
+  bool _isEmailFocused = false;
+  bool _isPhoneNumberFocused = false;
 
   @override
   void initState() {
@@ -65,7 +69,6 @@ class FillProfileState extends ConsumerState<FillProfile> {
 
   _insertInitialTextEditingControllersValues(){
     String imagePath = ref.watch(imagePathProvider);
-    _image = File(imagePath);
     _firstNameController.text = ref.watch(firstNameProvider);
     _lastNameController.text = ref.watch(lastNameProvider);
     _dateOfBirthController.text = ref.watch(dateOfBirthProvider);
@@ -95,7 +98,7 @@ class FillProfileState extends ConsumerState<FillProfile> {
 
     final imageTemporary = File(imagePath);
     await FillProfileModelImp().setValue(imagePathProvider.notifier, ref, imagePath);
-    setState(() { this._image = imageTemporary;});
+    setState(() {});
   }
 
   @override
@@ -107,7 +110,7 @@ class FillProfileState extends ConsumerState<FillProfile> {
         return false;
       },
       child: Scaffold(
-        backgroundColor: white,
+        backgroundColor: light1,
         resizeToAvoidBottomInset : true,
         appBar: MyAppBar(
           type: MyAppBarType.LEADING_ICON,
@@ -126,7 +129,7 @@ class FillProfileState extends ConsumerState<FillProfile> {
   Widget mobileBody(){
     return SingleChildScrollView(
       child: Container(
-        color: white,
+        color: light1,
         padding: EdgeInsets.only(left: 24.w, right: 24.w, bottom: 48.h),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -139,7 +142,7 @@ class FillProfileState extends ConsumerState<FillProfile> {
                 height: 200.h,
                 child: CircleAvatar(
                   radius: 58,
-                  backgroundColor: white,
+                  backgroundColor: light1,
                   backgroundImage: ref.watch(imagePathProvider) != PROFILE_IMAGE_DIRECTORY ? Image.file(File(ref.watch(imagePathProvider))).image : Image.asset(PROFILE_IMAGE_DIRECTORY).image,
                   child: Stack(
                     children: [
@@ -151,7 +154,7 @@ class FillProfileState extends ConsumerState<FillProfile> {
                           child: CircleAvatar(
                             radius: 18,
                             backgroundColor: blue,
-                            child: Icon(IconlyBold.edit,color: white,size: 30.sp),
+                            child: Icon(IconlyBold.edit,color: light1,size: 30.sp),
                           ),
                         ),
                       ),
@@ -175,6 +178,10 @@ class FillProfileState extends ConsumerState<FillProfile> {
                     contentPaddingHeight: 18,
                     hasError: _firstNameHasError,
                     errorText: 'Please enter a valid first name',
+                    isFieldFocused: _isFirstNameFocused,
+                    onFocusChange: (hasFocus){
+                      setState(() {_isFirstNameFocused = hasFocus;});
+                    },
                     validator: (value){
                       if(value == null || value.isEmpty || !Validators.hasMinimumAndMaxCharacters(value)){
                         setState(() {_firstNameHasError = true;});
@@ -194,6 +201,10 @@ class FillProfileState extends ConsumerState<FillProfile> {
                     contentPaddingHeight: 18,
                     hasError: _lastNameHasError,
                     errorText: 'Please enter a valid last name',
+                    isFieldFocused: _isLastNameFocused,
+                    onFocusChange: (hasFocus){
+                      setState(() {_isLastNameFocused = hasFocus;});
+                    },
                     validator: (value){
                       if(value == null || value.isEmpty || !Validators.hasMinimumAndMaxCharacters(value)){
                         setState(() {_lastNameHasError = true;});
@@ -228,6 +239,10 @@ class FillProfileState extends ConsumerState<FillProfile> {
                         }
                       });
                     },
+                    isFieldFocused: _isDateOfBirthFocused,
+                    onFocusChange: (hasFocus){
+                      setState(() {_isDateOfBirthFocused = hasFocus;});
+                    },
                     validator: (value){
                       if(value == null || value.isEmpty){
                         setState(() {_dateOfBirthHasError = true;});
@@ -248,6 +263,10 @@ class FillProfileState extends ConsumerState<FillProfile> {
                     contentPaddingHeight: 18,
                     hasError: _emailHasError,
                     errorText: 'Please enter a valid email',
+                    isFieldFocused: _isEmailFocused,
+                    onFocusChange: (hasFocus){
+                      setState(() {_isEmailFocused = hasFocus;});
+                    },
                     validator: (value){
                       if(value == null || value.isEmpty || !Validators.isEmailValid(value)){
                         setState(() {_emailHasError = true;});
@@ -267,6 +286,10 @@ class FillProfileState extends ConsumerState<FillProfile> {
                     contentPaddingHeight: 18,
                     hasError: _phoneNumberHasError,
                     errorText: 'Phone number should have the format: 9XYYYYYYY',
+                    isFieldFocused: _isPhoneNumberFocused,
+                    onFocusChange: (hasFocus){
+                      setState(() {_isPhoneNumberFocused = hasFocus;});
+                    },
                     validator: (value){
                       if(value == null || value.isEmpty || !Validators.isPhoneValid(value)){
                         setState(() {_phoneNumberHasError = true;});

@@ -16,6 +16,7 @@ import '../../../../../../ui_items/my_responsive_layout.dart';
 import '../../../../ui_items/my_app_bar.dart';
 import '../../../../ui_items/my_home_shop.dart';
 import '../../../../ui_items/my_pill.dart';
+import 'choose_shop.dart';
 
 class HomeUser extends ConsumerStatefulWidget {
   const HomeUser({Key? key}): super(key: key);
@@ -35,9 +36,10 @@ class HomeUserState extends ConsumerState<HomeUser> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: grey50,
-        appBar: const MyAppBar(
+        appBar: MyAppBar(
           type: MyAppBarType.LEADING_SUFFIX_ICON,
           label: 'Profile',
+          backgroundColor: grey50,
           height: kToolbarHeight,
           leadingIcon: IconlyLight.notification,
           suffixIcon: IconlyLight.notification,
@@ -53,7 +55,6 @@ class HomeUserState extends ConsumerState<HomeUser> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-
           Align(
             alignment: Alignment.centerLeft,
             child: MyLabel(
@@ -72,13 +73,23 @@ class HomeUserState extends ConsumerState<HomeUser> {
               MyLabel(
                 type: MyLabelType.H5,
                 fontWeight: MyLabel.BOLD,
-                label: 'Shops',
+                label: 'Featured',
               ),
-              MyLabel(
-                type: MyLabelType.BODY_LARGE,
-                fontWeight: MyLabel.BOLD,
-                label: 'See all',
-                color: blue,
+              GestureDetector(
+                onTap: (){
+                  pushNewScreen(
+                    context,
+                    screen: ChooseShop(),
+                    withNavBar: false, // OPTIONAL VALUE. True by default.
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  );
+                },
+                child: MyLabel(
+                  type: MyLabelType.BODY_LARGE,
+                  fontWeight: MyLabel.BOLD,
+                  label: 'See all',
+                  color: blue,
+                ),
               ),
             ],
           ),

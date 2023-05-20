@@ -90,7 +90,7 @@ class EditProfileState extends ConsumerState<EditProfile> {
         return false;
       },
       child: Scaffold(
-          backgroundColor: white,
+          backgroundColor: light1,
           resizeToAvoidBottomInset : true,
           appBar: MyAppBar(
             type: MyAppBarType.LEADING_ICON,
@@ -121,7 +121,7 @@ class EditProfileState extends ConsumerState<EditProfile> {
               autovalidateMode: AutovalidateMode.disabled,
               child: Column(
                 children: [
-                  MyTextFormField(
+                  /*MyTextFormField(
                       type: MyTextFormFieldType.GENERAL,
                       textEditingController: _firstNameController,
                       label: 'First name',
@@ -232,7 +232,7 @@ class EditProfileState extends ConsumerState<EditProfile> {
 
                   SizedBox(height: 24.h,),
 
-                  MyButton(type: MyButtonType.FILLED, label: 'Update',onPressed: _saveValues),
+                  MyButton(type: MyButtonType.FILLED, label: 'Update',onPressed: _saveValues),*/
                 ],
               ),
             ),

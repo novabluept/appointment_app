@@ -33,16 +33,12 @@ class AppointmentsHistoryState extends ConsumerState<AppointmentsCancelled> {
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
         child: ListView.separated(
+          padding: EdgeInsets.symmetric(vertical: 24.h),
           separatorBuilder: (context, index) => SizedBox(height: 20.h,),
-          itemCount: 10,
+          itemCount: 7,
           itemBuilder: (context, index) {
-            if(index == 0){
-              return Padding(padding: EdgeInsets.only(top: 24.h),child: MyAppointmentTile(type: MyAppointmentTileType.GENERAL));
-            } else if(index == 10 - 1){
-              return Padding(padding: EdgeInsets.only(bottom: 24.h),child: MyAppointmentTile(type: MyAppointmentTileType.GENERAL));
-            }else {
-              return MyAppointmentTile(type: MyAppointmentTileType.GENERAL);
-            }
+            return MyAppointmentTile(type: MyAppointmentTileType.CANCELLED,index: index,);
+
           },
         )
     );

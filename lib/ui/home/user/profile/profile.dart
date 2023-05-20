@@ -59,7 +59,7 @@ class ProfileState extends ConsumerState<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: white,
+        backgroundColor: light1,
         appBar: const MyAppBar(
           type: MyAppBarType.GENERAL,
           label: 'Profile',
@@ -85,7 +85,7 @@ class ProfileState extends ConsumerState<Profile> {
                 height: 140.h,
                 child: CircleAvatar(
                   radius: 58,
-                  backgroundColor: white,
+                  backgroundColor: light1,
                   backgroundImage: ref.watch(imagePathProvider) != PROFILE_IMAGE_DIRECTORY ? Image.file(File(ref.watch(imagePathProvider))).image : Image.asset(PROFILE_IMAGE_DIRECTORY).image,
                   child: Stack(
                       children: [
@@ -97,7 +97,7 @@ class ProfileState extends ConsumerState<Profile> {
                             child: CircleAvatar(
                               radius: 18,
                               backgroundColor: blue,
-                              child: Icon(IconlyBold.edit,color: white,size: 16.sp),
+                              child: Icon(IconlyBold.edit,color: light1,size: 16.sp),
                             ),
                           ),
                         ),

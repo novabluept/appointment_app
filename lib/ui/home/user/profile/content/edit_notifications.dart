@@ -38,7 +38,7 @@ class EditNotificationsState extends ConsumerState<EditNotifications> {
         return false;
       },
       child: Scaffold(
-          backgroundColor: white,
+          backgroundColor: light1,
           resizeToAvoidBottomInset : true,
           appBar: MyAppBar(
             type: MyAppBarType.LEADING_ICON,

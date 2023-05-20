@@ -9,32 +9,38 @@ import '../style/general_style.dart';
 import '../utils/enums.dart';
 import 'my_button.dart';
 import 'my_label.dart';
+import 'my_pill.dart';
 
 class MyAppointmentTile extends ConsumerWidget {
 
   final MyAppointmentTileType type;
+  final int index;
   final bool hasButtons;
 
 
-  const MyAppointmentTile({super.key, required this.type,this.hasButtons = false});
+  const MyAppointmentTile({super.key, required this.type, required this.index,this.hasButtons = false});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
     switch (type) {
-      case MyAppointmentTileType.GENERAL:
-        return generalAppointmentTile();
+      case MyAppointmentTileType.UPCOMMING:
+        return generalAppointmentTile(type,index);
+      case MyAppointmentTileType.COMPLETED:
+        return generalAppointmentTile(type,index);
+      case MyAppointmentTileType.CANCELLED:
+        return generalAppointmentTile(type,index);
       default:
         return Container();
     }
 
   }
 
-  Widget generalAppointmentTile(){
+  Widget generalAppointmentTile(MyAppointmentTileType type,int index){
 
     return Container(
       decoration: BoxDecoration(
-        color: white,
+        color: light1,
         borderRadius: BorderRadius.circular(16.0).r,
       ),
       child: Column(
@@ -52,6 +58,13 @@ class MyAppointmentTile extends ConsumerWidget {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(16).r,
                         child: Image.asset(
+                          index == 0 ? 'images/barber_1.jpg' :
+                          index == 1 ? 'images/barber_2.jpg' :
+                          index == 2 ? 'images/barber_3.jpg' :
+                          index == 3 ? 'images/barber_4.jpg' :
+                          index == 4 ? 'images/barber_5.jpg' :
+                          index == 5 ? 'images/barber_6.jpg' :
+                          index == 6 ? 'images/barber_7.jpg' :
                           'images/girl.jpg',
                           width: 110.h,
                           height: 110.h,
@@ -76,6 +89,18 @@ class MyAppointmentTile extends ConsumerWidget {
                                 label: 'Video Call',
                                 color: grey800,
                               ),
+                              SizedBox(width: 6.w,),
+                              MyLabel(
+                                type: MyLabelType.BODY_SMALL,
+                                fontWeight: MyLabel.MEDIUM,
+                                label: '-',
+                                color: grey800,
+                              ),
+                              SizedBox(width: 6.w,),
+
+                              type == MyAppointmentTileType.UPCOMMING ? MyPill(type: MyPillType.PRIMARY_FILLED_TRANSPARENT,label: 'Upcomming',) :
+                              type == MyAppointmentTileType.COMPLETED ? MyPill(type: MyPillType.SUCCESS_FILLED_TRANSPARENT,label: 'Completed',) :
+                              MyPill(type: MyPillType.DANGER_FILLED_TRANSPARENT,label: 'Cancelled',)
                             ],
                           ),
                           MyLabel(
