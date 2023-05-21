@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:iconly/iconly.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -16,6 +17,7 @@ import 'package:intl/intl.dart';
 import '../../../../../style/general_style.dart';
 import '../../../../../ui_items/my_app_bar.dart';
 import '../../../../../ui_items/my_button.dart';
+import '../../../../../ui_items/my_label.dart';
 import '../../../../../ui_items/my_responsive_layout.dart';
 import '../../../../../ui_items/my_text_form_field.dart';
 import '../../../../../utils/constants.dart';
@@ -61,6 +63,26 @@ class InviteFriendsState extends ConsumerState<InviteFriends> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+
+            SizedBox(height: 43.h,),
+
+            SvgPicture.asset('images/invite_friends_image.svg',width: 276.w,height: 250.h),
+
+            SizedBox(height: 33.h,),
+
+            Align(
+              alignment: Alignment.centerLeft,
+              child: MyLabel(
+                type: MyLabelType.BODY_XLARGE,
+                fontWeight: MyLabel.MEDIUM,
+                label: 'Bring your friends along and invite them now!',
+                color: grey900,
+              ),
+            ),
+
+            SizedBox(height: 24.h,),
+
+            MyButton(type: MyButtonType.FILLED, label: 'Invite Friends',onPressed: (){}),
 
           ],
         ),

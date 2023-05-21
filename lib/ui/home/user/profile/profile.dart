@@ -24,6 +24,7 @@ import '../../../../ui_items/my_profile_tile.dart';
 import '../../../../ui_items/my_responsive_layout.dart';
 import '../../../../utils/constants.dart';
 import '../appointments_history/content/appointments_cancelled.dart';
+import 'content/security.dart';
 
 class Profile extends ConsumerStatefulWidget {
   const Profile({Key? key}): super(key: key);
@@ -152,6 +153,17 @@ class ProfileState extends ConsumerState<Profile> {
                   pushNewScreen(
                     context,
                     screen: EditNotifications(),
+                    withNavBar: false, // OPTIONAL VALUE. True by default.
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  );
+                }),
+
+                SizedBox(height: 20.h,),
+
+                MyProfileTile(type: MyProfileTileType.GENERAL,icon: IconlyLight.shield_done,label: 'Security',onTap: (){
+                  pushNewScreen(
+                    context,
+                    screen: Security(),
                     withNavBar: false, // OPTIONAL VALUE. True by default.
                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
                   );

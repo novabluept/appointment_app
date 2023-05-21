@@ -47,7 +47,7 @@ class MyNotificationTile extends ConsumerWidget {
                   size: 28.sp,
                   color: blue,
                 ),
-                onPressed: () {},
+                onPressed: null,
               ),
             ),
             SizedBox(width: 16.w,),

@@ -41,6 +41,11 @@ class EditProfileState extends ConsumerState<EditProfile> {
   bool _dateOfBirthHasError = false;
   bool _emailHasError = false;
   bool _phoneNumberHasError = false;
+  bool _isFirstNameFocused = false;
+  bool _isLastNameFocused = false;
+  bool _isDateOfBirthFocused = false;
+  bool _isEmailFocused = false;
+  bool _isPhoneNumberFocused = false;
 
   @override
   void initState() {
@@ -121,118 +126,138 @@ class EditProfileState extends ConsumerState<EditProfile> {
               autovalidateMode: AutovalidateMode.disabled,
               child: Column(
                 children: [
-                  /*MyTextFormField(
-                      type: MyTextFormFieldType.GENERAL,
-                      textEditingController: _firstNameController,
-                      label: 'First name',
-                      contentPaddingHeight: 18,
-                      hasError: _firstNameHasError,
-                      errorText: 'Please enter a valid first name',
-                      validator: (value){
-                        if(value == null || value.isEmpty || !Validators.hasMinimumAndMaxCharacters(value)){
-                          setState(() {_firstNameHasError = true;});
-                          return '';
-                        }
-                        setState(() {_firstNameHasError = false;});
-                        return null;
-                      }
-                  ),
-
-                  SizedBox(height: 24.h,),
-
                   MyTextFormField(
-                      type: MyTextFormFieldType.GENERAL,
-                      textEditingController: _lastNameController,
-                      label: 'Last name',
-                      contentPaddingHeight: 18,
-                      hasError: _lastNameHasError,
-                      errorText: 'Please enter a valid last name',
-                      validator: (value){
-                        if(value == null || value.isEmpty || !Validators.hasMinimumAndMaxCharacters(value)){
-                          setState(() {_lastNameHasError = true;});
-                          return '';
-                        }
-                        setState(() {_lastNameHasError = false;});
-                        return null;
+                  type: MyTextFormFieldType.GENERAL,
+                  textEditingController: _firstNameController,
+                  label: 'First name',
+                  contentPaddingHeight: 18,
+                  hasError: _firstNameHasError,
+                  errorText: 'Please enter a valid first name',
+                  isFieldFocused: _isFirstNameFocused,
+                  onFocusChange: (hasFocus){
+                    setState(() {_isFirstNameFocused = hasFocus;});
+                  },
+                  validator: (value){
+                    if(value == null || value.isEmpty || !Validators.hasMinimumAndMaxCharacters(value)){
+                      setState(() {_firstNameHasError = true;});
+                      return '';
+                    }
+                    setState(() {_firstNameHasError = false;});
+                    return null;
+                  }
+              ),
+
+              SizedBox(height: 24.h,),
+
+              MyTextFormField(
+                  type: MyTextFormFieldType.GENERAL,
+                  textEditingController: _lastNameController,
+                  label: 'Last name',
+                  contentPaddingHeight: 18,
+                  hasError: _lastNameHasError,
+                  errorText: 'Please enter a valid last name',
+                  isFieldFocused: _isLastNameFocused,
+                  onFocusChange: (hasFocus){
+                    setState(() {_isLastNameFocused = hasFocus;});
+                  },
+                  validator: (value){
+                    if(value == null || value.isEmpty || !Validators.hasMinimumAndMaxCharacters(value)){
+                      setState(() {_lastNameHasError = true;});
+                      return '';
+                    }
+                    setState(() {_lastNameHasError = false;});
+                    return null;
+                  }
+              ),
+
+              SizedBox(height: 24.h,),
+
+              MyTextFormField(
+                  type: MyTextFormFieldType.SUFFIX,
+                  textEditingController: _dateOfBirthController,
+                  suffixIcon: IconlyLight.calendar,
+                  label: 'Date of birth',
+                  contentPaddingHeight: 18,
+                  hasError: _dateOfBirthHasError,
+                  errorText: 'Please enter a valid date of birth',
+                  isDate: true,
+                  isReadOnly: true,
+                  showDateDialog: () async{
+                    await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(1970),
+                      lastDate: DateTime(2025),
+                    ).then((selectedDate) {
+                      if (selectedDate != null) {
+                        _dateOfBirthController.text = DateFormat(DATE_FORMAT).format(selectedDate);
                       }
-                  ),
+                    });
+                  },
+                  isFieldFocused: _isDateOfBirthFocused,
+                  onFocusChange: (hasFocus){
+                    setState(() {_isDateOfBirthFocused = hasFocus;});
+                  },
+                  validator: (value){
+                    if(value == null || value.isEmpty){
+                      setState(() {_dateOfBirthHasError = true;});
+                      return '';
+                    }
+                    setState(() {_dateOfBirthHasError = false;});
+                    return null;
+                  }
+              ),
+
+              SizedBox(height: 24.h,),
+
+              MyTextFormField(
+                  type: MyTextFormFieldType.SUFFIX,
+                  textEditingController: _emailController,
+                  suffixIcon: IconlyLight.message,
+                  label: 'Email',
+                  contentPaddingHeight: 18,
+                  hasError: _emailHasError,
+                  errorText: 'Please enter a valid email',
+                  isFieldFocused: _isEmailFocused,
+                  onFocusChange: (hasFocus){
+                    setState(() {_isEmailFocused = hasFocus;});
+                  },
+                  validator: (value){
+                    if(value == null || value.isEmpty || !Validators.isEmailValid(value)){
+                      setState(() {_emailHasError = true;});
+                      return '';
+                    }
+                    setState(() {_emailHasError = false;});
+                    return null;
+                  }
+              ),
+
+              SizedBox(height: 24.h,),
+
+              MyTextFormField(
+                  type: MyTextFormFieldType.PHONE,
+                  textEditingController: _phoneNumberController,
+                  label: 'Phone number',
+                  contentPaddingHeight: 18,
+                  hasError: _phoneNumberHasError,
+                  errorText: 'Phone number should have the format: 9XYYYYYYY',
+                  isFieldFocused: _isPhoneNumberFocused,
+                  onFocusChange: (hasFocus){
+                    setState(() {_isPhoneNumberFocused = hasFocus;});
+                  },
+                  validator: (value){
+                    if(value == null || value.isEmpty || !Validators.isPhoneValid(value)){
+                      setState(() {_phoneNumberHasError = true;});
+                      return '';
+                    }
+                    setState(() {_phoneNumberHasError = false;});
+                    return null;
+                  }
+              ),
 
                   SizedBox(height: 24.h,),
 
-                  MyTextFormField(
-                      type: MyTextFormFieldType.SUFFIX,
-                      textEditingController: _dateOfBirthController,
-                      suffixIcon: IconlyLight.calendar,
-                      label: 'Date of birth',
-                      contentPaddingHeight: 18,
-                      hasError: _dateOfBirthHasError,
-                      errorText: 'Please enter a valid date of birth',
-                      isDate: true,
-                      isReadOnly: true,
-                      showDateDialog: () async{
-                        await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(1970),
-                          lastDate: DateTime(2025),
-                        ).then((selectedDate) {
-                          if (selectedDate != null) {
-                            _dateOfBirthController.text = DateFormat(DATE_FORMAT).format(selectedDate);
-                          }
-                        });
-                      },
-                      validator: (value){
-                        if(value == null || value.isEmpty){
-                          setState(() {_dateOfBirthHasError = true;});
-                          return '';
-                        }
-                        setState(() {_dateOfBirthHasError = false;});
-                        return null;
-                      }
-                  ),
-
-                  SizedBox(height: 24.h,),
-
-                  MyTextFormField(
-                      type: MyTextFormFieldType.SUFFIX,
-                      textEditingController: _emailController,
-                      suffixIcon: IconlyLight.message,
-                      label: 'Email',
-                      contentPaddingHeight: 18,
-                      hasError: _emailHasError,
-                      errorText: 'Please enter a valid email',
-                      validator: (value){
-                        if(value == null || value.isEmpty || !Validators.isEmailValid(value)){
-                          setState(() {_emailHasError = true;});
-                          return '';
-                        }
-                        setState(() {_emailHasError = false;});
-                        return null;
-                      }
-                  ),
-
-                  SizedBox(height: 24.h,),
-
-                  MyTextFormField(
-                      type: MyTextFormFieldType.PHONE,
-                      textEditingController: _phoneNumberController,
-                      label: 'Phone number',
-                      contentPaddingHeight: 18,
-                      hasError: _phoneNumberHasError,
-                      errorText: 'Phone number should have the format: 9XYYYYYYY',
-                      validator: (value){
-                        if(value == null || value.isEmpty || !Validators.isPhoneValid(value)){
-                          setState(() {_phoneNumberHasError = true;});
-                          return '';
-                        }
-                        setState(() {_phoneNumberHasError = false;});
-                        return null;
-                      }
-                  ),
-
-                  SizedBox(height: 24.h,),
-
-                  MyButton(type: MyButtonType.FILLED, label: 'Update',onPressed: _saveValues),*/
+                  MyButton(type: MyButtonType.FILLED, label: 'Update',onPressed: _saveValues),
                 ],
               ),
             ),

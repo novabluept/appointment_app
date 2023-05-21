@@ -1,7 +1,9 @@
 
-/// Firebase related
+
+/// Types
 enum FirebaseCollections { USER }
 enum UserRole { USER, WORKER, ADMIN}
+enum LanguageTypes { PT, EN }
 
 /// Page Transitions
 enum PageNavigatorType { PUSH, PUSH_REPLACEMENT }

@@ -16,6 +16,7 @@ import 'package:intl/intl.dart';
 import '../../../../../style/general_style.dart';
 import '../../../../../ui_items/my_app_bar.dart';
 import '../../../../../ui_items/my_button.dart';
+import '../../../../../ui_items/my_label.dart';
 import '../../../../../ui_items/my_responsive_layout.dart';
 import '../../../../../ui_items/my_text_form_field.dart';
 import '../../../../../utils/constants.dart';
@@ -29,6 +30,8 @@ class EditLanguage extends ConsumerStatefulWidget {
 }
 
 class EditLanguageState extends ConsumerState<EditLanguage> {
+
+  LanguageTypes? _language = LanguageTypes.PT;
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +64,49 @@ class EditLanguageState extends ConsumerState<EditLanguage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            
+
+            ListTile(
+              title: MyLabel(
+                type: MyLabelType.BODY_XLARGE,
+                fontWeight: MyLabel.SEMI_BOLD,
+                label: 'Portuguese',
+                color: grey900,
+              ),
+              trailing: Radio(
+                value: LanguageTypes.PT,
+                groupValue: _language,
+                activeColor: blue,
+                fillColor: MaterialStateProperty.all(blue),
+                onChanged: (LanguageTypes? value) {
+                  setState(() {
+                    _language = value;
+                  });
+                },
+              ),
+            ),
+
+
+
+            ListTile(
+              title: MyLabel(
+                type: MyLabelType.BODY_XLARGE,
+                fontWeight: MyLabel.SEMI_BOLD,
+                label: 'English',
+                color: grey900,
+              ),
+              trailing: Radio(
+                value: LanguageTypes.EN,
+                groupValue: _language,
+                activeColor: blue,
+                fillColor: MaterialStateProperty.all(blue),
+                onChanged: (LanguageTypes? value) {
+                  setState(() {
+                    _language = value;
+                  });
+                },
+              ),
+            ),
+
           ],
         ),
       ),
