@@ -71,7 +71,7 @@ class MyAppointmentTile extends ConsumerWidget {
                           fit: BoxFit.cover,
                         ),
                       ),
-                      SizedBox(width: 16.w,),
+                      SizedBox(width: 16.w),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,18 +89,18 @@ class MyAppointmentTile extends ConsumerWidget {
                                 label: 'Video Call',
                                 color: grey800,
                               ),
-                              SizedBox(width: 6.w,),
+                              SizedBox(width: 6.w),
                               MyLabel(
                                 type: MyLabelType.BODY_SMALL,
                                 fontWeight: MyLabel.MEDIUM,
                                 label: '-',
                                 color: grey800,
                               ),
-                              SizedBox(width: 6.w,),
+                              SizedBox(width: 6.w),
 
-                              type == MyAppointmentTileType.UPCOMMING ? MyPill(type: MyPillType.PRIMARY_FILLED_TRANSPARENT,label: 'Upcomming',) :
-                              type == MyAppointmentTileType.COMPLETED ? MyPill(type: MyPillType.SUCCESS_FILLED_TRANSPARENT,label: 'Completed',) :
-                              MyPill(type: MyPillType.DANGER_FILLED_TRANSPARENT,label: 'Cancelled',)
+                              type == MyAppointmentTileType.UPCOMMING ? MyPill(type: MyPillType.PRIMARY_FILLED_TRANSPARENT,label: 'Upcomming') :
+                              type == MyAppointmentTileType.COMPLETED ? MyPill(type: MyPillType.SUCCESS_FILLED_TRANSPARENT,label: 'Completed') :
+                              MyPill(type: MyPillType.DANGER_FILLED_TRANSPARENT,label: 'Cancelled')
                             ],
                           ),
                           MyLabel(
@@ -131,7 +131,7 @@ class MyAppointmentTile extends ConsumerWidget {
               ),
             ),
           ),
-          SizedBox(height: hasButtons ?  8.w : 16.w,),
+          SizedBox(height: hasButtons ?  8.w : 16.w),
           hasButtons ? Column(
             children: [
               Padding(
@@ -141,13 +141,13 @@ class MyAppointmentTile extends ConsumerWidget {
                   thickness: 1.0,
                 ),
               ),
-              SizedBox(height: 8.w,),
+              SizedBox(height: 8.w),
               Padding(
                 padding: EdgeInsets.only(left: 16.w,bottom: 16.w,right: 16.w),
                 child: Row(
                   children: [
                     Flexible(child: MyButton(type: MyButtonType.OUTLINED, label: 'Cancel Appointment',height: 32,verticalPadding: 6,onPressed:() {})),
-                    SizedBox(width: 16.w,),
+                    SizedBox(width: 16.w),
                     Flexible(child: MyButton(type: MyButtonType.FILLED, label: 'Reschedule',height: 32,verticalPadding: 6,onPressed:() {}))
                   ],
                 ),

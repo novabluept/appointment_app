@@ -1,11 +1,13 @@
 
 
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shimmer/shimmer.dart';
 import '../style/general_style.dart';
 import '../utils/enums.dart';
 import 'my_button.dart';
@@ -16,24 +18,30 @@ import 'my_pill.dart';
 class MyHomeShop extends ConsumerWidget {
 
   final MyHomeShopType type;
+  final Uint8List? image;
+  final String? name;
+  final String? city;
+  final String? state;
   final Function()? onTap;
 
 
-  const MyHomeShop({super.key, required this.type,required this.onTap});
+  const MyHomeShop({super.key,required this.type,this.image,this.name,this.city,this.state,this.onTap});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
     switch (type) {
       case MyHomeShopType.GENERAL:
-        return generalHomeShop(onTap);
+        return generalHomeShop(image!,name!,city!,state!,onTap);
+      case MyHomeShopType.SHIMMER:
+        return shimmerHomeShop();
       default:
         return Container();
     }
 
   }
 
-  Widget generalHomeShop(Function()? onTap){
+  Widget generalHomeShop(Uint8List image,String name,String city,String state,Function()? onTap){
 
     return MyInkwell(
       type: MyInkwellType.GENERAL,
@@ -43,11 +51,23 @@ class MyHomeShop extends ConsumerWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(16.0).r),
-                child: Image.asset(
-                  'images/barbershop_4.png',
-                  fit: BoxFit.cover,
-                  width: 380.w,
-                  height: 380.h,),
+                child: Image.memory(
+                    frameBuilder: (BuildContext context, Widget child, int? frame, bool? wasSynchronouslyLoaded) {
+                      if (wasSynchronouslyLoaded!) {
+                        return child;
+                      }
+                      return AnimatedOpacity(
+                        opacity: frame == null ? 0 : 1,
+                        duration: const Duration(seconds: 1),
+                        curve: Curves.linear,
+                        child: child,
+                      );
+                    },
+                    image,
+                    width: 380.w,
+                    height: 380.h,
+                    fit: BoxFit.cover
+                ),
               ),
             ],
           ),
@@ -61,7 +81,7 @@ class MyHomeShop extends ConsumerWidget {
                 end: Alignment.bottomCenter,
                 colors: [
                   Colors.transparent,
-                  Colors.black.withOpacity(0.5),
+                  Colors.black.withOpacity(0.7),
                 ],
               ),
             ),
@@ -78,23 +98,23 @@ class MyHomeShop extends ConsumerWidget {
                 MyLabel(
                   type: MyLabelType.H5,
                   fontWeight: MyLabel.BOLD,
-                  label: 'Porta 54',
+                  label: name,
                   color: light1,
                 ),
-                SizedBox(height: 12.h,),
+                SizedBox(height: 12.h),
                 Row(
                   children: [
-                    Icon(Icons.location_on,size: 16.sp,color: blue,),
-                    SizedBox(width: 6.w,),
+                    Icon(Icons.location_on,size: 16.sp,color: blue),
+                    SizedBox(width: 6.w),
                     MyLabel(
                       type: MyLabelType.BODY_XLARGE,
                       fontWeight: MyLabel.MEDIUM,
-                      label: 'Porto, Paços de Ferreira',
+                      label: '${city}, ${state}',
                       color: light1,
                     ),
                   ],
                 ),
-                SizedBox(height: 12.h,),
+                SizedBox(height: 12.h),
                 MyButton(type: MyButtonType.FILLED, label: 'Book Appointment',onPressed: (){}),
               ],
             ),
@@ -103,58 +123,72 @@ class MyHomeShop extends ConsumerWidget {
       ),
       onTap: onTap,
     );
+  }
 
-    /*return MyInkwell(
-      type: MyInkwellType.GENERAL,
-      widget: Container(
-        decoration: BoxDecoration(
-          color: light1,
-          borderRadius: BorderRadius.circular(16.0).r,
-        ),
-        child: Column(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.only(topRight: Radius.circular(15.0).r,topLeft: Radius.circular(15.0).r),
-              child: Image.asset(
-                'images/house.jpg',
-                fit: BoxFit.cover,
-                width: 380.w,
-                height: 200.h,),
-            ),
-            Container(
-              margin: EdgeInsets.all(24.h),
-              width: double.infinity,
-              height: 120.h,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  MyPill(type: MyPillType.PRIMARY_FILLED_TRANSPARENT,label: 'Barbearia',),
-                  MyLabel(
-                    type: MyLabelType.H5,
-                    fontWeight: MyLabel.BOLD,
-                    label: 'Porta 54',
-                  ),
-                  Row(
-                    children: [
 
-                      Icon(Icons.location_on,size: 16.sp,color: blue,),
-                      SizedBox(width: 6.w,),
-                      MyLabel(
-                        type: MyLabelType.BODY_XLARGE,
-                        fontWeight: MyLabel.MEDIUM,
-                        label: 'Porto, Paços de Ferreira',
-                      ),
-                    ],
-                  )
-                ],
+  Widget shimmerHomeShop(){
+
+    return Stack(
+      children: [
+        Shimmer.fromColors(
+          baseColor: grey300,
+          highlightColor: grey100,
+          child: Column(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(16.0).r),
+                child: Container(
+                  color: grey300,
+                  width: 380.w,
+                  height: 380.h,
+                ),
               ),
-            )
-          ],
+            ],
+          ),
         ),
-      ),
-      onTap: onTap,
-    );*/
+        Container(
+          width: 380.w,
+          height: 380.h,
+          padding: EdgeInsets.all(24.h),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Shimmer.fromColors(
+                baseColor: grey300,
+                highlightColor: grey100,
+                child: Container(
+                  width: 100.w,
+                  decoration: BoxDecoration(
+                      color: light1,
+                      borderRadius: BorderRadius.all(Radius.circular(16).r)
+                  ),
+                  child: Text(''),
+                ),
+              ),
+              SizedBox(height: 12.h),
+              Shimmer.fromColors(
+                baseColor: grey300,
+                highlightColor: grey100,
+                child: Container(
+                  width: 250.w,
+                  decoration: BoxDecoration(
+                      color: light1,
+                      borderRadius: BorderRadius.all(Radius.circular(16).r)
+                  ),
+                  child: Text(''),
+                ),
+              ),
+              SizedBox(height: 12.h),
+              Shimmer.fromColors(
+                  baseColor: grey300,
+                  highlightColor: grey100,
+                  child: MyButton(type: MyButtonType.FILLED, label: 'Book Appointment',onPressed: (){})),
+            ],
+          ),
+        ),
+      ]
+    );
   }
 
 

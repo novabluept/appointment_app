@@ -125,8 +125,8 @@ class MyTextFormField extends ConsumerWidget {
         ),
         hasError == true ? Row(
           children: [
-            Icon(IconlyBold.danger,size: 14.sp,color: red,),
-            SizedBox(width: 8.w,),
+            Icon(IconlyBold.danger,size: 14.sp,color: red),
+            SizedBox(width: 8.w),
             MyLabel(
               type: MyLabelType.BODY_MEDIUM,
               fontWeight: MyLabel.MEDIUM,
@@ -197,8 +197,8 @@ class MyTextFormField extends ConsumerWidget {
         ),
         hasError == true ? Row(
           children: [
-            Icon(IconlyBold.danger,size: 14.sp,color: red,),
-            SizedBox(width: 8.w,),
+            Icon(IconlyBold.danger,size: 14.sp,color: red),
+            SizedBox(width: 8.w),
             MyLabel(
               type: MyLabelType.BODY_MEDIUM,
               fontWeight: MyLabel.MEDIUM,

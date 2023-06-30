@@ -15,6 +15,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 
+import '../../../../../model/user_model.dart';
+import '../../../../../state_management/state.dart';
 import '../../../../../style/general_style.dart';
 import '../../../../../ui_items/my_app_bar.dart';
 import '../../../../../ui_items/my_button.dart';
@@ -25,6 +27,7 @@ import '../../../../../ui_items/my_text_form_field.dart';
 import '../../../../../utils/constants.dart';
 import '../../../../../utils/method_helper.dart';
 import '../../../../../utils/validators.dart';
+import '../../../../../view_model/choose_professional/choose_professional_view_model_imp.dart';
 
 class ChooseProfessional extends ConsumerStatefulWidget {
   const ChooseProfessional({Key? key}): super(key: key);
@@ -34,6 +37,19 @@ class ChooseProfessional extends ConsumerStatefulWidget {
 }
 
 class ChooseProfessionalState extends ConsumerState<ChooseProfessional> {
+
+  Future<List<UserModel>>? _future;
+
+  @override
+  void initState() {
+    super.initState();
+    _future = _getUsersByShopFirebase();
+  }
+
+  Future<List<UserModel>> _getUsersByShopFirebase() async{
+    List<UserModel> list = await ChooseProfessionalViewModelImp().getUsersByShopFromFirebase(ref);
+    return await Future.delayed(Duration(milliseconds: LOAD_DATA_DURATION), () => list);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,24 +70,63 @@ class ChooseProfessionalState extends ConsumerState<ChooseProfessional> {
               Navigator.of(context).pop();
             },
           ),
-          body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody(),)
+          body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())
       ),
     );
   }
 
   Widget mobileBody(){
     return Container(
-        padding: EdgeInsets.symmetric(horizontal: 24.w),
-        child: ListView.separated(
-          padding: EdgeInsets.symmetric(vertical: 24.h),
-          separatorBuilder: (context, index) => SizedBox(height: 20.h,),
-          itemCount: 7,
-          itemBuilder: (context, index) {
-            return MyChooseProfessionalTile(type: MyChooseProfessionalTileType.GENERAL,index: index,onTap: (){
-              MethodHelper.transitionPage(context, widget, ChooseService(), PageNavigatorType.PUSH, PageTransitionType.rightToLeftJoined);
-            });
-          },
-        )
+      padding: EdgeInsets.symmetric(horizontal: 24.w),
+      child: FutureBuilder(
+        future: _future,
+        builder: (BuildContext context, AsyncSnapshot<List<UserModel>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+
+            return ListView.separated(
+              physics: NeverScrollableScrollPhysics(),
+              padding: EdgeInsets.symmetric(vertical: 24.h),
+              separatorBuilder: (context, index) => SizedBox(height: 20.h),
+              itemCount: 5,
+              itemBuilder: (context, index) {
+                return MyChooseProfessionalTile(type: MyChooseProfessionalTileType.SHIMMER);
+              }
+            );
+
+          } else if (snapshot.hasError) {
+            return Container(child: Text('error'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Container(child: Text('no data or empty'));
+          } else {
+
+            List<UserModel> list = snapshot.data!;
+            String shopName = ref.read(currentShop).name;
+
+            return ListView.separated(
+                padding: EdgeInsets.symmetric(vertical: 24.h),
+                separatorBuilder: (context, index) => SizedBox(height: 20.h),
+                itemCount: list.length,
+                itemBuilder: (context, index) {
+
+                  UserModel user = list[index];
+
+                  return MyChooseProfessionalTile(
+                    type: MyChooseProfessionalTileType.GENERAL,
+                    image: user.imageUnit8list,
+                    firstName: user.firstname,
+                    lastName: user.lastname,
+                    shopName: shopName,
+                    index: index,onTap: (){
+                      ChooseProfessionalViewModelImp().setCurrentUser(currentUser.notifier, ref, user);
+                      MethodHelper.transitionPage(context, widget, ChooseService(), PageNavigatorType.PUSH, PageTransitionType.rightToLeftJoined);
+                    }
+                );
+              }
+            );
+
+          }
+        }
+      )
     );
   }
 

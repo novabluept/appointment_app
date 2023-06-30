@@ -50,7 +50,7 @@ class MyNotificationTile extends ConsumerWidget {
                 onPressed: null,
               ),
             ),
-            SizedBox(width: 16.w,),
+            SizedBox(width: 16.w),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -59,7 +59,7 @@ class MyNotificationTile extends ConsumerWidget {
                   fontWeight: MyLabel.BOLD,
                   label: 'Appointment Success!',
                 ),
-                SizedBox(height: 6.h,),
+                SizedBox(height: 6.h),
                 MyLabel(
                   type: MyLabelType.BODY_MEDIUM,
                   fontWeight: MyLabel.MEDIUM,
@@ -69,7 +69,7 @@ class MyNotificationTile extends ConsumerWidget {
             )
           ],
         ),
-        SizedBox(height: 20.h,),
+        SizedBox(height: 20.h),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

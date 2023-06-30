@@ -53,7 +53,7 @@ class MyAppBar extends ConsumerWidget implements PreferredSizeWidget {
         centerTitle: false,
         leading: leadingIcon != null ? GestureDetector(
             onTap: onTap,
-            child: Icon(leadingIcon, size: 20.sp, color: dark1,)
+            child: Icon(leadingIcon, size: 20.sp, color: dark1)
         ) : null,
         title: MyLabel(
           type: MyLabelType.H4,
@@ -71,7 +71,7 @@ class MyAppBar extends ConsumerWidget implements PreferredSizeWidget {
           indicatorSize: TabBarIndicatorSize.tab,
           indicatorColor: blue,
           indicatorWeight: 4.h,
-          padding: EdgeInsets.symmetric(horizontal: 24.w,),
+          padding: EdgeInsets.symmetric(horizontal: 24.w),
           overlayColor: MaterialStateProperty.all(Colors.transparent),
           splashBorderRadius: BorderRadius.circular(100).r,
           tabs: const [
@@ -96,7 +96,7 @@ class MyAppBar extends ConsumerWidget implements PreferredSizeWidget {
         leadingWidth: 80.w,
         centerTitle: false,
         leading: IconButton(
-          icon: Image.asset(PROFILE_IMAGE_DIRECTORY,width: 48.h,height: 48.h,),
+          icon: Image.asset(PROFILE_IMAGE_DIRECTORY,width: 48.h,height: 48.h),
           onPressed: null,
         ),
         actions: <Widget>[

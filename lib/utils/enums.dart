@@ -1,7 +1,7 @@
 
 
 /// Types
-enum FirebaseCollections { USER }
+enum FirebaseCollections { USER, SHOP, SERVICE }
 enum UserRole { USER, WORKER, ADMIN}
 enum LanguageTypes { PT, EN }
 
@@ -19,9 +19,9 @@ enum SnackBarType { WARNING, SUCCESS }
 enum MyAppointmentTileType { UPCOMMING, COMPLETED, CANCELLED }
 enum MyProfileTileType { GENERAL }
 enum MyPillType { PRIMARY_OUTLINED, DANGER_OUTLINED, SUCCESS_OUTLINED ,PRIMARY_FILLED_TRANSPARENT, DANGER_FILLED_TRANSPARENT, SUCCESS_FILLED_TRANSPARENT }
-enum MyHomeShopType { GENERAL }
-enum MyChooseProfessionalTileType { GENERAL }
+enum MyHomeShopType { GENERAL, SHIMMER }
+enum MyChooseProfessionalTileType { GENERAL, SHIMMER }
 enum MyInkwellType { GENERAL }
-enum MyChooseServiceTileType { GENERAL }
-enum MyChooseShopTileType { GENERAL }
+enum MyChooseServiceTileType { GENERAL, SHIMMER }
+enum MyChooseShopTileType { GENERAL, SHIMMER }
 enum MyNotificationTileType { GENERAL }

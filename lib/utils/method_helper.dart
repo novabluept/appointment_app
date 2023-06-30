@@ -35,12 +35,24 @@ class MethodHelper{
     switch(pageNavigatorType){
       case PageNavigatorType.PUSH:
         Navigator.of(context).push(
-            PageTransition(childCurrent: childCurrent,child: nextWidget, type: pageTransitionType, duration: Duration(milliseconds: PAGE_TRANSITION_DURATION))
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) => nextWidget,
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              return SlideTransition(
+                position: Tween<Offset>(
+                  begin: Offset(1.0, 0.0),
+                  end: Offset.zero,
+                ).animate(animation),
+                child: child,
+              );
+            },
+            maintainState: false, // Prevents maintaining the state of ChooseProfessional
+          ),
         );
         break;
       case PageNavigatorType.PUSH_REPLACEMENT:
         Navigator.of(context).pushReplacement(
-            PageTransition(childCurrent: childCurrent,child: nextWidget, type: pageTransitionType, duration: Duration(milliseconds: PAGE_TRANSITION_DURATION))
+          PageTransition(childCurrent: childCurrent,child: nextWidget, type: pageTransitionType, duration: Duration(milliseconds: PAGE_TRANSITION_DURATION))
         );
         break;
       default:
@@ -94,12 +106,12 @@ class MethodHelper{
   }
 
   static clearFillProfileControllers(WidgetRef ref) async{
-    await FillProfileModelImp().setValue(imagePathProvider.notifier, ref, PROFILE_IMAGE_DIRECTORY);
-    await FillProfileModelImp().setValue(firstNameProvider.notifier, ref, '');
-    await FillProfileModelImp().setValue(lastNameProvider.notifier, ref, '');
-    await FillProfileModelImp().setValue(dateOfBirthProvider.notifier, ref, '');
-    await FillProfileModelImp().setValue(emailProvider.notifier, ref, '');
-    await FillProfileModelImp().setValue(phoneNumberProvider.notifier, ref, '');
+    FillProfileModelImp().setValue(imagePathProvider.notifier, ref, PROFILE_IMAGE_DIRECTORY);
+    FillProfileModelImp().setValue(firstNameProvider.notifier, ref, '');
+    FillProfileModelImp().setValue(lastNameProvider.notifier, ref, '');
+    FillProfileModelImp().setValue(dateOfBirthProvider.notifier, ref, '');
+    FillProfileModelImp().setValue(emailProvider.notifier, ref, '');
+    FillProfileModelImp().setValue(phoneNumberProvider.notifier, ref, '');
   }
 
   static Future<File> returnFillProfileImage(String localImageDirectory) async {

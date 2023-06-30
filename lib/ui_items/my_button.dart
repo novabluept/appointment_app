@@ -74,7 +74,7 @@ class MyButton extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SvgPicture.asset(imgUrl,width: 24.w,height: 24.h),
-            SizedBox(width: 12.w,),
+            SizedBox(width: 12.w),
             MyLabel(
               type: MyLabelType.BODY_LARGE,
               label: label,

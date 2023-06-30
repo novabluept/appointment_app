@@ -84,7 +84,7 @@ class SecurityState extends ConsumerState<Security> {
               Navigator.of(context).pop();
             },
           ),
-          body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody(),)
+          body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())
       ),
     );
   }
@@ -98,7 +98,7 @@ class SecurityState extends ConsumerState<Security> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
 
-            SizedBox(height: 24.h,),
+            SizedBox(height: 24.h),
 
             Form(
               key: _formKey,
@@ -132,7 +132,7 @@ class SecurityState extends ConsumerState<Security> {
 
                   ),
 
-                  SizedBox(height: 24.h,),
+                  SizedBox(height: 24.h),
 
                   MyTextFormField(
                     type: MyTextFormFieldType.PREFIX_SUFIX,
@@ -160,7 +160,7 @@ class SecurityState extends ConsumerState<Security> {
                     },
                   ),
 
-                  SizedBox(height: 24.h,),
+                  SizedBox(height: 24.h),
 
                   MyButton(type: MyButtonType.FILLED, label: 'Continue',onPressed: (){}),
                 ],

@@ -38,7 +38,7 @@ class MyDivider extends ConsumerWidget {
             )
         ),
 
-        SizedBox(width: 16.w,),
+        SizedBox(width: 16.w),
 
         MyLabel(
           type: MyLabelType.BODY_XLARGE,
@@ -47,7 +47,7 @@ class MyDivider extends ConsumerWidget {
           color: grey600,
         ),
 
-        SizedBox(width: 16.w,),
+        SizedBox(width: 16.w),
 
         Expanded(
             child: Divider(

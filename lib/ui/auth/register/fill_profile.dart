@@ -68,22 +68,22 @@ class FillProfileState extends ConsumerState<FillProfile> {
   }
 
   _insertInitialTextEditingControllersValues(){
-    String imagePath = ref.watch(imagePathProvider);
-    _firstNameController.text = ref.watch(firstNameProvider);
-    _lastNameController.text = ref.watch(lastNameProvider);
-    _dateOfBirthController.text = ref.watch(dateOfBirthProvider);
-    _emailController.text = ref.watch(emailProvider);
-    _phoneNumberController.text = ref.watch(phoneNumberProvider);
+    String imagePath = ref.read(imagePathProvider);
+    _firstNameController.text = ref.read(firstNameProvider);
+    _lastNameController.text = ref.read(lastNameProvider);
+    _dateOfBirthController.text = ref.read(dateOfBirthProvider);
+    _emailController.text = ref.read(emailProvider);
+    _phoneNumberController.text = ref.read(phoneNumberProvider);
   }
 
   Future _saveValues() async{
 
     if(_formKey.currentState!.validate()){
-      await FillProfileModelImp().setValue(firstNameProvider.notifier, ref, _firstNameController.text.trim());
-      await FillProfileModelImp().setValue(lastNameProvider.notifier, ref, _lastNameController.text.trim());
-      await FillProfileModelImp().setValue(dateOfBirthProvider.notifier, ref, _dateOfBirthController.text.trim());
-      await FillProfileModelImp().setValue(emailProvider.notifier, ref, _emailController.text.trim());
-      await FillProfileModelImp().setValue(phoneNumberProvider.notifier, ref, _phoneNumberController.text.trim());
+      FillProfileModelImp().setValue(firstNameProvider.notifier, ref, _firstNameController.text.trim());
+      FillProfileModelImp().setValue(lastNameProvider.notifier, ref, _lastNameController.text.trim());
+      FillProfileModelImp().setValue(dateOfBirthProvider.notifier, ref, _dateOfBirthController.text.trim());
+      FillProfileModelImp().setValue(emailProvider.notifier, ref, _emailController.text.trim());
+      FillProfileModelImp().setValue(phoneNumberProvider.notifier, ref, _phoneNumberController.text.trim());
 
       MethodHelper.transitionPage(context, widget, CreatePassword(), PageNavigatorType.PUSH_REPLACEMENT, PageTransitionType.rightToLeftJoined);
     }
@@ -96,8 +96,7 @@ class FillProfileState extends ConsumerState<FillProfile> {
 
     String imagePath = image.path;
 
-    final imageTemporary = File(imagePath);
-    await FillProfileModelImp().setValue(imagePathProvider.notifier, ref, imagePath);
+    FillProfileModelImp().setValue(imagePathProvider.notifier, ref, imagePath);
     setState(() {});
   }
 
@@ -121,7 +120,7 @@ class FillProfileState extends ConsumerState<FillProfile> {
             MethodHelper.transitionPage(context, widget, MainPage(), PageNavigatorType.PUSH_REPLACEMENT, PageTransitionType.leftToRightJoined);
           },
         ),
-        body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody(),)
+        body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())
       ),
     );
   }
@@ -143,7 +142,7 @@ class FillProfileState extends ConsumerState<FillProfile> {
                 child: CircleAvatar(
                   radius: 58,
                   backgroundColor: light1,
-                  backgroundImage: ref.watch(imagePathProvider) != PROFILE_IMAGE_DIRECTORY ? Image.file(File(ref.watch(imagePathProvider))).image : Image.asset(PROFILE_IMAGE_DIRECTORY).image,
+                  backgroundImage: ref.read(imagePathProvider) != PROFILE_IMAGE_DIRECTORY ? Image.file(File(ref.watch(imagePathProvider))).image : Image.asset(PROFILE_IMAGE_DIRECTORY).image,
                   child: Stack(
                     children: [
                       Align(
@@ -164,7 +163,7 @@ class FillProfileState extends ConsumerState<FillProfile> {
               ),
             ),
 
-            SizedBox(height: 24.h,),
+            SizedBox(height: 24.h),
 
             Form(
               key: _formKey,
@@ -192,7 +191,7 @@ class FillProfileState extends ConsumerState<FillProfile> {
                     }
                   ),
 
-                  SizedBox(height: 24.h,),
+                  SizedBox(height: 24.h),
 
                   MyTextFormField(
                     type: MyTextFormFieldType.GENERAL,
@@ -215,7 +214,7 @@ class FillProfileState extends ConsumerState<FillProfile> {
                     }
                   ),
 
-                  SizedBox(height: 24.h,),
+                  SizedBox(height: 24.h),
 
                   MyTextFormField(
                     type: MyTextFormFieldType.SUFFIX,
@@ -253,7 +252,7 @@ class FillProfileState extends ConsumerState<FillProfile> {
                     }
                   ),
 
-                  SizedBox(height: 24.h,),
+                  SizedBox(height: 24.h),
 
                   MyTextFormField(
                     type: MyTextFormFieldType.SUFFIX,
@@ -277,7 +276,7 @@ class FillProfileState extends ConsumerState<FillProfile> {
                     }
                   ),
 
-                  SizedBox(height: 24.h,),
+                  SizedBox(height: 24.h),
 
                   MyTextFormField(
                     type: MyTextFormFieldType.PHONE,
@@ -300,7 +299,7 @@ class FillProfileState extends ConsumerState<FillProfile> {
                     }
                   ),
 
-                  SizedBox(height: 24.h,),
+                  SizedBox(height: 24.h),
 
                   MyButton(type: MyButtonType.FILLED, label: 'Continue',onPressed: _saveValues),
                 ],

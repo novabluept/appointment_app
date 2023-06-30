@@ -1,4 +1,5 @@
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:appointment_app_v2/ui/home/user/appointments_history/content/appointments_completed.dart';
@@ -25,7 +26,11 @@ import '../../../../../ui_items/my_text_form_field.dart';
 import '../../../../../utils/constants.dart';
 import '../../../../../utils/method_helper.dart';
 import '../../../../../utils/validators.dart';
+import '../../../../model/shop_model.dart';
+import '../../../../state_management/state.dart';
 import '../../../../ui_items/my_choose_shop_tile.dart';
+import '../../../../view_model/choose_shop/choose_shop_view_model_imp.dart';
+import '../../../../view_model/home_user/home_user_view_model_imp.dart';
 
 class ChooseShop extends ConsumerStatefulWidget {
   const ChooseShop({Key? key}): super(key: key);
@@ -35,6 +40,12 @@ class ChooseShop extends ConsumerStatefulWidget {
 }
 
 class ChooseShopState extends ConsumerState<ChooseShop> {
+
+  Future<List<ShopModel>> _getShopsFromFirebase() async{
+    List<ShopModel> list = [];
+    list = await HomeUserModelImp().getShopsFromFirebase();
+    return await Future.delayed(Duration(milliseconds: LOAD_DATA_DURATION), () => list);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,24 +66,64 @@ class ChooseShopState extends ConsumerState<ChooseShop> {
               Navigator.of(context).pop();
             },
           ),
-          body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody(),)
+          body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())
       ),
     );
   }
 
   Widget mobileBody(){
     return Container(
-        padding: EdgeInsets.symmetric(horizontal: 24.w),
-        child: ListView.separated(
-          padding: EdgeInsets.symmetric(vertical: 24.h),
-          separatorBuilder: (context, index) => SizedBox(height: 20.h,),
-          itemCount: 2,
-          itemBuilder: (context, index) {
-            return MyChooseShopTile(type: MyChooseShopTileType.GENERAL,index: index,onTap: (){
+      padding: EdgeInsets.symmetric(horizontal: 24.w),
+      child: FutureBuilder(
+        future: _getShopsFromFirebase(),
+        builder: (BuildContext context, AsyncSnapshot<List<ShopModel>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return ListView.separated(
+              physics: const NeverScrollableScrollPhysics(),
+              padding: EdgeInsets.symmetric(vertical: 24.h),
+              separatorBuilder: (context, index) => SizedBox(height: 20.h),
+              itemCount: 5,
+              itemBuilder: (context, index) {
+                return MyChooseShopTile(type: MyChooseShopTileType.SHIMMER);
+              },
+            );
+          } else if (snapshot.hasError) {
+            return Container(child: Text('error'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Container(child: Text('no data or empty'));
+          } else {
 
-            });
-          },
-        )
+            List<ShopModel> list = snapshot.data!;
+
+            return ListView.separated(
+              padding: EdgeInsets.symmetric(vertical: 24.h),
+              separatorBuilder: (context, index) => SizedBox(height: 20.h),
+              itemCount: list.length,
+              itemBuilder: (context, index) {
+
+                ShopModel shop = list[index];
+
+                return MyChooseShopTile(
+                  type: MyChooseShopTileType.GENERAL,
+                  index: index,
+                  image: shop.imageUnit8list,
+                  name: shop.name,
+                  city: shop.city,
+                  state: shop.state,
+                  onTap: (){
+                    ChooseShopViewModelImp().setCurrentShop(currentShop.notifier, ref, shop);
+                    ChooseShopViewModelImp().setCurrentShopIndex(currentShopIndex.notifier, ref, index);
+                    Timer(Duration(milliseconds: POP_DURATION), () {
+                      Navigator.of(context).pop();
+                    });
+
+                  }
+                );
+              },
+            );
+          }
+        },
+      )
     );
   }
 

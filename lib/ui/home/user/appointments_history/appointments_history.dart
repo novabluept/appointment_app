@@ -40,7 +40,7 @@ class AppointmentsHistoryState extends ConsumerState<AppointmentsHistory> {
           isTabBar: true,
         ),
         resizeToAvoidBottomInset : true,
-        body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody(),)
+        body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())
       ),
     );
   }

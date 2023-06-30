@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
 
+
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized(); /// Firebase
   await Firebase.initializeApp(); /// Firebase
@@ -40,13 +41,16 @@ class MyApp extends StatelessWidget {
               primary: blue,
             ),
           ),
-          home: AnimatedSplashScreen(
-              duration: 3000,
-              splash: SvgPicture.asset('images/logo_medica_full.svg',width: 240.w,height: 60.h),
-              nextScreen: MainPage(),
-              splashTransition: SplashTransition.fadeTransition,
-              pageTransitionType: PageTransitionType.fade,
-              backgroundColor: light1),
+          home: AnimatedSplashScreen.withScreenFunction(
+            splash: SvgPicture.asset('images/logo_medica_full.svg',width: 240.w,height: 60.h),
+            screenFunction: () async{
+              /*await _manageDataInLocalDataBase();*/
+              return const MainPage();
+            },
+            splashTransition: SplashTransition.fadeTransition,
+            pageTransitionType: PageTransitionType.fade,
+            backgroundColor: light1,
+          ),
         );
       },
     );

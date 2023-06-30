@@ -1,3 +1,3 @@
 
 
-final String CURRENTPLACEID="currentPlaceId";
+final String CURRENTshopId="currentshopId";

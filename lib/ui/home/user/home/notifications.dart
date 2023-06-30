@@ -56,7 +56,7 @@ class NotificationsState extends ConsumerState<Notifications> {
               Navigator.of(context).pop();
             },
           ),
-          body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody(),)
+          body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())
       ),
     );
   }
@@ -66,7 +66,7 @@ class NotificationsState extends ConsumerState<Notifications> {
         padding: EdgeInsets.symmetric(horizontal: 24.w),
         child: ListView.separated(
           padding: EdgeInsets.symmetric(vertical: 24.h),
-          separatorBuilder: (context, index) => SizedBox(height: 24.h,),
+          separatorBuilder: (context, index) => SizedBox(height: 24.h),
           itemCount: 10,
           itemBuilder: (context, index) {
             return MyNotificationTile(type: MyNotificationTileType.GENERAL,index: index);

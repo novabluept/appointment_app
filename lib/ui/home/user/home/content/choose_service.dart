@@ -17,6 +17,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 
+import '../../../../../model/service_model.dart';
+import '../../../../../state_management/state.dart';
 import '../../../../../style/general_style.dart';
 import '../../../../../ui_items/my_app_bar.dart';
 import '../../../../../ui_items/my_button.dart';
@@ -26,6 +28,7 @@ import '../../../../../ui_items/my_text_form_field.dart';
 import '../../../../../utils/constants.dart';
 import '../../../../../utils/method_helper.dart';
 import '../../../../../utils/validators.dart';
+import '../../../../../view_model/choose_service/choose_service_view_model_imp.dart';
 
 class ChooseService extends ConsumerStatefulWidget {
   const ChooseService({Key? key}): super(key: key);
@@ -35,6 +38,13 @@ class ChooseService extends ConsumerStatefulWidget {
 }
 
 class ChooseServiceState extends ConsumerState<ChooseService> {
+
+  Future<List<ServiceModel>> _getServicesByUserIdAndShopIdFromDB() async{
+    String userId = ref.read(currentUser).userId;
+    String shopId = ref.read(currentShop).shopId;
+    List<ServiceModel> list = await ChooseServiceViewModelImp().getServicesByUserIdAndShopIdFromFirebase(userId,shopId);
+    return await Future.delayed(Duration(milliseconds: LOAD_DATA_DURATION), () => list);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +65,7 @@ class ChooseServiceState extends ConsumerState<ChooseService> {
               Navigator.of(context).pop();
             },
           ),
-          body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody(),)
+          body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())
       ),
     );
   }
@@ -63,16 +73,45 @@ class ChooseServiceState extends ConsumerState<ChooseService> {
   Widget mobileBody(){
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
-        child: ListView.separated(
-          padding: EdgeInsets.symmetric(vertical: 24.h),
-          separatorBuilder: (context, index) => SizedBox(height: 20.h,),
-          itemCount: 10,
-          itemBuilder: (context, index) {
-            return MyChooseServiceTile(type: MyChooseServiceTileType.GENERAL,index: index,onTap: (){
-              MethodHelper.transitionPage(context, widget, ChooseSchedule(), PageNavigatorType.PUSH, PageTransitionType.rightToLeftJoined);
-            });
+        child: FutureBuilder(
+          future: _getServicesByUserIdAndShopIdFromDB(),
+          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+
+
+            if (snapshot.connectionState == ConnectionState.waiting) {
+
+              return ListView.separated(
+                physics: NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.symmetric(vertical: 24.h),
+                separatorBuilder: (context, index) => SizedBox(height: 20.h),
+                itemCount: 9,
+                itemBuilder: (context, index) {
+                  return MyChooseServiceTile(type: MyChooseServiceTileType.SHIMMER);
+                },
+              );
+
+            } else if (snapshot.hasError) {
+              return Container(child: Text('error'));
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return Container(child: Text('no data or empty'));
+            } else {
+
+              List<ServiceModel> list = snapshot.data!;
+
+              return ListView.separated(
+                padding: EdgeInsets.symmetric(vertical: 24.h),
+                separatorBuilder: (context, index) => SizedBox(height: 20.h),
+                itemCount: list.length,
+                itemBuilder: (context, index) {
+                  return MyChooseServiceTile(type: MyChooseServiceTileType.GENERAL,index: index,onTap: (){
+                    MethodHelper.transitionPage(context, widget, ChooseSchedule(), PageNavigatorType.PUSH, PageTransitionType.rightToLeftJoined);
+                  });
+                },
+              );
+            }
           },
         )
+
     );
   }
 

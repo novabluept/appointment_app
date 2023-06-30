@@ -85,7 +85,7 @@ class VerifyEmailState extends ConsumerState<VerifyEmail> {
             onTap: _signOut,
           ),
           resizeToAvoidBottomInset : false,
-          body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody(),)
+          body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())
       ),
     );
   }
@@ -98,11 +98,11 @@ class VerifyEmailState extends ConsumerState<VerifyEmail> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(height: 43.h,),
+          SizedBox(height: 43.h),
 
           SvgPicture.asset('images/verify_email_image.svg',width: 237.w,height: 200.h),
 
-          SizedBox(height: 33.h,),
+          SizedBox(height: 33.h),
 
           Align(
             alignment: Alignment.centerLeft,
@@ -114,11 +114,11 @@ class VerifyEmailState extends ConsumerState<VerifyEmail> {
             ),
           ),
 
-          SizedBox(height: 24.h,),
+          SizedBox(height: 24.h),
 
           MyButton(type: MyButtonType.FILLED, label: 'Resend email',onPressed: _sendVerificationEmail),
 
-          SizedBox(height: 24.h,),
+          SizedBox(height: 24.h),
 
           MyButton(type: MyButtonType.OUTLINED, label: 'Cancel',onPressed: _signOut),
 

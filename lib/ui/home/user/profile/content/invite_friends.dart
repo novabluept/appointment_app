@@ -50,7 +50,7 @@ class InviteFriendsState extends ConsumerState<InviteFriends> {
               Navigator.of(context).pop();
             },
           ),
-          body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody(),)
+          body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())
       ),
     );
   }
@@ -64,11 +64,11 @@ class InviteFriendsState extends ConsumerState<InviteFriends> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
 
-            SizedBox(height: 43.h,),
+            SizedBox(height: 43.h),
 
             SvgPicture.asset('images/invite_friends_image.svg',width: 276.w,height: 250.h),
 
-            SizedBox(height: 33.h,),
+            SizedBox(height: 33.h),
 
             Align(
               alignment: Alignment.centerLeft,
@@ -80,7 +80,7 @@ class InviteFriendsState extends ConsumerState<InviteFriends> {
               ),
             ),
 
-            SizedBox(height: 24.h,),
+            SizedBox(height: 24.h),
 
             MyButton(type: MyButtonType.FILLED, label: 'Invite Friends',onPressed: (){}),
 

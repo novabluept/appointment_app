@@ -28,7 +28,7 @@ class AppointmentsUpcomingState extends ConsumerState<AppointmentsUpcoming> {
 
   @override
   Widget build(BuildContext context) {
-    return MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody(),);
+    return MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody());
   }
 
   Widget mobileBody(){
@@ -36,10 +36,10 @@ class AppointmentsUpcomingState extends ConsumerState<AppointmentsUpcoming> {
       padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: ListView.separated(
         padding: EdgeInsets.symmetric(vertical: 24.h),
-        separatorBuilder: (context, index) => SizedBox(height: 20.h,),
+        separatorBuilder: (context, index) => SizedBox(height: 20.h),
         itemCount: 1,
         itemBuilder: (context, index) {
-          return MyAppointmentTile(type: MyAppointmentTileType.UPCOMMING,index: index,hasButtons: true,);
+          return MyAppointmentTile(type: MyAppointmentTileType.UPCOMMING,index: index,hasButtons: true);
         },
       )
     );

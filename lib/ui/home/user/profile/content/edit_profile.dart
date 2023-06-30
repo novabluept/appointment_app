@@ -105,7 +105,7 @@ class EditProfileState extends ConsumerState<EditProfile> {
               Navigator.of(context).pop();
             },
           ),
-          body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody(),)
+          body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())
       ),
     );
   }
@@ -119,7 +119,7 @@ class EditProfileState extends ConsumerState<EditProfile> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
 
-            SizedBox(height: 24.h,),
+            SizedBox(height: 24.h),
 
             Form(
               key: _formKey,
@@ -147,7 +147,7 @@ class EditProfileState extends ConsumerState<EditProfile> {
                   }
               ),
 
-              SizedBox(height: 24.h,),
+              SizedBox(height: 24.h),
 
               MyTextFormField(
                   type: MyTextFormFieldType.GENERAL,
@@ -170,7 +170,7 @@ class EditProfileState extends ConsumerState<EditProfile> {
                   }
               ),
 
-              SizedBox(height: 24.h,),
+              SizedBox(height: 24.h),
 
               MyTextFormField(
                   type: MyTextFormFieldType.SUFFIX,
@@ -208,7 +208,7 @@ class EditProfileState extends ConsumerState<EditProfile> {
                   }
               ),
 
-              SizedBox(height: 24.h,),
+              SizedBox(height: 24.h),
 
               MyTextFormField(
                   type: MyTextFormFieldType.SUFFIX,
@@ -232,7 +232,7 @@ class EditProfileState extends ConsumerState<EditProfile> {
                   }
               ),
 
-              SizedBox(height: 24.h,),
+              SizedBox(height: 24.h),
 
               MyTextFormField(
                   type: MyTextFormFieldType.PHONE,
@@ -255,7 +255,7 @@ class EditProfileState extends ConsumerState<EditProfile> {
                   }
               ),
 
-                  SizedBox(height: 24.h,),
+                  SizedBox(height: 24.h),
 
                   MyButton(type: MyButtonType.FILLED, label: 'Update',onPressed: _saveValues),
                 ],

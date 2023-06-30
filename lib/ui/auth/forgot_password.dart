@@ -85,7 +85,7 @@ class ForgotPasswordState extends ConsumerState<ForgotPassword> {
           },
         ),
         resizeToAvoidBottomInset : true,
-        body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody(),)
+        body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())
       ),
     );
   }
@@ -99,11 +99,11 @@ class ForgotPasswordState extends ConsumerState<ForgotPassword> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(height: 43.h,),
+            SizedBox(height: 43.h),
 
             SvgPicture.asset('images/forgot_password_image.svg',width: 276.w,height: 250.h),
 
-            SizedBox(height: 33.h,),
+            SizedBox(height: 33.h),
 
             Align(
               alignment: Alignment.centerLeft,
@@ -115,7 +115,7 @@ class ForgotPasswordState extends ConsumerState<ForgotPassword> {
               ),
             ),
 
-            SizedBox(height: 24.h,),
+            SizedBox(height: 24.h),
 
             Form(
               key: _formKey,
@@ -144,7 +144,7 @@ class ForgotPasswordState extends ConsumerState<ForgotPassword> {
                     }
                   ),
 
-                  SizedBox(height: 20.h,),
+                  SizedBox(height: 20.h),
 
                   MyButton(type: MyButtonType.FILLED, label: 'Recover Password',onPressed: () => _sendPasswordResetByEmail(_emailController.text.trim())),
 

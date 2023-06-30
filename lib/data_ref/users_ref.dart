@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:appointment_app_v2/utils/method_helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 import '../model/user_model.dart';
@@ -13,6 +14,7 @@ import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'dart:math';
+import '../state_management/state.dart';
 import '../utils/constants.dart';
 import '../utils/enums.dart';
 
@@ -127,12 +129,12 @@ Future<UserRole> getUserRoleRef() async{
 
   await FirebaseFirestore.instance
       .collection(FirebaseCollections.USER.name)
-      .where("userId", isEqualTo: userId)
+      .where(UserModel.col_userId, isEqualTo: userId)
       .get()
       .then((querySnapshot) {
           print("Successfully completed");
           var doc = querySnapshot.docs.first;
-          role = doc.data()['role'];
+          role = doc.data()[UserModel.col_role];
         },
         onError: (e) => print("Error completing: $e"),
       );
@@ -143,4 +145,45 @@ Future<UserRole> getUserRoleRef() async{
     default:
       return UserRole.USER;
   }
+}
+
+Future<List<UserModel>> getUsersFromFirebaseRef() async{
+
+  List<UserModel> list = [];
+  var db = await FirebaseFirestore.instance;
+
+  await db.collection(FirebaseCollections.USER.name).where(UserModel.col_role,whereIn: [UserRole.WORKER.name, UserRole.ADMIN.name]).get().then((querySnapshot) {
+    for (var docSnapshot in querySnapshot.docs) {
+      //print('${docSnapshot.id} => ${docSnapshot.data()}');
+      Map<String, dynamic> data = docSnapshot.data();
+      data[UserModel.col_role] = UserRole.WORKER.name; /// Disfarçar o admin de worker
+      list.add(UserModel.fromJson(data));
+    }
+  },
+    onError: (e) => print("Error completing: $e"),
+  );
+
+  return list;
+}
+
+Future<List<UserModel>> getUsersFromShopsFromFirebaseRef(WidgetRef ref) async{
+
+  List usersFromShop = ref.read(currentShop).users;
+  List<UserModel> list = [];
+
+  var db = await FirebaseFirestore.instance;
+
+  await db.collection(FirebaseCollections.USER.name)
+      .where(UserModel.col_userId, whereIn: usersFromShop)
+      .get()
+      .then((querySnapshot) {
+    for (var docSnapshot in querySnapshot.docs) {
+      //print('${docSnapshot.id} => ${docSnapshot.data()}');
+      list.add(UserModel.fromJson(docSnapshot.data()));
+    }
+  },
+    onError: (e) => print("Error completing: $e"),
+  );
+
+  return list;
 }

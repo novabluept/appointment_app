@@ -25,6 +25,8 @@ import '../../../utils/constants.dart';
 import '../../../utils/method_helper.dart';
 import '../../../utils/validators.dart';
 import '../../../view_model/create_password/create_password_view_model_imp.dart';
+import 'package:uuid/uuid.dart';
+
 
 class CreatePassword extends ConsumerStatefulWidget {
   const CreatePassword({Key? key}): super(key: key);
@@ -56,7 +58,7 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
     if(await MethodHelper.hasInternetConnection()){
       if(_formKey.currentState!.validate()){
 
-        final email = ref.watch(emailProvider);
+        final email = ref.read(emailProvider);
         final password = _passwordController.text;
 
         /// Create user and add details in FireAuth
@@ -70,13 +72,13 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
   Future _signUp(String email,String password) async{
     await CreatePasswordModelImp().signUp(email.trim(),password.trim()).then((value) async {
 
-      String imagePath = ref.watch(imagePathProvider);
+      String imagePath = ref.read(imagePathProvider);
       final image = File(imagePath);
-      final firstName = ref.watch(firstNameProvider);
-      final lastName = ref.watch(lastNameProvider);
-      final dateOfBirth = ref.watch(dateOfBirthProvider);
-      final email = ref.watch(emailProvider);
-      final phone = ref.watch(phoneNumberProvider);
+      final firstName = ref.read(firstNameProvider);
+      final lastName = ref.read(lastNameProvider);
+      final dateOfBirth = ref.read(dateOfBirthProvider);
+      final email = ref.read(emailProvider);
+      final phone = ref.read(phoneNumberProvider);
 
       final userId = FirebaseAuth.instance.currentUser?.uid;
 
@@ -96,6 +98,7 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
   }
 
   Future _addUserDetails(String userId,File image,String firstName,String lastName,String dateOfBirth,String email,String phone) async{
+    String imagePath = '/${FirebaseCollections.USER.name}/${userId}-${Uuid().v1()}'; /// collection / userId + uuid ( time generated type )
 
     /// User Model
     UserModel user = UserModel(
@@ -105,12 +108,12 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
       dateOfBirth: dateOfBirth.trim(),
       phone: email.trim(),
       email: phone.trim(),
-      imagePath: '/${FirebaseCollections.USER.name}/$userId',
+      imagePath: imagePath,
       role: UserRole.USER.name
     );
 
     await CreatePasswordModelImp().addUserDetails(userId,user).then((value) async {
-      await _addProfilePicture(image,user.imagePath);
+      await _addProfilePicture(image,imagePath);
     }).catchError((onError){
       MethodHelper.showSnackBar(context, SnackBarType.WARNING, 'Ocorreu algo inesperado. Por favor, tente mais tarde.');
     });
@@ -145,7 +148,7 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
             MethodHelper.transitionPage(context, widget, const FillProfile(), PageNavigatorType.PUSH_REPLACEMENT, PageTransitionType.leftToRightJoined);
           },
         ),
-        body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody(),)
+        body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())
       ),
     );
   }
@@ -160,11 +163,11 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
 
-            SizedBox(height: 43.h,),
+            SizedBox(height: 43.h),
 
             SvgPicture.asset('images/create_password_image.svg',width: 329.w,height: 250.h),
 
-            SizedBox(height: 71.h,),
+            SizedBox(height: 71.h),
 
             const Align(
               alignment: Alignment.centerLeft,
@@ -175,7 +178,7 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
               ),
             ),
 
-            SizedBox(height: 24.h,),
+            SizedBox(height: 24.h),
 
             Form(
               key: _formKey,
@@ -209,7 +212,7 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
 
                   ),
 
-                  SizedBox(height: 24.h,),
+                  SizedBox(height: 24.h),
 
                   MyTextFormField(
                     type: MyTextFormFieldType.PREFIX_SUFIX,
@@ -237,7 +240,7 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
                     },
                   ),
 
-                  SizedBox(height: 24.h,),
+                  SizedBox(height: 24.h),
 
                   MyButton(type: MyButtonType.FILLED, label: 'Continue',onPressed: _signUpAndAddUserDetails),
                 ],

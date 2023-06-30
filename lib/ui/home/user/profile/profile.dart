@@ -67,7 +67,7 @@ class ProfileState extends ConsumerState<Profile> {
           height: kToolbarHeight,
         ),
         resizeToAvoidBottomInset : true,
-        body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody(),)
+        body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())
     );
   }
 
@@ -108,7 +108,7 @@ class ProfileState extends ConsumerState<Profile> {
               ),
             ),
 
-            SizedBox(height: 12.h,),
+            SizedBox(height: 12.h),
 
             MyLabel(
               type: MyLabelType.H4,
@@ -117,7 +117,7 @@ class ProfileState extends ConsumerState<Profile> {
               color: grey900,
             ),
 
-            SizedBox(height: 8.h,),
+            SizedBox(height: 8.h),
 
             MyLabel(
               type: MyLabelType.BODY_MEDIUM,
@@ -126,14 +126,14 @@ class ProfileState extends ConsumerState<Profile> {
               color: grey900,
             ),
 
-            SizedBox(height: 24.h,),
+            SizedBox(height: 24.h),
 
             Divider(
               color: grey200,
               thickness: 1.0,
             ),
 
-            SizedBox(height: 24.h,),
+            SizedBox(height: 24.h),
 
             Column(
               children: [
@@ -142,56 +142,56 @@ class ProfileState extends ConsumerState<Profile> {
                   pushNewScreen(
                     context,
                     screen: EditProfile(),
-                    withNavBar: false, // OPTIONAL VALUE. True by default.
+                    withNavBar: false,
                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
                   );
                 }),
 
-                SizedBox(height: 20.h,),
+                SizedBox(height: 20.h),
 
                 MyProfileTile(type: MyProfileTileType.GENERAL,icon: IconlyLight.notification,label: 'Notifications',onTap: (){
                   pushNewScreen(
                     context,
                     screen: EditNotifications(),
-                    withNavBar: false, // OPTIONAL VALUE. True by default.
+                    withNavBar: false,
                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
                   );
                 }),
 
-                SizedBox(height: 20.h,),
+                SizedBox(height: 20.h),
 
                 MyProfileTile(type: MyProfileTileType.GENERAL,icon: IconlyLight.shield_done,label: 'Security',onTap: (){
                   pushNewScreen(
                     context,
                     screen: Security(),
-                    withNavBar: false, // OPTIONAL VALUE. True by default.
+                    withNavBar: false,
                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
                   );
                 }),
 
-                SizedBox(height: 20.h,),
+                SizedBox(height: 20.h),
 
                 MyProfileTile(type: MyProfileTileType.GENERAL,icon: IconlyLight.more_square,label: 'Language',onTap: (){
                   pushNewScreen(
                     context,
                     screen: EditLanguage(),
-                    withNavBar: false, // OPTIONAL VALUE. True by default.
+                    withNavBar: false,
                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
                   );
                 }),
 
-                SizedBox(height: 20.h,),
+                SizedBox(height: 20.h),
 
                 MyProfileTile(type: MyProfileTileType.GENERAL,icon: IconlyLight.user_1,label: 'Invite Friends',onTap: (){
                   pushNewScreen(
                     context,
                     screen: InviteFriends(),
-                    withNavBar: false, // OPTIONAL VALUE. True by default.
+                    withNavBar: false,
                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
                   );
                 }),
 
-                SizedBox(height: 20.h,),
+                SizedBox(height: 20.h),
 
                 MyProfileTile(type: MyProfileTileType.GENERAL,icon: IconlyLight.logout,label: 'Logout',isLogout: true,onTap: _signOut),
 

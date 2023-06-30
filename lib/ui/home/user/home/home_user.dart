@@ -9,14 +9,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconly/iconly.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../../../../ui_items/my_appointment_tile.dart';
 import '../../../../../../ui_items/my_button.dart';
 import '../../../../../../ui_items/my_label.dart';
 import '../../../../../../ui_items/my_responsive_layout.dart';
+import '../../../../model/shop_model.dart';
+import '../../../../state_management/state.dart';
 import '../../../../ui_items/my_app_bar.dart';
 import '../../../../ui_items/my_home_shop.dart';
 import '../../../../ui_items/my_pill.dart';
+import '../../../../utils/constants.dart';
+import '../../../../view_model/home_user/home_user_view_model_imp.dart';
 import 'choose_shop.dart';
 
 class HomeUser extends ConsumerStatefulWidget {
@@ -31,6 +36,17 @@ class HomeUserState extends ConsumerState<HomeUser> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  Future<List<ShopModel>> _getShopsFromFirebase() async{
+    List<ShopModel> list = [];
+    list = await HomeUserModelImp().getShopsFromFirebase();
+
+    /// Selecionar a shop
+    ShopModel shop = ref.read(currentShop) != ShopModel(imagePath: '', imageUnit8list: null, name: '', city: '', state: '', streetName: '', zipCode: '',users: []) ? ref.read(currentShop) : list[0];
+
+    HomeUserModelImp().setCurrentShop(currentShop.notifier,ref,shop);
+    return await Future.delayed(Duration(milliseconds: LOAD_DATA_DURATION), () => list);
   }
 
   @override
@@ -48,13 +64,13 @@ class HomeUserState extends ConsumerState<HomeUser> {
             pushNewScreen(
               context,
               screen: Notifications(),
-              withNavBar: false, // OPTIONAL VALUE. True by default.
+              withNavBar: false,
               pageTransitionAnimation: PageTransitionAnimation.cupertino,
             );
           },
         ),
         resizeToAvoidBottomInset : true,
-        body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody(),)
+        body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())
     );
   }
 
@@ -74,50 +90,107 @@ class HomeUserState extends ConsumerState<HomeUser> {
             ),
           ),
 
-          SizedBox(height: 96.h,),
+          SizedBox(height: 96.h),
 
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              MyLabel(
-                type: MyLabelType.H5,
-                fontWeight: MyLabel.BOLD,
-                label: 'Featured',
-              ),
-              GestureDetector(
-                onTap: (){
-                  pushNewScreen(
-                    context,
-                    screen: ChooseShop(),
-                    withNavBar: false, // OPTIONAL VALUE. True by default.
-                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                  );
-                },
-                child: MyLabel(
-                  type: MyLabelType.BODY_LARGE,
-                  fontWeight: MyLabel.BOLD,
-                  label: 'See all',
-                  color: blue,
-                ),
-              ),
-            ],
+          FutureBuilder(
+            future: _getShopsFromFirebase(),
+            builder: (BuildContext context, AsyncSnapshot<List<ShopModel>> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Shimmer.fromColors(
+                          baseColor: grey300,
+                          highlightColor: grey100,
+                          child: MyLabel(
+                            type: MyLabelType.H5,
+                            fontWeight: MyLabel.BOLD,
+                            label: 'Featured',
+                          ),
+                        ),
+                        Shimmer.fromColors(
+                          baseColor: grey300,
+                          highlightColor: grey100,
+                          child: MyLabel(
+                            type: MyLabelType.BODY_LARGE,
+                            fontWeight: MyLabel.BOLD,
+                            label: 'See all',
+                            color: blue,
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(height: 24.h),
+
+                    MyHomeShop(type: MyHomeShopType.SHIMMER),
+
+                  ],
+                );
+              } else if (snapshot.hasError) {
+                return Container(child: Text('error'));
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return Container(child: Text('no data or empty'));
+              } else {
+
+                List<ShopModel> list = snapshot.data!;
+                ShopModel shop = ref.watch(currentShop) != ShopModel(imagePath: '', imageUnit8list: null, name: '', city: '', state: '', streetName: '', zipCode: '',users: []) ? ref.read(currentShop) : list[0];
+
+                return Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        MyLabel(
+                          type: MyLabelType.H5,
+                          fontWeight: MyLabel.BOLD,
+                          label: 'Featured',
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            pushNewScreen(
+                              context,
+                              screen: ChooseShop(),
+                              withNavBar: false,
+                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                            );
+                          },
+                          child: MyLabel(
+                            type: MyLabelType.BODY_LARGE,
+                            fontWeight: MyLabel.BOLD,
+                            label: 'See all',
+                            color: blue,
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(height: 24.h),
+
+                    MyHomeShop(
+                      type: MyHomeShopType.GENERAL,
+                      image: shop.imageUnit8list,
+                      name: shop.name,
+                      city: shop.city,
+                      state: shop.state,
+                      onTap: () {
+                        pushNewScreen(
+                          context,
+                          screen: ChooseProfessional(),
+                          withNavBar: false,
+                          pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                        );
+                      },
+                    ),
+                  ],
+                );
+              }
+            }
           ),
 
-          SizedBox(height: 24.h,),
-
-          MyHomeShop(
-            type: MyHomeShopType.GENERAL,
-            onTap: (){
-              pushNewScreen(
-                context,
-                screen: ChooseProfessional(),
-                withNavBar: false, // OPTIONAL VALUE. True by default.
-                pageTransitionAnimation: PageTransitionAnimation.cupertino,
-              );
-            },
-          ),
-
-          SizedBox(height: 24.h,)
+          SizedBox(height: 24.h)
         ],
       )
 

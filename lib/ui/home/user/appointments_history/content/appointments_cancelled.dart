@@ -26,7 +26,7 @@ class AppointmentsHistoryState extends ConsumerState<AppointmentsCancelled> {
 
   @override
   Widget build(BuildContext context) {
-    return MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody(),);
+    return MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody());
   }
 
   Widget mobileBody(){
@@ -34,10 +34,10 @@ class AppointmentsHistoryState extends ConsumerState<AppointmentsCancelled> {
         padding: EdgeInsets.symmetric(horizontal: 24.w),
         child: ListView.separated(
           padding: EdgeInsets.symmetric(vertical: 24.h),
-          separatorBuilder: (context, index) => SizedBox(height: 20.h,),
+          separatorBuilder: (context, index) => SizedBox(height: 20.h),
           itemCount: 7,
           itemBuilder: (context, index) {
-            return MyAppointmentTile(type: MyAppointmentTileType.CANCELLED,index: index,);
+            return MyAppointmentTile(type: MyAppointmentTileType.CANCELLED,index: index);
 
           },
         )

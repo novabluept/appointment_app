@@ -42,8 +42,8 @@ class HomeState extends ConsumerState<Home> {
 
   List<Widget> _buildScreensTest() {
     return [
-      Container(color: Colors.green,),
-      Container(color: Colors.yellow,),
+      Container(color: Colors.green),
+      Container(color: Colors.yellow),
     ];
   }
 
@@ -58,8 +58,8 @@ class HomeState extends ConsumerState<Home> {
   List<PersistentBottomNavBarItem> _navBarsItemsTest() {
     return [
       PersistentBottomNavBarItem(
-        icon: Icon(IconlyBold.home,size: 24.sp,),
-        inactiveIcon: Icon(IconlyLight.home,size: 24.sp,),
+        icon: Icon(IconlyBold.home,size: 24.sp),
+        inactiveIcon: Icon(IconlyLight.home,size: 24.sp),
         title: "Home",
         textStyle: TextStyle(
           fontFamily: 'Urbanist',
@@ -70,8 +70,8 @@ class HomeState extends ConsumerState<Home> {
         inactiveColorPrimary: grey500,
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(IconlyBold.calendar,size: 24.sp,),
-        inactiveIcon: Icon(IconlyLight.calendar,size: 24.sp,),
+        icon: Icon(IconlyBold.calendar,size: 24.sp),
+        inactiveIcon: Icon(IconlyLight.calendar,size: 24.sp),
         title: "Appointments",
         textStyle: TextStyle(
           fontFamily: 'Urbanist',
@@ -87,8 +87,8 @@ class HomeState extends ConsumerState<Home> {
   List<PersistentBottomNavBarItem> _navBarsItemsUser() {
     return [
       PersistentBottomNavBarItem(
-        icon: Icon(IconlyBold.home,size: 24.sp,),
-        inactiveIcon: Icon(IconlyLight.home,size: 24.sp,),
+        icon: Icon(IconlyBold.home,size: 24.sp),
+        inactiveIcon: Icon(IconlyLight.home,size: 24.sp),
         title: "Home",
         textStyle: TextStyle(
           fontFamily: 'Urbanist',
@@ -99,8 +99,8 @@ class HomeState extends ConsumerState<Home> {
         inactiveColorPrimary: grey500,
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(IconlyBold.calendar,size: 24.sp,),
-        inactiveIcon: Icon(IconlyLight.calendar,size: 24.sp,),
+        icon: Icon(IconlyBold.calendar,size: 24.sp),
+        inactiveIcon: Icon(IconlyLight.calendar,size: 24.sp),
         title: "Appointments",
         textStyle: TextStyle(
           fontFamily: 'Urbanist',
@@ -111,8 +111,8 @@ class HomeState extends ConsumerState<Home> {
         inactiveColorPrimary: grey500,
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(IconlyBold.profile,size: 24.sp,),
-        inactiveIcon: Icon(IconlyLight.profile,size: 24.sp,),
+        icon: Icon(IconlyBold.profile,size: 24.sp),
+        inactiveIcon: Icon(IconlyLight.profile,size: 24.sp),
         title: "Profile",
         textStyle: TextStyle(
           fontFamily: 'Urbanist',
@@ -161,7 +161,7 @@ class HomeState extends ConsumerState<Home> {
             items: navBarsItems,
             navBarHeight: kBottomNavigationBarHeight.h,
             confineInSafeArea: true,
-            backgroundColor: light1, // Default is Colors.white.
+            backgroundColor: light1, // Default is light1.
             handleAndroidBackButtonPress: true, // Default is true.
             resizeToAvoidBottomInset: true, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
             stateManagement: true, // Default is true.

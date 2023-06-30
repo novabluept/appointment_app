@@ -56,7 +56,7 @@ class LoginState extends ConsumerState<Login> {
     return Scaffold(
       backgroundColor: light1,
       resizeToAvoidBottomInset : true,
-      body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody(),)
+      body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())
     );
   }
 
@@ -102,11 +102,11 @@ class LoginState extends ConsumerState<Login> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(height: 99.h,),
+            SizedBox(height: 99.h),
 
             SvgPicture.asset('images/logo_medica.svg',width: 140.w,height: 140.h),
 
-            SizedBox(height: 27.h,),
+            SizedBox(height: 27.h),
 
             MyLabel(
               type: MyLabelType.H3,
@@ -114,7 +114,7 @@ class LoginState extends ConsumerState<Login> {
               label: 'Login to your account',
             ),
 
-            SizedBox(height: 27.h,),
+            SizedBox(height: 27.h),
 
             Form(
               key: _formKey,
@@ -143,7 +143,7 @@ class LoginState extends ConsumerState<Login> {
                     }
                   ),
 
-                  SizedBox(height: 20.h,),
+                  SizedBox(height: 20.h),
 
                   MyTextFormField(
                     type: MyTextFormFieldType.PREFIX_SUFIX,
@@ -166,7 +166,7 @@ class LoginState extends ConsumerState<Login> {
                     },
                   ),
 
-                  SizedBox(height: 20.h,),
+                  SizedBox(height: 20.h),
 
                   MyButton(type: MyButtonType.FILLED, label: 'Sign in',onPressed: _signIn),
 
@@ -174,7 +174,7 @@ class LoginState extends ConsumerState<Login> {
               ),
             ),
 
-            SizedBox(height: 20.h,),
+            SizedBox(height: 20.h),
 
             GestureDetector(
               onTap: (){
@@ -191,15 +191,15 @@ class LoginState extends ConsumerState<Login> {
               ),
             ),
 
-            SizedBox(height: 27.h,),
+            SizedBox(height: 27.h),
 
             MyDivider(type: MyDividerType.GENERAL,label: 'or'),
 
-            SizedBox(height: 30.h,),
+            SizedBox(height: 30.h),
 
             MyButton(type: MyButtonType.IMAGE, label: 'Continue with google',imgUrl: 'images/google_logo.svg',onPressed: _signInWithGoogle),
 
-            SizedBox(height: 27.h,),
+            SizedBox(height: 27.h),
 
             GestureDetector(
               onTap: (){
@@ -213,7 +213,7 @@ class LoginState extends ConsumerState<Login> {
                     label: 'Don\'t have an acocunt?',
                     color: grey500,
                   ),
-                  SizedBox(width: 8.w,),
+                  SizedBox(width: 8.w),
                   MyLabel(
                     type: MyLabelType.BODY_MEDIUM,
                     label: 'Sign up',
