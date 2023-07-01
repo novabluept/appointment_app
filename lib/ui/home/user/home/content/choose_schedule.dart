@@ -35,25 +35,10 @@ class ChooseScheduleState extends ConsumerState<ChooseSchedule> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async{
-        Navigator.of(context).pop();
-        return false;
-      },
-      child: Scaffold(
-          backgroundColor: grey50,
-          resizeToAvoidBottomInset : true,
-          appBar: MyAppBar(
-            type: MyAppBarType.LEADING_ICON,
-            leadingIcon: IconlyLight.arrow_left,
-            backgroundColor: grey50,
-            label: 'Choose Schedule',
-            onTap: (){
-              Navigator.of(context).pop();
-            },
-          ),
-          body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())
-      ),
+    return Scaffold(
+      backgroundColor: grey50,
+      resizeToAvoidBottomInset : true,
+      body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())
     );
   }
 

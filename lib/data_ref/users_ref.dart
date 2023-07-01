@@ -168,7 +168,7 @@ Future<List<UserModel>> getUsersFromFirebaseRef() async{
 
 Future<List<UserModel>> getUsersFromShopsFromFirebaseRef(WidgetRef ref) async{
 
-  List usersFromShop = ref.read(currentShop).users;
+  List usersFromShop = ref.read(currentShopProvider).users;
   List<UserModel> list = [];
 
   var db = await FirebaseFirestore.instance;

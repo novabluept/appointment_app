@@ -1,6 +1,7 @@
 
 import 'package:appointment_app_v2/style/general_style.dart';
 import 'package:appointment_app_v2/ui/home/user/home/content/choose_professional.dart';
+import 'package:appointment_app_v2/ui/home/user/home/make_appointment_screen.dart';
 import 'package:appointment_app_v2/ui/home/user/home/notifications.dart';
 import 'package:appointment_app_v2/utils/enums.dart';
 import 'package:flutter/cupertino.dart';
@@ -43,9 +44,9 @@ class HomeUserState extends ConsumerState<HomeUser> {
     list = await HomeUserModelImp().getShopsFromFirebase();
 
     /// Selecionar a shop
-    ShopModel shop = ref.read(currentShop) != ShopModel(imagePath: '', imageUnit8list: null, name: '', city: '', state: '', streetName: '', zipCode: '',users: []) ? ref.read(currentShop) : list[0];
+    ShopModel shop = ref.read(currentShopProvider) != ShopModel(imagePath: '', imageUnit8list: null, name: '', city: '', state: '', streetName: '', zipCode: '',users: []) ? ref.read(currentShopProvider) : list[0];
 
-    HomeUserModelImp().setCurrentShop(currentShop.notifier,ref,shop);
+    HomeUserModelImp().setCurrentShop(currentShopProvider.notifier,ref,shop);
     return await Future.delayed(Duration(milliseconds: LOAD_DATA_DURATION), () => list);
   }
 
@@ -136,7 +137,7 @@ class HomeUserState extends ConsumerState<HomeUser> {
               } else {
 
                 List<ShopModel> list = snapshot.data!;
-                ShopModel shop = ref.watch(currentShop) != ShopModel(imagePath: '', imageUnit8list: null, name: '', city: '', state: '', streetName: '', zipCode: '',users: []) ? ref.read(currentShop) : list[0];
+                ShopModel shop = ref.watch(currentShopProvider) != ShopModel(imagePath: '', imageUnit8list: null, name: '', city: '', state: '', streetName: '', zipCode: '',users: []) ? ref.read(currentShopProvider) : list[0];
 
                 return Column(
                   children: [
@@ -178,7 +179,7 @@ class HomeUserState extends ConsumerState<HomeUser> {
                       onTap: () {
                         pushNewScreen(
                           context,
-                          screen: ChooseProfessional(),
+                          screen: ChooseScreen(),
                           withNavBar: false,
                           pageTransitionAnimation: PageTransitionAnimation.cupertino,
                         );

@@ -8,8 +8,9 @@ import '../../model/user_model.dart';
 
 abstract class ChooseProfessionalViewModel{
 
-  void setCurrentUser(AlwaysAliveRefreshable<StateController<UserModel>> notifier,WidgetRef ref,UserModel value);
+  void setValue(AlwaysAliveRefreshable<StateController<dynamic>> notifier,WidgetRef ref,dynamic value);
   Future<Uint8List?> getImageAndCovertToUint8list(String path);
   Future<List<UserModel>> getUsersByShopFromFirebase(WidgetRef ref);
+  
 
 }

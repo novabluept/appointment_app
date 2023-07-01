@@ -111,8 +111,8 @@ class ChooseShopState extends ConsumerState<ChooseShop> {
                   city: shop.city,
                   state: shop.state,
                   onTap: (){
-                    ChooseShopViewModelImp().setCurrentShop(currentShop.notifier, ref, shop);
-                    ChooseShopViewModelImp().setCurrentShopIndex(currentShopIndex.notifier, ref, index);
+                    ChooseShopViewModelImp().setValue(currentShopProvider.notifier, ref, shop);
+                    ChooseShopViewModelImp().setValue(currentShopIndexProvider.notifier, ref, index);
                     Timer(Duration(milliseconds: POP_DURATION), () {
                       Navigator.of(context).pop();
                     });

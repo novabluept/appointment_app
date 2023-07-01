@@ -37,36 +37,30 @@ class ChooseService extends ConsumerStatefulWidget {
   ChooseServiceState createState() => ChooseServiceState();
 }
 
-class ChooseServiceState extends ConsumerState<ChooseService> {
+class ChooseServiceState extends ConsumerState<ChooseService> with AutomaticKeepAliveClientMixin {
+
+  late Future<List<ServiceModel>> _future;
+
+
+  @override
+  void initState() {
+    _future = _getServicesByUserIdAndShopIdFromDB();
+    super.initState();
+  }
 
   Future<List<ServiceModel>> _getServicesByUserIdAndShopIdFromDB() async{
-    String userId = ref.read(currentUser).userId;
-    String shopId = ref.read(currentShop).shopId;
+    String userId = ref.read(currentUserProvider).userId;
+    String shopId = ref.read(currentShopProvider).shopId;
     List<ServiceModel> list = await ChooseServiceViewModelImp().getServicesByUserIdAndShopIdFromFirebase(userId,shopId);
     return await Future.delayed(Duration(milliseconds: LOAD_DATA_DURATION), () => list);
   }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async{
-        Navigator.of(context).pop();
-        return false;
-      },
-      child: Scaffold(
-          backgroundColor: grey50,
-          resizeToAvoidBottomInset : true,
-          appBar: MyAppBar(
-            type: MyAppBarType.LEADING_ICON,
-            leadingIcon: IconlyLight.arrow_left,
-            backgroundColor: grey50,
-            label: 'Choose Service',
-            onTap: (){
-              Navigator.of(context).pop();
-            },
-          ),
-          body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())
-      ),
+    return Scaffold(
+        backgroundColor: grey50,
+        resizeToAvoidBottomInset : true,
+        body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())
     );
   }
 
@@ -74,9 +68,8 @@ class ChooseServiceState extends ConsumerState<ChooseService> {
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
         child: FutureBuilder(
-          future: _getServicesByUserIdAndShopIdFromDB(),
+          future: _future,
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-
 
             if (snapshot.connectionState == ConnectionState.waiting) {
 
@@ -104,7 +97,7 @@ class ChooseServiceState extends ConsumerState<ChooseService> {
                 itemCount: list.length,
                 itemBuilder: (context, index) {
                   return MyChooseServiceTile(type: MyChooseServiceTileType.GENERAL,index: index,onTap: (){
-                    MethodHelper.transitionPage(context, widget, ChooseSchedule(), PageNavigatorType.PUSH, PageTransitionType.rightToLeftJoined);
+                    ChooseServiceViewModelImp().setValue(indexMakeAppointmentProvider.notifier, ref, 2);
                   });
                 },
               );
@@ -114,5 +107,8 @@ class ChooseServiceState extends ConsumerState<ChooseService> {
 
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 
 }

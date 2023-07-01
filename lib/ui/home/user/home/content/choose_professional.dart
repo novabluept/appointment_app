@@ -36,9 +36,10 @@ class ChooseProfessional extends ConsumerStatefulWidget {
   ChooseProfessionalState createState() => ChooseProfessionalState();
 }
 
-class ChooseProfessionalState extends ConsumerState<ChooseProfessional> {
+class ChooseProfessionalState extends ConsumerState<ChooseProfessional> with AutomaticKeepAliveClientMixin {
 
-  Future<List<UserModel>>? _future;
+
+  late Future<List<UserModel>> _future;
 
   @override
   void initState() {
@@ -53,25 +54,10 @@ class ChooseProfessionalState extends ConsumerState<ChooseProfessional> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async{
-        Navigator.of(context).pop();
-        return false;
-      },
-      child: Scaffold(
-          backgroundColor: grey50,
-          resizeToAvoidBottomInset : true,
-          appBar: MyAppBar(
-            type: MyAppBarType.LEADING_ICON,
-            leadingIcon: IconlyLight.arrow_left,
-            backgroundColor: grey50,
-            label: 'Choose Professional',
-            onTap: (){
-              Navigator.of(context).pop();
-            },
-          ),
-          body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())
-      ),
+    return Scaffold(
+        backgroundColor: grey50,
+        resizeToAvoidBottomInset : true,
+        body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())
     );
   }
 
@@ -100,7 +86,7 @@ class ChooseProfessionalState extends ConsumerState<ChooseProfessional> {
           } else {
 
             List<UserModel> list = snapshot.data!;
-            String shopName = ref.read(currentShop).name;
+            String shopName = ref.read(currentShopProvider).name;
 
             return ListView.separated(
                 padding: EdgeInsets.symmetric(vertical: 24.h),
@@ -116,9 +102,11 @@ class ChooseProfessionalState extends ConsumerState<ChooseProfessional> {
                     firstName: user.firstname,
                     lastName: user.lastname,
                     shopName: shopName,
-                    index: index,onTap: (){
-                      ChooseProfessionalViewModelImp().setCurrentUser(currentUser.notifier, ref, user);
-                      MethodHelper.transitionPage(context, widget, ChooseService(), PageNavigatorType.PUSH, PageTransitionType.rightToLeftJoined);
+                    index: index,
+                    onTap: (){
+                      ChooseProfessionalViewModelImp().setValue(currentUserProvider.notifier, ref, user);
+                      ChooseProfessionalViewModelImp().setValue(indexMakeAppointmentProvider.notifier, ref, 1);
+                      print('indexMakeAppointmentProvider -> ' + ref.read(indexMakeAppointmentProvider).toString());
                     }
                 );
               }
@@ -130,4 +118,6 @@ class ChooseProfessionalState extends ConsumerState<ChooseProfessional> {
     );
   }
 
+  @override
+  bool get wantKeepAlive => true;
 }

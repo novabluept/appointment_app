@@ -1,12 +1,14 @@
 
 
+import 'dart:typed_data';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../model/service_model.dart';
-import '../../model/shop_model.dart';
+import '../../model/user_model.dart';
 
-abstract class ChooseShopViewModel{
+abstract class MakeAppointmentScreenViewModel{
 
   void setValue(AlwaysAliveRefreshable<StateController<dynamic>> notifier,WidgetRef ref,dynamic value);
+
 
 }

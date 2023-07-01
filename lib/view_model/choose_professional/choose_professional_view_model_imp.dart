@@ -46,9 +46,8 @@ class ChooseProfessionalViewModelImp implements ChooseProfessionalViewModel{
     return listUsers;
   }
 
-
   @override
-  void setCurrentUser(AlwaysAliveRefreshable<StateController<UserModel>> notifier, WidgetRef ref, UserModel value) {
+  void setValue(AlwaysAliveRefreshable<StateController> notifier, WidgetRef ref, value) {
     ref.read(notifier).state = value;
   }
 

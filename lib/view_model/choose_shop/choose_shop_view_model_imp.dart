@@ -10,12 +10,7 @@ import 'choose_shop_view_model.dart';
 class ChooseShopViewModelImp implements ChooseShopViewModel{
 
   @override
-  void setCurrentShop(AlwaysAliveRefreshable<StateController<ShopModel>> notifier,WidgetRef ref,ShopModel value) async {
-    ref.read(notifier).state = value;
-  }
-
-  @override
-  void setCurrentShopIndex(AlwaysAliveRefreshable<StateController<int>> notifier,WidgetRef ref,int value) async {
+  void setValue(AlwaysAliveRefreshable<StateController> notifier, WidgetRef ref, value) {
     ref.read(notifier).state = value;
   }
 

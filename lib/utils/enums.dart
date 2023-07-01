@@ -25,3 +25,4 @@ enum MyInkwellType { GENERAL }
 enum MyChooseServiceTileType { GENERAL, SHIMMER }
 enum MyChooseShopTileType { GENERAL, SHIMMER }
 enum MyNotificationTileType { GENERAL }
+enum MyKeepPageAliveType { GENERAL }

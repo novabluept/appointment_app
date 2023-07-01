@@ -48,7 +48,7 @@ class MyChooseShopTile extends ConsumerWidget {
       widget: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          color: index == ref.watch(currentShopIndex) ? blue : light1,
+          color: index == ref.watch(currentShopIndexProvider) ? blue : light1,
           border: Border.all(
               width: 1.w,
               color: light1,
@@ -92,13 +92,13 @@ class MyChooseShopTile extends ConsumerWidget {
 
                   Row(
                     children: [
-                      Icon(Icons.location_on,size: 10.sp,color: index == ref.watch(currentShopIndex) ? light1 : blue),
+                      Icon(Icons.location_on,size: 10.sp,color: index == ref.watch(currentShopIndexProvider) ? light1 : blue),
                       SizedBox(width: 6.w),
                       MyLabel(
                         type: MyLabelType.BODY_XSMALL,
                         label: '${city}, ${state}',
                         fontWeight: MyLabel.MEDIUM,
-                        color: index == ref.watch(currentShopIndex) ? grey300 : grey800,
+                        color: index == ref.watch(currentShopIndexProvider) ? grey300 : grey800,
                       ),
                     ],
                   ),
@@ -109,7 +109,7 @@ class MyChooseShopTile extends ConsumerWidget {
                     type: MyLabelType.H6,
                     label: name,
                     fontWeight: MyLabel.BOLD,
-                    color: index == ref.watch(currentShopIndex) ? light1 : grey800,
+                    color: index == ref.watch(currentShopIndexProvider) ? light1 : grey800,
                   ),
 
                   SizedBox(height: 8.h),
@@ -118,7 +118,7 @@ class MyChooseShopTile extends ConsumerWidget {
                     type: MyLabelType.BODY_SMALL,
                     label: 'Obter direções',
                     fontWeight: MyLabel.MEDIUM,
-                    color: index == ref.watch(currentShopIndex) ? grey300 : blue,
+                    color: index == ref.watch(currentShopIndexProvider) ? grey300 : blue,
                   ),
 
 
