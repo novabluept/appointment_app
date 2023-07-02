@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconly/iconly.dart';
 import 'package:shimmer/shimmer.dart';
+import '../state_management/state.dart';
 import '../style/general_style.dart';
 import '../utils/enums.dart';
 import 'my_button.dart';
@@ -33,7 +34,7 @@ class MyChooseProfessionalTile extends ConsumerWidget {
 
     switch (type) {
       case MyChooseProfessionalTileType.GENERAL:
-        return generalChooseProfessionalTile(index!,image!,firstName!,lastName!,shopName!,onTap);
+        return generalChooseProfessionalTile(index!,image!,firstName!,lastName!,shopName!,ref,onTap);
       case MyChooseProfessionalTileType.SHIMMER:
         return shimmerChooseShopTile();
       default:
@@ -42,15 +43,14 @@ class MyChooseProfessionalTile extends ConsumerWidget {
 
   }
 
-  Widget generalChooseProfessionalTile(int index,Uint8List image,String firstName,String lastName,String shopName,Function()? onTap){
-
-
+  Widget generalChooseProfessionalTile(int index,Uint8List image,String firstName,String lastName,String shopName,WidgetRef ref,Function()? onTap){
+    int currentIndex = ref.watch(currentUserIndexProvider);
     return MyInkwell(
       type: MyInkwellType.GENERAL,
       widget: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          color: index == 1 ? blue : light1,
+          color: index == currentIndex ? blue : light1,
           border: Border.all(
               width: 1.w,
               color: light1,
@@ -96,7 +96,7 @@ class MyChooseProfessionalTile extends ConsumerWidget {
                     type: MyLabelType.BODY_XSMALL,
                     label: shopName,
                     fontWeight: MyLabel.MEDIUM,
-                    color: index == 1 ? grey300 : grey800,
+                    color: index == currentIndex ? grey300 : grey800,
                   ),
 
                   SizedBox(height: 8.h),
@@ -105,7 +105,7 @@ class MyChooseProfessionalTile extends ConsumerWidget {
                     type: MyLabelType.H6,
                     label: '${firstName} ${lastName}',
                     fontWeight: MyLabel.BOLD,
-                    color: index == 1 ? light1 : grey800,
+                    color: index == currentIndex ? light1 : grey800,
                   ),
 
                   SizedBox(height: 8.h),

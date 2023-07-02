@@ -15,12 +15,15 @@ final emailProvider = StateProvider<String>((ref) => '');
 final phoneNumberProvider = StateProvider<String>((ref) => '');
 
 
-/// Home
-final indexMakeAppointmentProvider = StateProvider<int>((ref) => 0);
-
+/// ChooseShop
 final currentShopProvider = StateProvider<ShopModel>((ref) => ShopModel(imagePath: '', imageUnit8list: null, name: '', city: '', state: '', streetName: '', zipCode: '',users: []));
 final currentShopIndexProvider = StateProvider<int>((ref) => 0);
 
-/// Appointments
+/// Make appointments
+final indexMakeAppointmentProvider = StateProvider<int>((ref) => 0);
+
 final currentUserProvider = StateProvider<UserModel>((ref) => UserModel(firstname: '', lastname: '', dateOfBirth: '', email: '', phone: '', role: ''));
+final currentUserIndexProvider = StateProvider<int>((ref) => -1);
+
+final selectedDayProvider = StateProvider<DateTime>((ref) => DateTime.now());
 

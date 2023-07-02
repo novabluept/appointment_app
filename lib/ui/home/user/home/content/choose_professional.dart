@@ -1,4 +1,5 @@
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:appointment_app_v2/ui/home/user/appointments_history/content/appointments_completed.dart';
@@ -105,7 +106,12 @@ class ChooseProfessionalState extends ConsumerState<ChooseProfessional> with Aut
                     index: index,
                     onTap: (){
                       ChooseProfessionalViewModelImp().setValue(currentUserProvider.notifier, ref, user);
-                      ChooseProfessionalViewModelImp().setValue(indexMakeAppointmentProvider.notifier, ref, 1);
+                      ChooseProfessionalViewModelImp().setValue(currentUserIndexProvider.notifier, ref, index);
+
+                      Timer(Duration(milliseconds: TRANSITION_DURATION), () {
+                        ChooseProfessionalViewModelImp().setValue(indexMakeAppointmentProvider.notifier, ref, 1);
+                      });
+
                       print('indexMakeAppointmentProvider -> ' + ref.read(indexMakeAppointmentProvider).toString());
                     }
                 );

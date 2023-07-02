@@ -4,7 +4,7 @@ const PAGE_TRANSITION_DURATION = 350;
 
 /// Load data time
 const LOAD_DATA_DURATION = 500;
-const POP_DURATION = 350;
+const TRANSITION_DURATION = 350;
 
 /// Date
 const DATE_FORMAT = 'dd-MM-yyyy';
