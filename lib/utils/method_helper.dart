@@ -7,9 +7,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:path_provider/path_provider.dart';
-import '../state_management/state.dart';
+import '../state_management/choose_shop_state.dart';
+import '../state_management/fill_profile_state.dart';
 import '../style/general_style.dart';
 import '../ui_items/my_label.dart';
 import '../view_model/fill_profile/fill_profile_view_model_imp.dart';
@@ -120,6 +122,12 @@ class MethodHelper{
     File file = File('$tempPath/profile.png');
     await file.writeAsBytes(bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));
     return file;
+  }
+
+  static String convertTimestampToHHmm(int timestamp) {
+    var dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+    var format = DateFormat.Hm(); // 'H' is for 24-hour format, 'h' for 12-hour format
+    return format.format(dateTime);
   }
 
 

@@ -1,8 +1,8 @@
 
 
 /// Types
-enum FirebaseCollections { USER, SHOP, SERVICE }
-enum UserRole { USER, WORKER, ADMIN}
+enum FirebaseCollections { USER, SHOP, SERVICE, APPOINTMENT }
+enum UserRole { USER, PROFESSIONAL, ADMIN}
 enum LanguageTypes { PT, EN }
 
 /// Page Transitions
@@ -26,3 +26,4 @@ enum MyChooseServiceTileType { GENERAL, SHIMMER }
 enum MyChooseShopTileType { GENERAL, SHIMMER }
 enum MyNotificationTileType { GENERAL }
 enum MyKeepPageAliveType { GENERAL }
+enum MyChooseScheduleTileType { GENERAL, SHIMMER }

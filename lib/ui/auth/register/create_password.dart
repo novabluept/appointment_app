@@ -1,12 +1,13 @@
 
 import 'dart:io';
 
-import 'package:appointment_app_v2/state_management/state.dart';
+import 'package:appointment_app_v2/state_management/choose_shop_state.dart';
 import 'package:appointment_app_v2/ui/auth/register/fill_profile.dart';
 import 'package:appointment_app_v2/ui/main_page.dart';
 import 'package:appointment_app_v2/ui_items/my_text_form_field.dart';
 import 'package:appointment_app_v2/utils/enums.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../../../state_management/fill_profile_state.dart';
 import '../../../utils/enums.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

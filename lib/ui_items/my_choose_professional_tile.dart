@@ -8,7 +8,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconly/iconly.dart';
 import 'package:shimmer/shimmer.dart';
-import '../state_management/state.dart';
+import '../model/user_model.dart';
+import '../state_management/appointments_state.dart';
+import '../state_management/choose_shop_state.dart';
 import '../style/general_style.dart';
 import '../utils/enums.dart';
 import 'my_button.dart';
@@ -20,21 +22,19 @@ class MyChooseProfessionalTile extends ConsumerWidget {
 
   final MyChooseProfessionalTileType type;
   final int? index;
-  final Uint8List? image;
-  final String? firstName;
-  final String? lastName;
+  final UserModel? user;
   final String? shopName;
   final Function()? onTap;
 
 
-  const MyChooseProfessionalTile({super.key, required this.type,this.index,this.image,this.firstName,this.lastName,this.shopName,this.onTap});
+  const MyChooseProfessionalTile({super.key, required this.type,this.index,this.user,this.shopName,this.onTap});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
     switch (type) {
       case MyChooseProfessionalTileType.GENERAL:
-        return generalChooseProfessionalTile(index!,image!,firstName!,lastName!,shopName!,ref,onTap);
+        return generalChooseProfessionalTile(index!,user!,shopName!,ref,onTap);
       case MyChooseProfessionalTileType.SHIMMER:
         return shimmerChooseShopTile();
       default:
@@ -43,8 +43,8 @@ class MyChooseProfessionalTile extends ConsumerWidget {
 
   }
 
-  Widget generalChooseProfessionalTile(int index,Uint8List image,String firstName,String lastName,String shopName,WidgetRef ref,Function()? onTap){
-    int currentIndex = ref.watch(currentUserIndexProvider);
+  Widget generalChooseProfessionalTile(int index,UserModel user,String shopName,WidgetRef ref,Function()? onTap){
+    int currentIndex = ref.watch(currentProfessionalIndexProvider);
     return MyInkwell(
       type: MyInkwellType.GENERAL,
       widget: Container(
@@ -77,7 +77,7 @@ class MyChooseProfessionalTile extends ConsumerWidget {
                             child: child,
                           );
                         },
-                        image,
+                        user.imageUnit8list!,
                         width: 110.h,
                         height: 110.h,
                         fit: BoxFit.cover
@@ -103,7 +103,7 @@ class MyChooseProfessionalTile extends ConsumerWidget {
 
                   MyLabel(
                     type: MyLabelType.H6,
-                    label: '${firstName} ${lastName}',
+                    label: '${user.firstname} ${user.lastname}',
                     fontWeight: MyLabel.BOLD,
                     color: index == currentIndex ? light1 : grey800,
                   ),
@@ -193,7 +193,7 @@ class MyChooseProfessionalTile extends ConsumerWidget {
                       ),
                       child: MyLabel(
                         type: MyLabelType.BODY_XSMALL,
-                        label: 'Jenny Watson',
+                        label: 'Jenna Watson',
                         fontWeight: MyLabel.BOLD,
                       ),
                     ),
@@ -212,7 +212,7 @@ class MyChooseProfessionalTile extends ConsumerWidget {
                       ),
                       child: MyLabel(
                         type: MyLabelType.BODY_XSMALL,
-                        label: 'Jenny Watson',
+                        label: 'Jenna Watson',
                         fontWeight: MyLabel.BOLD,
                       ),
                     ),

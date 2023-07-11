@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../model/shop_model.dart';
-import '../state_management/state.dart';
+import '../state_management/choose_shop_state.dart';
 import '../utils/enums.dart';
 
 Future<List<ShopModel>> getShopsFromFirebaseRef() async{

@@ -14,7 +14,7 @@ import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'dart:math';
-import '../state_management/state.dart';
+import '../state_management/choose_shop_state.dart';
 import '../utils/constants.dart';
 import '../utils/enums.dart';
 
@@ -140,8 +140,8 @@ Future<UserRole> getUserRoleRef() async{
       );
 
   switch(role){
-    case 'WORKER':
-      return UserRole.WORKER;
+    case 'PROFESSIONAL':
+      return UserRole.PROFESSIONAL;
     default:
       return UserRole.USER;
   }
@@ -152,11 +152,11 @@ Future<List<UserModel>> getUsersFromFirebaseRef() async{
   List<UserModel> list = [];
   var db = await FirebaseFirestore.instance;
 
-  await db.collection(FirebaseCollections.USER.name).where(UserModel.col_role,whereIn: [UserRole.WORKER.name, UserRole.ADMIN.name]).get().then((querySnapshot) {
+  await db.collection(FirebaseCollections.USER.name).where(UserModel.col_role,whereIn: [UserRole.PROFESSIONAL.name, UserRole.ADMIN.name]).get().then((querySnapshot) {
     for (var docSnapshot in querySnapshot.docs) {
       //print('${docSnapshot.id} => ${docSnapshot.data()}');
       Map<String, dynamic> data = docSnapshot.data();
-      data[UserModel.col_role] = UserRole.WORKER.name; /// Disfarçar o admin de worker
+      data[UserModel.col_role] = UserRole.PROFESSIONAL.name; /// Disfarçar o admin de professional
       list.add(UserModel.fromJson(data));
     }
   },
@@ -168,7 +168,7 @@ Future<List<UserModel>> getUsersFromFirebaseRef() async{
 
 Future<List<UserModel>> getUsersFromShopsFromFirebaseRef(WidgetRef ref) async{
 
-  List usersFromShop = ref.read(currentShopProvider).users;
+  List usersFromShop = ref.read(currentShopProvider).professionals;
   List<UserModel> list = [];
 
   var db = await FirebaseFirestore.instance;

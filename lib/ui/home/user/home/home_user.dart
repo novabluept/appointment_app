@@ -17,7 +17,7 @@ import '../../../../../../ui_items/my_button.dart';
 import '../../../../../../ui_items/my_label.dart';
 import '../../../../../../ui_items/my_responsive_layout.dart';
 import '../../../../model/shop_model.dart';
-import '../../../../state_management/state.dart';
+import '../../../../state_management/choose_shop_state.dart';
 import '../../../../ui_items/my_app_bar.dart';
 import '../../../../ui_items/my_home_shop.dart';
 import '../../../../ui_items/my_pill.dart';
@@ -44,7 +44,7 @@ class HomeUserState extends ConsumerState<HomeUser> {
     list = await HomeUserModelImp().getShopsFromFirebase();
 
     /// Selecionar a shop
-    ShopModel shop = ref.read(currentShopProvider) != ShopModel(imagePath: '', imageUnit8list: null, name: '', city: '', state: '', streetName: '', zipCode: '',users: []) ? ref.read(currentShopProvider) : list[0];
+    ShopModel shop = ref.read(currentShopProvider) != ShopModel(imagePath: '', imageUnit8list: null, name: '', city: '', state: '', streetName: '', zipCode: '',professionals: []) ? ref.read(currentShopProvider) : list[0];
 
     HomeUserModelImp().setCurrentShop(currentShopProvider.notifier,ref,shop);
     return await Future.delayed(Duration(milliseconds: LOAD_DATA_DURATION), () => list);
@@ -137,7 +137,7 @@ class HomeUserState extends ConsumerState<HomeUser> {
               } else {
 
                 List<ShopModel> list = snapshot.data!;
-                ShopModel shop = ref.watch(currentShopProvider) != ShopModel(imagePath: '', imageUnit8list: null, name: '', city: '', state: '', streetName: '', zipCode: '',users: []) ? ref.read(currentShopProvider) : list[0];
+                ShopModel shop = ref.watch(currentShopProvider) != ShopModel(imagePath: '', imageUnit8list: null, name: '', city: '', state: '', streetName: '', zipCode: '',professionals: []) ? ref.read(currentShopProvider) : list[0];
 
                 return Column(
                   children: [

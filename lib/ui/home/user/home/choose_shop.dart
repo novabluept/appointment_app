@@ -27,7 +27,7 @@ import '../../../../../utils/constants.dart';
 import '../../../../../utils/method_helper.dart';
 import '../../../../../utils/validators.dart';
 import '../../../../model/shop_model.dart';
-import '../../../../state_management/state.dart';
+import '../../../../state_management/choose_shop_state.dart';
 import '../../../../ui_items/my_choose_shop_tile.dart';
 import '../../../../view_model/choose_shop/choose_shop_view_model_imp.dart';
 import '../../../../view_model/home_user/home_user_view_model_imp.dart';
@@ -106,10 +106,7 @@ class ChooseShopState extends ConsumerState<ChooseShop> {
                 return MyChooseShopTile(
                   type: MyChooseShopTileType.GENERAL,
                   index: index,
-                  image: shop.imageUnit8list,
-                  name: shop.name,
-                  city: shop.city,
-                  state: shop.state,
+                  shop: shop,
                   onTap: (){
                     ChooseShopViewModelImp().setValue(currentShopProvider.notifier, ref, shop);
                     ChooseShopViewModelImp().setValue(currentShopIndexProvider.notifier, ref, index);

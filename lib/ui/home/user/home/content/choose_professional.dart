@@ -17,7 +17,8 @@ import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../../../../../model/user_model.dart';
-import '../../../../../state_management/state.dart';
+import '../../../../../state_management/appointments_state.dart';
+import '../../../../../state_management/choose_shop_state.dart';
 import '../../../../../style/general_style.dart';
 import '../../../../../ui_items/my_app_bar.dart';
 import '../../../../../ui_items/my_button.dart';
@@ -99,14 +100,12 @@ class ChooseProfessionalState extends ConsumerState<ChooseProfessional> with Aut
 
                   return MyChooseProfessionalTile(
                     type: MyChooseProfessionalTileType.GENERAL,
-                    image: user.imageUnit8list,
-                    firstName: user.firstname,
-                    lastName: user.lastname,
+                    user: user,
                     shopName: shopName,
                     index: index,
                     onTap: (){
-                      ChooseProfessionalViewModelImp().setValue(currentUserProvider.notifier, ref, user);
-                      ChooseProfessionalViewModelImp().setValue(currentUserIndexProvider.notifier, ref, index);
+                      ChooseProfessionalViewModelImp().setValue(currentProfessionalProvider.notifier, ref, user);
+                      ChooseProfessionalViewModelImp().setValue(currentProfessionalIndexProvider.notifier, ref, index);
 
                       Timer(Duration(milliseconds: TRANSITION_DURATION), () {
                         ChooseProfessionalViewModelImp().setValue(indexMakeAppointmentProvider.notifier, ref, 1);

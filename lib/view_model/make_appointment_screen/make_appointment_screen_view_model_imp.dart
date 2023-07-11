@@ -12,7 +12,7 @@ import '../../data_ref/shops_ref.dart';
 import '../../data_ref/users_ref.dart';
 import '../../model/shop_model.dart';
 import '../../model/user_model.dart';
-import '../../state_management/state.dart';
+import '../../state_management/choose_shop_state.dart';
 import 'make_appointment_screen_view_model.dart';
 
 class MakeAppointmentScreenViewModelImp implements MakeAppointmentScreenViewModel{

@@ -1,11 +1,14 @@
 
 
+import 'package:appointment_app_v2/model/service_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconly/iconly.dart';
 import 'package:shimmer/shimmer.dart';
+import '../state_management/appointments_state.dart';
+import '../state_management/choose_shop_state.dart';
 import '../style/general_style.dart';
 import '../utils/enums.dart';
 import 'my_button.dart';
@@ -16,17 +19,18 @@ class MyChooseServiceTile extends ConsumerWidget {
 
   final MyChooseServiceTileType type;
   final int? index;
+  final ServiceModel? service;
   final Function()? onTap;
 
 
-  const MyChooseServiceTile({super.key, required this.type,this.index,this.onTap});
+  const MyChooseServiceTile({super.key, required this.type,this.index,this.service,this.onTap});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
     switch (type) {
       case MyChooseServiceTileType.GENERAL:
-        return generalChooseServiceTile(index!,onTap);
+        return generalChooseServiceTile(index!,service!,ref,onTap);
       case MyChooseServiceTileType.SHIMMER:
         return shimmerChooseServiceTile();
       default:
@@ -35,15 +39,14 @@ class MyChooseServiceTile extends ConsumerWidget {
 
   }
 
-  Widget generalChooseServiceTile(int index,Function()? onTap){
-
+  Widget generalChooseServiceTile(int index,ServiceModel service,WidgetRef ref,Function()? onTap){
+    int currentIndex = ref.watch(currentServiceIndexProvider);
     return MyInkwell(
       type: MyInkwellType.GENERAL,
       widget: Container(
         width: double.infinity,
-
         decoration: BoxDecoration(
-          color: index == 1 ? blue : light1,
+          color: index == currentIndex ? blue : light1,
           border: Border.all(
               width: 1.w,
               color: light1,
@@ -56,19 +59,20 @@ class MyChooseServiceTile extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   MyLabel(
                     type: MyLabelType.BODY_LARGE,
                     fontWeight: MyLabel.BOLD,
-                    label: 'Package',
-                    color: index == 1 ? light1 : dark1,
+                    label: service.name,
+                    color: index == currentIndex ? light1 : dark1,
                   ),
                   SizedBox(height: 8.h),
                   MyLabel(
                     type: MyLabelType.BODY_SMALL,
                     fontWeight: MyLabel.MEDIUM,
                     label: 'Information',
-                    color: index == 1 ? grey300 : grey800,
+                    color: index == currentIndex ? grey300 : grey800,
                   ),
                 ],
               ),
@@ -77,15 +81,15 @@ class MyChooseServiceTile extends ConsumerWidget {
                   MyLabel(
                     type: MyLabelType.BODY_XLARGE,
                     fontWeight: MyLabel.BOLD,
-                    label: '20€',
-                    color: index == 1 ? light1 : blue,
+                    label: service.price.toString() + "€",
+                    color: index == currentIndex ? light1 : blue,
                   ),
                   SizedBox(height: 8.h),
                   MyLabel(
                     type: MyLabelType.BODY_SMALL,
                     fontWeight: MyLabel.MEDIUM,
-                    label: '30 mins',
-                    color: index == 1 ? grey300 : grey800,
+                    label: service.duration.toString()+ " min",
+                    color: index == currentIndex ? grey300 : grey800,
                   ),
                 ],
               ),
@@ -98,10 +102,8 @@ class MyChooseServiceTile extends ConsumerWidget {
   }
 
   Widget shimmerChooseServiceTile(){
-
     return Container(
       width: double.infinity,
-
       decoration: BoxDecoration(
         color: light1,
         border: Border.all(
@@ -130,7 +132,7 @@ class MyChooseServiceTile extends ConsumerWidget {
                     child: MyLabel(
                       type: MyLabelType.BODY_XSMALL,
                       fontWeight: MyLabel.BOLD,
-                      label: 'Package',
+                      label: 'aackaae',
                       color: dark1,
                     ),
                   ),
@@ -148,7 +150,7 @@ class MyChooseServiceTile extends ConsumerWidget {
                     child: MyLabel(
                       type: MyLabelType.BODY_XSMALL,
                       fontWeight: MyLabel.MEDIUM,
-                      label: 'Information',
+                      label: 'information',
                       color: grey800,
                     ),
                   ),
@@ -170,7 +172,7 @@ class MyChooseServiceTile extends ConsumerWidget {
                     child: MyLabel(
                       type: MyLabelType.BODY_XSMALL,
                       fontWeight: MyLabel.BOLD,
-                      label: '20€',
+                      label: '20',
                       color: blue,
                     ),
                   ),

@@ -3,7 +3,7 @@ import 'dart:typed_data';
 class ServiceModel {
 
   static final String col_serviceId = "serviceId";
-  static final String col_userId = "userId";
+  static final String col_professionalId = "professionalId";
   static final String col_shopId = "shopId";
   static final String col_name = "name";
   static final String col_description = "description";
@@ -11,7 +11,7 @@ class ServiceModel {
   static final String col_price = "price";
 
   String serviceId;
-  String userId;
+  String professionalId;
   String shopId;
   String name;
   String description;
@@ -20,7 +20,7 @@ class ServiceModel {
 
   ServiceModel({
     this.serviceId = '',
-    required this.userId,
+    required this.professionalId,
     required this.shopId,
     required this.name,
     required this.description,
@@ -34,7 +34,7 @@ class ServiceModel {
           other is ServiceModel &&
               runtimeType == other.runtimeType &&
               serviceId == other.serviceId &&
-              userId == other.userId &&
+              professionalId == other.professionalId &&
               shopId == other.shopId &&
               name == other.name &&
               description == other.description &&
@@ -44,7 +44,7 @@ class ServiceModel {
   @override
   int get hashCode =>
       serviceId.hashCode ^
-      userId.hashCode ^
+      professionalId.hashCode ^
       shopId.hashCode ^
       name.hashCode ^
       description.hashCode ^
@@ -53,7 +53,7 @@ class ServiceModel {
 
   ServiceModel.fromJson(Map<String, dynamic> json)
       : serviceId = json[col_serviceId] != null ? json[col_serviceId] : '',
-        userId = json[col_userId] != null ? json[col_userId] : '',
+        professionalId = json[col_professionalId] != null ? json[col_professionalId] : '',
         shopId = json[col_shopId] != null ? json[col_shopId] : '',
         name = json[col_name] != null ? json[col_name] : '',
         description = json[col_description] != null ? json[col_description] : '',
@@ -63,7 +63,7 @@ class ServiceModel {
 
   Map<String, dynamic> toJson() => {
     col_serviceId: serviceId,
-    col_userId: userId,
+    col_professionalId: professionalId,
     col_shopId: shopId,
     col_name: name,
     col_description: description,

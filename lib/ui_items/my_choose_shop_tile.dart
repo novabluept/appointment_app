@@ -8,7 +8,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconly/iconly.dart';
 import 'package:shimmer/shimmer.dart';
-import '../state_management/state.dart';
+import '../model/shop_model.dart';
+import '../state_management/choose_shop_state.dart';
 import '../style/general_style.dart';
 import '../utils/enums.dart';
 import 'my_button.dart';
@@ -20,20 +21,17 @@ class MyChooseShopTile extends ConsumerWidget {
 
   final MyChooseShopTileType type;
   final int? index;
-  final Uint8List? image;
-  final String? name;
-  final String? city;
-  final String? state;
+  final ShopModel? shop;
   final Function()? onTap;
 
-  const MyChooseShopTile({super.key, required this.type, this.index, this.image, this.name, this.city, this.state, this.onTap});
+  const MyChooseShopTile({super.key, required this.type, this.index, this.shop, this.onTap});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
     switch (type) {
       case MyChooseShopTileType.GENERAL:
-        return generalChooseShopTile(index!,image!,name!,city!,state!,ref,onTap);
+        return generalChooseShopTile(index!,shop!,ref,onTap);
       case MyChooseShopTileType.SHIMMER:
         return shimmerChooseShopTile();
       default:
@@ -42,7 +40,7 @@ class MyChooseShopTile extends ConsumerWidget {
 
   }
 
-  Widget generalChooseShopTile(int index,Uint8List image, String name, String city,String state,WidgetRef ref,Function()? onTap){
+  Widget generalChooseShopTile(int index,ShopModel shop,WidgetRef ref,Function()? onTap){
     int currentIndex = ref.watch(currentShopIndexProvider);
     return MyInkwell(
       type: MyInkwellType.GENERAL,
@@ -76,7 +74,7 @@ class MyChooseShopTile extends ConsumerWidget {
                             child: child,
                           );
                         },
-                        image,
+                        shop.imageUnit8list!,
                         width: 110.h,
                         height: 110.h,
                         fit: BoxFit.cover
@@ -97,7 +95,7 @@ class MyChooseShopTile extends ConsumerWidget {
                       SizedBox(width: 6.w),
                       MyLabel(
                         type: MyLabelType.BODY_XSMALL,
-                        label: '${city}, ${state}',
+                        label: '${shop.city}, ${shop.state}',
                         fontWeight: MyLabel.MEDIUM,
                         color: index == currentIndex ? grey300 : grey800,
                       ),
@@ -108,7 +106,7 @@ class MyChooseShopTile extends ConsumerWidget {
 
                   MyLabel(
                     type: MyLabelType.H6,
-                    label: name,
+                    label: shop.name,
                     fontWeight: MyLabel.BOLD,
                     color: index == currentIndex ? light1 : grey800,
                   ),

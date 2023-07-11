@@ -11,7 +11,7 @@ class ShopModel {
   static final String col_state = "state";
   static final String col_streetName = "streetName";
   static final String col_zipCode = "zipCode";
-  static final String col_users = "users";
+  static final String col_professionals = "professionals";
 
   String shopId;
   String imagePath;
@@ -21,7 +21,7 @@ class ShopModel {
   String state;
   String streetName;
   String zipCode;
-  List<dynamic> users;
+  List<dynamic> professionals;
 
 
   ShopModel({
@@ -33,7 +33,7 @@ class ShopModel {
     required this.state,
     required this.streetName,
     required this.zipCode,
-    required this.users,
+    required this.professionals,
   });
 
   @override
@@ -59,7 +59,7 @@ class ShopModel {
       state.hashCode ^
       streetName.hashCode ^
       zipCode.hashCode ^
-      users.hashCode;
+      professionals.hashCode;
 
   ShopModel.fromJson(Map<String, dynamic> json)
       : shopId = json[col_shopId] != null ? json[col_shopId] : '',
@@ -70,7 +70,7 @@ class ShopModel {
         state = json[col_state] != null ? json[col_state] : '',
         streetName = json[col_streetName] != null ? json[col_streetName] : '',
         zipCode = json[col_zipCode] != null ? json[col_zipCode] : '',
-        users = json[col_users] != null ? json[col_users] : '';
+        professionals = json[col_professionals] != null ? json[col_professionals] : '';
 
   Map<String, dynamic> toJson() => {
     col_shopId: shopId,
@@ -81,7 +81,7 @@ class ShopModel {
     col_state: state,
     col_streetName: streetName,
     col_zipCode: zipCode,
-    col_users : users
+    col_professionals : professionals
   };
 
 }

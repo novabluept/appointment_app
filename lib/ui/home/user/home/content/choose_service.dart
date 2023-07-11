@@ -1,4 +1,5 @@
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:appointment_app_v2/ui/home/user/appointments_history/content/appointments_completed.dart';
@@ -18,7 +19,8 @@ import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../../../../../model/service_model.dart';
-import '../../../../../state_management/state.dart';
+import '../../../../../state_management/appointments_state.dart';
+import '../../../../../state_management/choose_shop_state.dart';
 import '../../../../../style/general_style.dart';
 import '../../../../../ui_items/my_app_bar.dart';
 import '../../../../../ui_items/my_button.dart';
@@ -49,7 +51,7 @@ class ChooseServiceState extends ConsumerState<ChooseService> with AutomaticKeep
   }
 
   Future<List<ServiceModel>> _getServicesByUserIdAndShopIdFromDB() async{
-    String userId = ref.read(currentUserProvider).userId;
+    String userId = ref.read(currentProfessionalProvider).userId;
     String shopId = ref.read(currentShopProvider).shopId;
     List<ServiceModel> list = await ChooseServiceViewModelImp().getServicesByUserIdAndShopIdFromFirebase(userId,shopId);
     return await Future.delayed(Duration(milliseconds: LOAD_DATA_DURATION), () => list);
@@ -96,9 +98,22 @@ class ChooseServiceState extends ConsumerState<ChooseService> with AutomaticKeep
                 separatorBuilder: (context, index) => SizedBox(height: 20.h),
                 itemCount: list.length,
                 itemBuilder: (context, index) {
-                  return MyChooseServiceTile(type: MyChooseServiceTileType.GENERAL,index: index,onTap: (){
-                    ChooseServiceViewModelImp().setValue(indexMakeAppointmentProvider.notifier, ref, 2);
-                  });
+
+                  ServiceModel service = list[index];
+
+                  return MyChooseServiceTile(
+                    type: MyChooseServiceTileType.GENERAL,
+                    index: index,
+                    service: service,
+                    onTap: (){
+                      ChooseServiceViewModelImp().setValue(currentServiceProvider.notifier, ref, service);
+                      ChooseServiceViewModelImp().setValue(currentServiceIndexProvider.notifier, ref, index);
+
+                      Timer(Duration(milliseconds: TRANSITION_DURATION), () {
+                        ChooseServiceViewModelImp().setValue(indexMakeAppointmentProvider.notifier, ref, 2);
+                      });
+                    }
+                  );
                 },
               );
             }
