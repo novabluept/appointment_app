@@ -46,6 +46,22 @@ class AppointmentModel {
     required this.status,
   });
 
+  @override
+  int get hashCode =>
+      appointmentId.hashCode ^
+      shopId.hashCode ^
+      professionalId.hashCode ^
+      clientId.hashCode ^
+      serviceId.hashCode ^
+      clientPhone.hashCode ^
+      startDate.hashCode ^
+      endDate.hashCode ^
+      date.hashCode ^
+      serviceName.hashCode ^
+      servicePrice.hashCode ^
+      serviceDuration.hashCode ^
+      status.hashCode;
+
   AppointmentModel.fromJson(Map<String, dynamic> json)
       : appointmentId = json[col_appointmentId] != null ? json[col_appointmentId] : '',
         shopId = json[col_shopId] != null ? json[col_shopId] : '',

@@ -4,10 +4,10 @@
 enum FirebaseCollections { USER, SHOP, SERVICE, APPOINTMENT }
 enum UserRole { USER, PROFESSIONAL, ADMIN}
 enum LanguageTypes { PT, EN }
+enum AppointmentStatus { AVAILABLE, BOOKED, CANCELED}
 
 /// Page Transitions
 enum PageNavigatorType { PUSH, PUSH_REPLACEMENT }
-
 
 /// Components
 enum MyLabelType { H1, H2, H3, H4, H5, H6, BODY_LARGE , BODY_XLARGE, BODY_MEDIUM, BODY_SMALL, BODY_XSMALL }

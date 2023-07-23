@@ -10,10 +10,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconly/iconly.dart';
 import 'package:shimmer/shimmer.dart';
 import '../model/appointment_model.dart';
+import '../model/time_slot_model.dart';
 import '../model/user_model.dart';
 import '../state_management/appointments_state.dart';
 import '../state_management/choose_shop_state.dart';
 import '../style/general_style.dart';
+import '../utils/constants.dart';
 import '../utils/enums.dart';
 import 'my_button.dart';
 import 'my_inkwell.dart';
@@ -24,18 +26,18 @@ class MyChooseScheduleTile extends ConsumerWidget {
 
   final MyChooseScheduleTileType type;
   final int? index;
-  final AppointmentModel? appointment;
+  final TimeSlotModel? timeSlot;
   final Function()? onTap;
 
 
-  const MyChooseScheduleTile({super.key, required this.type,this.index,this.appointment,this.onTap});
+  const MyChooseScheduleTile({super.key, required this.type,this.index,this.timeSlot,this.onTap});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
     switch (type) {
       case MyChooseScheduleTileType.GENERAL:
-        return generalChooseScheduleTile(index!,appointment!,ref,onTap);
+        return generalChooseScheduleTile(index!,timeSlot!,ref,onTap);
       case MyChooseScheduleTileType.SHIMMER:
         return shimmerChooseShopTile();
       default:
@@ -44,10 +46,19 @@ class MyChooseScheduleTile extends ConsumerWidget {
 
   }
 
-  Widget generalChooseScheduleTile(int index,AppointmentModel appointment,WidgetRef ref,Function()? onTap){
-    int currentIndex = ref.watch(currentAppointmentIndexProvider);
-    String startDate = MethodHelper.convertTimestampToHHmm(appointment.startDate.seconds);
-    String endDate = MethodHelper.convertTimestampToHHmm(appointment.endDate.seconds);
+  Widget generalChooseScheduleTile(int index,TimeSlotModel slot,WidgetRef ref,Function()? onTap){
+    int currentIndex = ref.watch(currentSlotIndexProvider);
+
+    String startDateHour = slot.startTime.hour < 10 ? "0"+slot.startTime.hour.toString() : slot.startTime.hour.toString();
+    String startDateMinute = slot.startTime.minute < 10 ? "0"+slot.startTime.minute.toString() : slot.startTime.minute.toString();
+
+    String endDateHour = slot.endTime.hour < 10 ? "0"+slot.endTime.hour.toString() : slot.endTime.hour.toString();
+    String endDateMinute = slot.endTime.minute < 10 ? "0"+slot.endTime.minute.toString() : slot.endTime.minute.toString();
+
+
+
+    String startDate = startDateHour + ":" + startDateMinute;
+    String endDate = endDateHour + ":" + endDateMinute;
     return MyInkwell(
       type: MyInkwellType.GENERAL,
       widget: Center(

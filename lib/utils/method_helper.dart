@@ -1,6 +1,7 @@
 
 
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -128,6 +129,15 @@ class MethodHelper{
     var dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
     var format = DateFormat.Hm(); // 'H' is for 24-hour format, 'h' for 12-hour format
     return format.format(dateTime);
+  }
+
+  static TimeOfDay convertTimestampToTimeOfDay(Timestamp timestamp){
+    DateTime date = timestamp.toDate();
+    return TimeOfDay(hour: date.hour, minute: date.minute);
+  }
+
+  static double timeOfDayToDouble(TimeOfDay myTime){
+    return myTime.hour + myTime.minute/60.0;
   }
 
 

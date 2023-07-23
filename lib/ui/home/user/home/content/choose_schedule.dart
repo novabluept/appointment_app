@@ -2,11 +2,13 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:appointment_app_v2/model/user_model.dart';
 import 'package:appointment_app_v2/ui/home/user/appointments_history/content/appointments_completed.dart';
 import 'package:appointment_app_v2/ui/home/user/appointments_history/content/appointments_upcoming.dart';
 import 'package:appointment_app_v2/ui/home/user/home/content/choose_service.dart';
 import 'package:appointment_app_v2/ui_items/my_choose_schedule_tile.dart';
 import 'package:appointment_app_v2/utils/enums.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +22,9 @@ import 'package:table_calendar/table_calendar.dart';
 
 import '../../../../../data_ref/appointment_ref.dart';
 import '../../../../../model/appointment_model.dart';
+import '../../../../../model/service_model.dart';
+import '../../../../../model/shop_model.dart';
+import '../../../../../model/time_slot_model.dart';
 import '../../../../../state_management/appointments_state.dart';
 import '../../../../../state_management/choose_shop_state.dart';
 import '../../../../../style/general_style.dart';
@@ -139,7 +144,7 @@ class ChooseScheduleState extends ConsumerState<ChooseSchedule> {
           SizedBox(
             height: 180.h,
             child: StreamBuilder(
-              stream: getAppointmentByProfessionalShopStatusDateFromFirebaseRef("pcCs5lax0sgIc5d6EJ0QQIbidUn1","vsvWcBONOYI4ArQ3tZL2","BOOKED","08-09-2023"),
+              stream: getAppointmentByProfessionalShopStatusDateFromFirebaseRef("pcCs5lax0sgIc5d6EJ0QQIbidUn1","vsvWcBONOYI4ArQ3tZL2",AppointmentStatus.BOOKED.name,"08-09-2023"),
               builder: (BuildContext context, AsyncSnapshot<List<AppointmentModel>> snapshot) {
                 if(snapshot.connectionState == ConnectionState.waiting){
                   return Text('waiting');
@@ -147,8 +152,7 @@ class ChooseScheduleState extends ConsumerState<ChooseSchedule> {
                   return Text('has error');
                 }else{
 
-                  List<AppointmentModel> list = snapshot.data!;
-                  list.sort((a, b) => a.startDate.compareTo(b.startDate));
+                  List<TimeSlotModel> list = _getAvailableSlots(ref,snapshot.data!,ref.read(currentServiceProvider).duration);
 
                   return GridView.count(
                     crossAxisCount: 3,
@@ -159,16 +163,16 @@ class ChooseScheduleState extends ConsumerState<ChooseSchedule> {
                     mainAxisSpacing: 16.h,
                     children: List.generate(list.length, (index) {
 
-                      AppointmentModel appointment = list[index];
+                      TimeSlotModel slot = list[index];
 
                       return MyChooseScheduleTile(
                           type: MyChooseScheduleTileType.GENERAL,
                           index: index,
-                          appointment: appointment,
+                          timeSlot: slot,
                           onTap: (){
-                            ChooseScheduleViewModelImp().setValue(currentAppointmentProvider.notifier, ref, appointment);
-                            ChooseScheduleViewModelImp().setValue(currentAppointmentIndexProvider.notifier, ref, index);
-                            print('currentScheduleIndexProvider -> ' + ref.read(currentAppointmentIndexProvider).toString());
+                            ChooseScheduleViewModelImp().setValue(currentSlotProvider.notifier, ref, slot);
+                            ChooseScheduleViewModelImp().setValue(currentSlotIndexProvider.notifier, ref, index);
+                            print('currentScheduleIndexProvider -> ' + ref.read(currentSlotIndexProvider).toString());
                           }
                       );
                     }),
@@ -186,3 +190,139 @@ class ChooseScheduleState extends ConsumerState<ChooseSchedule> {
   }
 
 }
+
+List<TimeSlotModel> _generateSlotsByRangeAndInterval(TimeOfDay startTime,TimeOfDay endTime,int interval){
+
+  List<TimeSlotModel> timeSlots = [];
+
+  TimeOfDay currentTime = startTime;
+
+  while (currentTime.hour < endTime.hour) {
+
+    TimeOfDay nextTime;
+
+    if(currentTime.minute == (60 - INTERVAL_SLOT)){
+      nextTime = TimeOfDay(hour: currentTime.hour + 1, minute: 0);
+    }else{
+      nextTime = TimeOfDay(hour: currentTime.hour, minute: currentTime.minute + interval);
+    }
+
+    TimeSlotModel slotToAdd = TimeSlotModel(
+      startTime: currentTime,
+      endTime: nextTime,
+    );
+
+    timeSlots.add(slotToAdd);
+
+    currentTime = nextTime;
+  }
+
+  return timeSlots;
+}
+
+bool _isSlotAvailable(TimeSlotModel slot,TimeOfDay appointmentStartTime,TimeOfDay appointmentEndTime){
+  if(MethodHelper.timeOfDayToDouble(slot.startTime) >= MethodHelper.timeOfDayToDouble(appointmentStartTime)
+      && MethodHelper.timeOfDayToDouble(slot.endTime) <= MethodHelper.timeOfDayToDouble(appointmentEndTime) ){
+    return true;
+  }
+  return false;
+}
+
+_checkAvailableAndUnavailableSlots(List<AppointmentModel> appointments,List<TimeSlotModel> slots,TimeOfDay slotStartTime,TimeOfDay slotEndTime){
+  for(var appointment in appointments){
+
+    TimeOfDay appointmentStartTime = MethodHelper.convertTimestampToTimeOfDay(appointment.startDate);
+    TimeOfDay appointmentEndTime = MethodHelper.convertTimestampToTimeOfDay(appointment.endDate);
+
+    /// If the appointment is in the interval of the time slot
+    if(MethodHelper.timeOfDayToDouble(appointmentStartTime) >= MethodHelper.timeOfDayToDouble(slotStartTime)
+        && MethodHelper.timeOfDayToDouble(appointmentEndTime) <= MethodHelper.timeOfDayToDouble(slotEndTime) ){
+
+      for(var slot in slots){
+        _isSlotAvailable(slot,appointmentStartTime,appointmentEndTime) ? slot.hasAppointment = true : null;
+      }
+
+    }
+
+  }
+}
+
+_checkPossibleSlotsForServiceDuration(List<TimeSlotModel> slots,List<TimeSlotModel> possibleSlots,double numServiceInstances,int serviceDuration){
+  for(int i = 0; i < slots.length; i++){
+
+    if(!slots[i].hasAppointment!){
+
+      int countNumServiceInstances = 0;
+
+      for(int j = i; j < slots.length; j++){
+
+        if(!slots[i + countNumServiceInstances].hasAppointment!){
+
+          countNumServiceInstances++;
+
+          if(countNumServiceInstances == numServiceInstances){
+
+            TimeOfDay endTime;
+            if(slots[i].startTime.minute + serviceDuration >= 60){
+              endTime = TimeOfDay(hour: slots[i].startTime.hour + 1, minute: slots[i].startTime.minute + serviceDuration -  60);
+            }else{
+              endTime = TimeOfDay(hour: slots[i].startTime.hour, minute: slots[i].startTime.minute + serviceDuration);
+            }
+            possibleSlots.add(TimeSlotModel(startTime: slots[i].startTime, endTime: endTime));
+            break;
+          }
+
+        }
+
+      }
+    }
+  }
+  //print(possibleSlots);
+}
+
+double _calculateServiceInstances(int serviceDuration){
+  return serviceDuration / INTERVAL_SLOT;
+}
+
+List<TimeSlotModel> _getAvailableSlots(WidgetRef ref,List<AppointmentModel> listBookedAppointments, int serviceDuration) {
+
+  List<TimeSlotModel> listAvailableAppointments = [];
+  double numServiceInstances = _calculateServiceInstances(serviceDuration);
+
+  /// Define the list of time slots for the day (start times and end times)
+  List<TimeSlotModel> timeSlots = [
+    TimeSlotModel(startTime: TimeOfDay(hour: 9, minute: 0),endTime: TimeOfDay(hour: 13, minute: 0)),
+    TimeSlotModel(startTime: TimeOfDay(hour: 14, minute: 0),endTime: TimeOfDay(hour: 18, minute: 0)),
+  ];
+
+  /// Define the booked appointments and sort the booked appointments by their start date and time
+  List<AppointmentModel> appointments = listBookedAppointments;
+  appointments.sort((a, b) => a.startDate.compareTo(b.startDate));
+
+  /// Iterate through the time slots
+  for (TimeSlotModel slot in timeSlots) {
+
+    List<TimeSlotModel> possibleSlots = [];
+
+    TimeOfDay slotStartTime = slot.startTime;
+    TimeOfDay slotEndTime = slot.endTime;
+
+    List<TimeSlotModel> slots = _generateSlotsByRangeAndInterval(slotStartTime,slotEndTime,INTERVAL_SLOT);
+
+    _checkAvailableAndUnavailableSlots(appointments,slots,slotStartTime,slotEndTime);
+
+    _checkPossibleSlotsForServiceDuration(slots,possibleSlots,numServiceInstances,serviceDuration);
+
+    listAvailableAppointments.addAll(possibleSlots);
+  }
+
+
+  return listAvailableAppointments;
+}
+
+
+
+
+
+
+
