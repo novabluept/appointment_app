@@ -4,7 +4,7 @@
 enum FirebaseCollections { USER, SHOP, SERVICE, APPOINTMENT }
 enum UserRole { USER, PROFESSIONAL, ADMIN}
 enum LanguageTypes { PT, EN }
-enum AppointmentStatus { AVAILABLE, BOOKED, CANCELED}
+enum AppointmentStatus { BOOKED, COMPLETED, CANCELED }
 
 /// Page Transitions
 enum PageNavigatorType { PUSH, PUSH_REPLACEMENT }

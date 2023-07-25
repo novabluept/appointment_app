@@ -110,7 +110,7 @@ class ChooseServiceState extends ConsumerState<ChooseService> with AutomaticKeep
                       ChooseServiceViewModelImp().setValue(currentServiceIndexProvider.notifier, ref, index);
 
                       Timer(Duration(milliseconds: TRANSITION_DURATION), () {
-                        ChooseServiceViewModelImp().setValue(indexMakeAppointmentProvider.notifier, ref, 2);
+                        ChooseServiceViewModelImp().setValue(currentAppointmentIndexProvider.notifier, ref, 2);
                       });
                     }
                   );

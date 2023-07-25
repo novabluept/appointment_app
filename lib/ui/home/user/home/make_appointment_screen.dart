@@ -57,8 +57,8 @@ class ChooseScreenState extends ConsumerState<ChooseScreen> with TickerProviderS
 
   @override
   void didChangeDependencies() {
-    print('indexMakeAppointmentProvider: ' + ref.read(indexMakeAppointmentProvider).toString());
-    _controller = TabController(length: _pages.length, initialIndex: ref.watch(indexMakeAppointmentProvider), vsync: this);
+    print('indexMakeAppointmentProvider: ' + ref.read(currentAppointmentIndexProvider).toString());
+    _controller = TabController(length: _pages.length, initialIndex: ref.watch(currentAppointmentIndexProvider), vsync: this);
     super.didChangeDependencies();
   }
 
@@ -72,8 +72,16 @@ class ChooseScreenState extends ConsumerState<ChooseScreen> with TickerProviderS
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async{
-        int index = ref.read(indexMakeAppointmentProvider);
-        index > 0 ? MakeAppointmentScreenViewModelImp().setValue(indexMakeAppointmentProvider.notifier, ref, --index) :  Navigator.of(context).pop();
+
+        /// Este codigo esta igual ao de baixo por causa do back nativo
+        int index = ref.read(currentAppointmentIndexProvider);
+        if(index > 0){
+          MakeAppointmentScreenViewModelImp().setValue(currentAppointmentIndexProvider.notifier, ref, --index);
+        }else{
+          Navigator.of(context).pop();
+          MethodHelper.cleanAppointmentsVariables(ref);
+        }
+
         return false;
       },
       child: Scaffold(
@@ -83,12 +91,17 @@ class ChooseScreenState extends ConsumerState<ChooseScreen> with TickerProviderS
             type: MyAppBarType.LEADING_ICON,
             leadingIcon: IconlyLight.arrow_left,
             backgroundColor: grey50,
-            label: ref.watch(indexMakeAppointmentProvider) == 0 ? 'Choose Professional' :
-            ref.watch(indexMakeAppointmentProvider) == 1 ? 'Choose Service' :
-            ref.watch(indexMakeAppointmentProvider) == 2 ? 'Choose Schedule' : '',
+            label: ref.watch(currentAppointmentIndexProvider) == 0 ? 'Choose Professional' :
+            ref.watch(currentAppointmentIndexProvider) == 1 ? 'Choose Service' :
+            ref.watch(currentAppointmentIndexProvider) == 2 ? 'Choose Schedule' : '',
             onTap: (){
-              int index = ref.read(indexMakeAppointmentProvider);
-              index > 0 ? MakeAppointmentScreenViewModelImp().setValue(indexMakeAppointmentProvider.notifier, ref, --index) :  Navigator.of(context).pop();
+              int index = ref.read(currentAppointmentIndexProvider);
+              if(index > 0){
+                MakeAppointmentScreenViewModelImp().setValue(currentAppointmentIndexProvider.notifier, ref, --index);
+              }else{
+                Navigator.of(context).pop();
+                MethodHelper.cleanAppointmentsVariables(ref);
+              }
             },
           ),
           body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())
@@ -100,7 +113,7 @@ class ChooseScreenState extends ConsumerState<ChooseScreen> with TickerProviderS
     return Consumer(
       builder: (BuildContext context, WidgetRef ref, Widget? child) {
 
-        final index = ref.watch(indexMakeAppointmentProvider);
+        final index = ref.watch(currentAppointmentIndexProvider);
         _controller = TabController(length: _pages.length, initialIndex: index, vsync: this);
 
         return TabBarView(

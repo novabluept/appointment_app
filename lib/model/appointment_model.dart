@@ -7,7 +7,6 @@ class AppointmentModel {
   static final String col_professionalId = "professionalId";
   static final String col_clientId = "clientId";
   static final String col_serviceId = "serviceId";
-  static final String col_clientPhone = "clientPhone";
   static final String col_startDate = "startDate";
   static final String col_endDate = "endDate";
   static final String col_date = "date";
@@ -21,7 +20,6 @@ class AppointmentModel {
   String professionalId;
   String clientId;
   String serviceId;
-  String clientPhone;
   Timestamp startDate;
   Timestamp endDate;
   String date;
@@ -36,7 +34,6 @@ class AppointmentModel {
     required this.professionalId,
     required this.clientId,
     required this.serviceId,
-    required this.clientPhone,
     required this.startDate,
     required this.endDate,
     required this.date,
@@ -53,7 +50,6 @@ class AppointmentModel {
       professionalId.hashCode ^
       clientId.hashCode ^
       serviceId.hashCode ^
-      clientPhone.hashCode ^
       startDate.hashCode ^
       endDate.hashCode ^
       date.hashCode ^
@@ -68,7 +64,6 @@ class AppointmentModel {
         professionalId = json[col_professionalId] != null ? json[col_professionalId] : '',
         clientId = json[col_clientId] != null ? json[col_clientId] : '',
         serviceId = json[col_serviceId] != null ? json[col_serviceId] : '',
-        clientPhone = json[col_clientPhone] != null ? json[col_clientPhone] : '',
         startDate = json[col_startDate] != null ? json[col_startDate] : Timestamp.fromDate(DateTime.utc(1971,1,1)),
         endDate = json[col_endDate] != null ? json[col_endDate] : Timestamp.fromDate(DateTime.utc(1971,1,1)),
         date = json[col_date] != null ? json[col_date] : '',
@@ -84,7 +79,6 @@ class AppointmentModel {
     col_professionalId: professionalId,
     col_clientId: clientId,
     col_serviceId: serviceId,
-    col_clientPhone: clientPhone,
     col_startDate: startDate,
     col_endDate: endDate,
     col_date: date,

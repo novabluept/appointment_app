@@ -9,7 +9,7 @@ import '../model/service_model.dart';
 import '../model/user_model.dart';
 
 /// Pagination
-final indexMakeAppointmentProvider = StateProvider<int>((ref) => 0);
+final currentAppointmentIndexProvider = StateProvider<int>((ref) => 0);
 
 /// Professional
 final currentProfessionalProvider = StateProvider<UserModel>((ref) => UserModel(firstname: '', lastname: '', dateOfBirth: '', email: '', phone: '', role: ''));

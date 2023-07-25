@@ -108,10 +108,10 @@ class ChooseProfessionalState extends ConsumerState<ChooseProfessional> with Aut
                       ChooseProfessionalViewModelImp().setValue(currentProfessionalIndexProvider.notifier, ref, index);
 
                       Timer(Duration(milliseconds: TRANSITION_DURATION), () {
-                        ChooseProfessionalViewModelImp().setValue(indexMakeAppointmentProvider.notifier, ref, 1);
+                        ChooseProfessionalViewModelImp().setValue(currentAppointmentIndexProvider.notifier, ref, 1);
                       });
 
-                      print('indexMakeAppointmentProvider -> ' + ref.read(indexMakeAppointmentProvider).toString());
+                      print('indexMakeAppointmentProvider -> ' + ref.read(currentAppointmentIndexProvider).toString());
                     }
                 );
               }

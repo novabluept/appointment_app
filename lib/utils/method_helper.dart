@@ -11,10 +11,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:path_provider/path_provider.dart';
+import '../state_management/appointments_state.dart';
 import '../state_management/choose_shop_state.dart';
 import '../state_management/fill_profile_state.dart';
 import '../style/general_style.dart';
 import '../ui_items/my_label.dart';
+import '../view_model/choose_schedule/choose_schedule_view_model_imp.dart';
 import '../view_model/fill_profile/fill_profile_view_model_imp.dart';
 import 'constants.dart';
 import 'enums.dart';
@@ -136,8 +138,21 @@ class MethodHelper{
     return TimeOfDay(hour: date.hour, minute: date.minute);
   }
 
+  static Timestamp convertTimeOfDayToTimestamp(TimeOfDay timeOfDay){
+    DateTime now = DateTime.now(); // Get the current date to create a DateTime object
+    DateTime dateTime = DateTime(now.year, now.month, now.day, timeOfDay.hour, timeOfDay.minute);
+    return Timestamp.fromDate(dateTime);
+  }
+
   static double timeOfDayToDouble(TimeOfDay myTime){
     return myTime.hour + myTime.minute/60.0;
+  }
+
+  static void cleanAppointmentsVariables(WidgetRef ref){
+    ChooseScheduleViewModelImp().setValue(currentProfessionalIndexProvider.notifier, ref, -1);
+    ChooseScheduleViewModelImp().setValue(currentServiceIndexProvider.notifier, ref, -1);
+    ChooseScheduleViewModelImp().setValue(currentSlotIndexProvider.notifier, ref, -1);
+    ChooseScheduleViewModelImp().setValue(currentAppointmentIndexProvider.notifier, ref, 0);
   }
 
 

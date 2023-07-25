@@ -1,5 +1,6 @@
 
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:appointment_app_v2/model/user_model.dart';
@@ -47,6 +48,31 @@ class ChooseSchedule extends ConsumerStatefulWidget {
 
 class ChooseScheduleState extends ConsumerState<ChooseSchedule> {
 
+  StreamSubscription<List<AppointmentModel>>? _streamSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    // Subscribe to the stream when the widget is initialized
+    _streamSubscription = getAppointmentByProfessionalShopStatusDateFromFirebaseRef(
+      ref.read(currentProfessionalProvider).userId,
+      ref.read(currentShopProvider).shopId,
+      AppointmentStatus.BOOKED.name,
+      DateFormat(DATE_FORMAT).format(ref.read(selectedDayProvider)),
+    ).listen((List<AppointmentModel> data) {
+      // This block will be called when new data is available on the stream.
+      // You can put your code here to update currentSlotIndexProvider with -1.
+      ChooseScheduleViewModelImp().setValue(currentSlotIndexProvider.notifier, ref, -1);
+    });
+  }
+
+  @override
+  void dispose() {
+    // Don't forget to cancel the subscription when the widget is disposed
+    _streamSubscription?.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,6 +97,7 @@ class ChooseScheduleState extends ConsumerState<ChooseSchedule> {
 
   _onDaySelected(DateTime day,DateTime focusedDay){
     if(!_isDayOfPast(day,focusedDay)){
+      ChooseScheduleViewModelImp().setValue(currentSlotIndexProvider.notifier, ref, -1);
       ChooseScheduleViewModelImp().setValue(selectedDayProvider.notifier, ref, day);
     }else{
       MethodHelper.showSnackBar(context, SnackBarType.WARNING, 'Não é possivel efetuar marcações num dia do passado');
@@ -144,7 +171,11 @@ class ChooseScheduleState extends ConsumerState<ChooseSchedule> {
           SizedBox(
             height: 180.h,
             child: StreamBuilder(
-              stream: getAppointmentByProfessionalShopStatusDateFromFirebaseRef("pcCs5lax0sgIc5d6EJ0QQIbidUn1","vsvWcBONOYI4ArQ3tZL2",AppointmentStatus.BOOKED.name,"08-09-2023"),
+              stream: getAppointmentByProfessionalShopStatusDateFromFirebaseRef(
+                  ref.read(currentProfessionalProvider).userId,
+                  ref.read(currentShopProvider).shopId,
+                  AppointmentStatus.BOOKED.name,
+                  DateFormat(DATE_FORMAT).format(ref.read(selectedDayProvider))),
               builder: (BuildContext context, AsyncSnapshot<List<AppointmentModel>> snapshot) {
                 if(snapshot.connectionState == ConnectionState.waiting){
                   return Text('waiting');
@@ -170,25 +201,77 @@ class ChooseScheduleState extends ConsumerState<ChooseSchedule> {
                           index: index,
                           timeSlot: slot,
                           onTap: (){
-                            ChooseScheduleViewModelImp().setValue(currentSlotProvider.notifier, ref, slot);
-                            ChooseScheduleViewModelImp().setValue(currentSlotIndexProvider.notifier, ref, index);
-                            print('currentScheduleIndexProvider -> ' + ref.read(currentSlotIndexProvider).toString());
+                            if(index == ref.read(currentSlotIndexProvider)) {
+                              ChooseScheduleViewModelImp().setValue(currentSlotIndexProvider.notifier, ref, -1);
+                            }else{
+                              ChooseScheduleViewModelImp().setValue(currentSlotProvider.notifier, ref, slot);
+                              ChooseScheduleViewModelImp().setValue(currentSlotIndexProvider.notifier, ref, index);
+                            }
                           }
                       );
                     }),
                   );
                 }
               },
-            )
+            ),
           ),
           SizedBox(height: 16.h),
-          MyButton(type: MyButtonType.FILLED, label: 'Continue',onPressed: (){}),
+          MyButton(
+            type: MyButtonType.FILLED,
+            label: 'Continue',
+            onPressed: (){
+              _saveAppointment(context,ref);
+            }
+          ),
           SizedBox(height: 24.h,)
         ],
       ),
     );
   }
 
+}
+
+_saveAppointment(BuildContext context,WidgetRef ref){
+  if(ref.read(currentSlotIndexProvider) == -1){
+    MethodHelper.showSnackBar(context, SnackBarType.WARNING, 'Terá de selecionar um horario para continuar');
+  }else{
+    FirebaseAuth auth = FirebaseAuth.instance;
+    final User user = auth.currentUser!;
+
+    ServiceModel service = ref.read(currentServiceProvider);
+    TimeSlotModel slot = ref.read(currentSlotProvider);
+    AppointmentModel appointment = AppointmentModel(
+        shopId: ref.read(currentShopProvider).shopId,
+        professionalId: ref.read(currentProfessionalProvider).userId,
+        clientId: user.uid,
+        serviceId: service.serviceId,
+        startDate: MethodHelper.convertTimeOfDayToTimestamp(TimeOfDay(hour: slot.startTime.hour, minute: slot.startTime.minute)),
+        endDate: MethodHelper.convertTimeOfDayToTimestamp(TimeOfDay(hour: slot.endTime.hour, minute: slot.endTime.minute)),
+        date: DateFormat(DATE_FORMAT).format(ref.read(selectedDayProvider)),
+        serviceName: service.name,
+        servicePrice: service.price,
+        serviceDuration: service.duration,
+        status: AppointmentStatus.BOOKED.name
+    );
+
+    ChooseScheduleViewModelImp().addAppointment(appointment);
+
+    // Create a Completer to manage the timer completion
+    Completer<void> completer = Completer<void>();
+
+    Timer(Duration(milliseconds: TRANSITION_DURATION), () {
+      Navigator.of(context).pop();
+      completer.complete();
+    });
+
+    completer.future.then((_) {
+      Timer(Duration(milliseconds: TRANSITION_DURATION), () {
+        MethodHelper.cleanAppointmentsVariables(ref);
+      });
+    });
+
+
+  }
 }
 
 List<TimeSlotModel> _generateSlotsByRangeAndInterval(TimeOfDay startTime,TimeOfDay endTime,int interval){
