@@ -23,6 +23,7 @@ import '../../../../../style/general_style.dart';
 import '../../../../../ui_items/my_app_bar.dart';
 import '../../../../../ui_items/my_button.dart';
 import '../../../../../ui_items/my_choose_professional_tile.dart';
+import '../../../../../ui_items/my_exception.dart';
 import '../../../../../ui_items/my_label.dart';
 import '../../../../../ui_items/my_responsive_layout.dart';
 import '../../../../../ui_items/my_text_form_field.dart';
@@ -82,9 +83,9 @@ class ChooseProfessionalState extends ConsumerState<ChooseProfessional> with Aut
             );
 
           } else if (snapshot.hasError) {
-            return Container(child: Text('error'));
+            return MyException(type: MyExceptionType.NO_DATA,imagePath: 'images/warning_image.svg',firstLabel: 'Something went wrong',secondLabel: 'Please try again later.',);
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Container(child: Text('no data or empty'));
+            return MyException(type: MyExceptionType.NO_DATA,imagePath: 'images/no_data_image.svg',firstLabel: 'There is no data available',secondLabel: 'No professionals available',);
           } else {
 
             List<UserModel> list = snapshot.data!;

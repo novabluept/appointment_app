@@ -2,6 +2,7 @@
 
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -127,10 +128,10 @@ class MethodHelper{
     return file;
   }
 
-  static String convertTimestampToHHmm(int timestamp) {
-    var dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
-    var format = DateFormat.Hm(); // 'H' is for 24-hour format, 'h' for 12-hour format
-    return format.format(dateTime);
+  static String convertHourAndMinuteToFormattedDate(int hour,int minute) {
+    String hourDate = hour < 10 ? "0"+ hour.toString() : hour.toString();
+    String minuteDate = minute < 10 ? "0"+ minute.toString() : minute.toString();
+    return hourDate + ":" + minuteDate;
   }
 
   static TimeOfDay convertTimestampToTimeOfDay(Timestamp timestamp){
@@ -155,7 +156,20 @@ class MethodHelper{
     ChooseScheduleViewModelImp().setValue(currentAppointmentIndexProvider.notifier, ref, 0);
   }
 
+  static Future<Uint8List?> getImageAndCovertToUint8list(String path) async{
+    final storageRef = FirebaseStorage.instance.ref();
 
+    final islandRef = storageRef.child(path);
+
+    try {
+      const oneMegabyte = 1024 * 1024 * 5;
+      final Uint8List? data = await islandRef.getData(oneMegabyte);
+      return data;
+    } on Error catch (e) {
+      print(e.toString());
+    }
+    return null;
+  }
 
 }
 

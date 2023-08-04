@@ -31,6 +31,7 @@ import '../../../../../state_management/choose_shop_state.dart';
 import '../../../../../style/general_style.dart';
 import '../../../../../ui_items/my_app_bar.dart';
 import '../../../../../ui_items/my_button.dart';
+import '../../../../../ui_items/my_exception.dart';
 import '../../../../../ui_items/my_label.dart';
 import '../../../../../ui_items/my_responsive_layout.dart';
 import '../../../../../ui_items/my_text_form_field.dart';
@@ -57,8 +58,8 @@ class ChooseScheduleState extends ConsumerState<ChooseSchedule> {
     _streamSubscription = getAppointmentByProfessionalShopStatusDateFromFirebaseRef(
       ref.read(currentProfessionalProvider).userId,
       ref.read(currentShopProvider).shopId,
-      AppointmentStatus.BOOKED.name,
-      DateFormat(DATE_FORMAT).format(ref.read(selectedDayProvider)),
+      AppointmentStatus.BOOKED,
+      DateFormat(DATE_FORMAT_DAY_MONTH_YEAR).format(ref.read(selectedDayProvider)),
     ).listen((List<AppointmentModel> data) {
       // This block will be called when new data is available on the stream.
       // You can put your code here to update currentSlotIndexProvider with -1.
@@ -174,13 +175,13 @@ class ChooseScheduleState extends ConsumerState<ChooseSchedule> {
               stream: getAppointmentByProfessionalShopStatusDateFromFirebaseRef(
                   ref.read(currentProfessionalProvider).userId,
                   ref.read(currentShopProvider).shopId,
-                  AppointmentStatus.BOOKED.name,
-                  DateFormat(DATE_FORMAT).format(ref.read(selectedDayProvider))),
+                  AppointmentStatus.BOOKED,
+                  DateFormat(DATE_FORMAT_DAY_MONTH_YEAR).format(ref.read(selectedDayProvider))),
               builder: (BuildContext context, AsyncSnapshot<List<AppointmentModel>> snapshot) {
                 if(snapshot.connectionState == ConnectionState.waiting){
                   return Text('waiting');
                 }else if(snapshot.hasError){
-                  return Text('has error');
+                  return MyException(type: MyExceptionType.NO_DATA,imagePath: 'images/warning_image.svg',firstLabel: 'Something went wrong',secondLabel: 'Please try again later.',);
                 }else{
 
                   List<TimeSlotModel> list = _getAvailableSlots(ref,snapshot.data!,ref.read(currentServiceProvider).duration);
@@ -235,19 +236,25 @@ _saveAppointment(BuildContext context,WidgetRef ref){
   if(ref.read(currentSlotIndexProvider) == -1){
     MethodHelper.showSnackBar(context, SnackBarType.WARNING, 'Terá de selecionar um horario para continuar');
   }else{
+
     FirebaseAuth auth = FirebaseAuth.instance;
     final User user = auth.currentUser!;
-
     ServiceModel service = ref.read(currentServiceProvider);
     TimeSlotModel slot = ref.read(currentSlotProvider);
+    UserModel professional = ref.read(currentProfessionalProvider);
+
     AppointmentModel appointment = AppointmentModel(
         shopId: ref.read(currentShopProvider).shopId,
-        professionalId: ref.read(currentProfessionalProvider).userId,
+        professionalId: professional.userId,
         clientId: user.uid,
         serviceId: service.serviceId,
+        professionalPhone: professional.phone,
+        professionalFirstName: professional.firstname,
+        professionalLastName: professional.lastname,
+        professionalImagePath: professional.imagePath,
         startDate: MethodHelper.convertTimeOfDayToTimestamp(TimeOfDay(hour: slot.startTime.hour, minute: slot.startTime.minute)),
         endDate: MethodHelper.convertTimeOfDayToTimestamp(TimeOfDay(hour: slot.endTime.hour, minute: slot.endTime.minute)),
-        date: DateFormat(DATE_FORMAT).format(ref.read(selectedDayProvider)),
+        date: DateFormat(DATE_FORMAT_DAY_MONTH_YEAR).format(ref.read(selectedDayProvider)),
         serviceName: service.name,
         servicePrice: service.price,
         serviceDuration: service.duration,

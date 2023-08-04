@@ -190,7 +190,7 @@ class EditProfileState extends ConsumerState<EditProfile> {
                       lastDate: DateTime(2025),
                     ).then((selectedDate) {
                       if (selectedDate != null) {
-                        _dateOfBirthController.text = DateFormat(DATE_FORMAT).format(selectedDate);
+                        _dateOfBirthController.text = DateFormat(DATE_FORMAT_DAY_MONTH_YEAR).format(selectedDate);
                       }
                     });
                   },

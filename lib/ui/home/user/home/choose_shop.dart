@@ -29,6 +29,7 @@ import '../../../../../utils/validators.dart';
 import '../../../../model/shop_model.dart';
 import '../../../../state_management/choose_shop_state.dart';
 import '../../../../ui_items/my_choose_shop_tile.dart';
+import '../../../../ui_items/my_exception.dart';
 import '../../../../view_model/choose_shop/choose_shop_view_model_imp.dart';
 import '../../../../view_model/home_user/home_user_view_model_imp.dart';
 
@@ -88,9 +89,9 @@ class ChooseShopState extends ConsumerState<ChooseShop> {
               },
             );
           } else if (snapshot.hasError) {
-            return Container(child: Text('error'));
+            return MyException(type: MyExceptionType.NO_DATA,imagePath: 'images/warning_image.svg',firstLabel: 'Something went wrong',secondLabel: 'Please try again later.',);
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Container(child: Text('no data or empty'));
+            return MyException(type: MyExceptionType.NO_DATA,imagePath: 'images/no_data_image.svg',firstLabel: 'There is no data available',secondLabel: 'No shops available',);
           } else {
 
             List<ShopModel> list = snapshot.data!;

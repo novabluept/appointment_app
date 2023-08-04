@@ -13,37 +13,23 @@ import '../../data_ref/users_ref.dart';
 import '../../model/shop_model.dart';
 import '../../model/user_model.dart';
 import '../../state_management/choose_shop_state.dart';
+import '../../utils/method_helper.dart';
 import 'choose_professional_view_model.dart';
 
 class ChooseProfessionalViewModelImp implements ChooseProfessionalViewModel{
 
-  @override
-  Future<Uint8List?> getImageAndCovertToUint8list(String path) async{ /// todo: Transformar isto num utils
-    final storageRef = FirebaseStorage.instance.ref();
-
-    final islandRef = storageRef.child(path);
-
-    try {
-      const oneMegabyte = 1024 * 1024 * 5;
-      final Uint8List? data = await islandRef.getData(oneMegabyte);
-      return data;
-    } on Error catch (e) {
-      print(e.toString());
-    }
-    return null;
-  }
 
   @override
   Future<List<UserModel>> getUsersByShopFromFirebase(WidgetRef ref) async {
 
-    List<UserModel> listUsers = await getUsersFromShopsFromFirebaseRef(ref);
+    List<UserModel> list = await getUsersFromShopsFromFirebaseRef(ref);
 
-    await Future.forEach(listUsers,(element) async {
-      Uint8List? image = await getImageAndCovertToUint8list(element.imagePath);
+    await Future.forEach(list,(element) async {
+      Uint8List? image = await MethodHelper.getImageAndCovertToUint8list(element.imagePath);
       image != null ? element.imageUnit8list = image : element.imageUnit8list = null;
     });
 
-    return listUsers;
+    return list;
   }
 
   @override

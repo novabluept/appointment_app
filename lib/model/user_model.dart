@@ -16,19 +16,6 @@ class UserModel {
   static final String col_imagePath = "imagePath";
   static final String col_imageUnit8list = "imageUnit8list";
 
-  static final String table_name = "tb_users";
-  static final String create = "CREATE TABLE $table_name("
-      " $col_userId TEXT,"
-      " $col_firstname TEXT,"
-      " $col_lastname TEXT,"
-      " $col_dateOfBirth TEXT,"
-      " $col_phone TEXT,"
-      " $col_email TEXT,"
-      " $col_role TEXT,"
-      " $col_imagePath TEXT,"
-      " $col_imageUnit8list BLOB"
-      ")";
-
   String userId;
   String firstname;
   String lastname;

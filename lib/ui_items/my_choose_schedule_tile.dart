@@ -49,16 +49,9 @@ class MyChooseScheduleTile extends ConsumerWidget {
   Widget generalChooseScheduleTile(int index,TimeSlotModel slot,WidgetRef ref,Function()? onTap){
     int currentIndex = ref.watch(currentSlotIndexProvider);
 
-    String startDateHour = slot.startTime.hour < 10 ? "0"+slot.startTime.hour.toString() : slot.startTime.hour.toString();
-    String startDateMinute = slot.startTime.minute < 10 ? "0"+slot.startTime.minute.toString() : slot.startTime.minute.toString();
+    String startDate = MethodHelper.convertHourAndMinuteToFormattedDate(slot.startTime.hour, slot.startTime.minute);
+    String endDate = MethodHelper.convertHourAndMinuteToFormattedDate(slot.endTime.hour, slot.endTime.minute);
 
-    String endDateHour = slot.endTime.hour < 10 ? "0"+slot.endTime.hour.toString() : slot.endTime.hour.toString();
-    String endDateMinute = slot.endTime.minute < 10 ? "0"+slot.endTime.minute.toString() : slot.endTime.minute.toString();
-
-
-
-    String startDate = startDateHour + ":" + startDateMinute;
-    String endDate = endDateHour + ":" + endDateMinute;
     return MyInkwell(
       type: MyInkwellType.GENERAL,
       widget: Center(

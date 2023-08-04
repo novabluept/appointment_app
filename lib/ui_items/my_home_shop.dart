@@ -183,7 +183,16 @@ class MyHomeShop extends ConsumerWidget {
               Shimmer.fromColors(
                   baseColor: grey300,
                   highlightColor: grey100,
-                  child: MyButton(type: MyButtonType.FILLED, label: 'Book Appointment',onPressed: (){})),
+                  child: Container(
+                    width: 380.w,
+                    height: 60.h,
+                    decoration: BoxDecoration(
+                        color: light1,
+                        borderRadius: BorderRadius.all(Radius.circular(16).r)
+                    ),
+                    child: Text(''),
+                  ),
+              )
             ],
           ),
         ),

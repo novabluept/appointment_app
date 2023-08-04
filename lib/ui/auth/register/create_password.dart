@@ -107,8 +107,8 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
       firstname: MethodHelper.capitalize(firstName.trim()),
       lastname: MethodHelper.capitalize(lastName.trim()),
       dateOfBirth: dateOfBirth.trim(),
-      phone: email.trim(),
-      email: phone.trim(),
+      phone: phone.trim(),
+      email: email.trim(),
       imagePath: imagePath,
       role: UserRole.USER.name
     );
@@ -135,7 +135,9 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async{
-        MethodHelper.transitionPage(context, widget, const FillProfile(), PageNavigatorType.PUSH_REPLACEMENT,PageTransitionType.leftToRightJoined);
+        final user = FirebaseAuth.instance.currentUser;
+        user == null ? MethodHelper.transitionPage(context, widget, const FillProfile(), PageNavigatorType.PUSH_REPLACEMENT,PageTransitionType.leftToRightJoined) : null;
+
         return false;
       },
       child: Scaffold(
@@ -146,7 +148,8 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
           leadingIcon: IconlyLight.arrow_left,
           label: 'Create password',
           onTap: (){
-            MethodHelper.transitionPage(context, widget, const FillProfile(), PageNavigatorType.PUSH_REPLACEMENT, PageTransitionType.leftToRightJoined);
+            final user = FirebaseAuth.instance.currentUser;
+            user == null ? MethodHelper.transitionPage(context, widget, const FillProfile(), PageNavigatorType.PUSH_REPLACEMENT,PageTransitionType.leftToRightJoined) : null;
           },
         ),
         body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())

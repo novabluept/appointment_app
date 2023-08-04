@@ -106,6 +106,7 @@ class MyPill extends ConsumerWidget {
         fontWeight: MyLabel.MEDIUM,
         label: label,
         color: _labelColor(type),
+        overflow: TextOverflow.ellipsis,
       ),
     );
   }

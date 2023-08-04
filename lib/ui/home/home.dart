@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:iconly/iconly.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import '../../style/general_style.dart';
@@ -129,7 +130,6 @@ class HomeState extends ConsumerState<Home> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async{
-        print('hrello');
         return false;
       },
       child: Scaffold(
@@ -144,7 +144,12 @@ class HomeState extends ConsumerState<Home> {
       future: HomeViewModelImp().getUserRole(),
       builder: (BuildContext context, AsyncSnapshot<UserRole> snapshot) {
         if(snapshot.connectionState == ConnectionState.waiting){
-          return Text('waiting');
+          return Center(
+            child: SpinKitRing(
+              color: blue,
+              size: 60.w,
+            ),
+          );
         }else if(snapshot.hasError){
           return Text('has error');
         }else{

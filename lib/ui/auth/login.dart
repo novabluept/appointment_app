@@ -210,7 +210,7 @@ class LoginState extends ConsumerState<Login> {
                 children: [
                   MyLabel(
                     type: MyLabelType.BODY_MEDIUM,
-                    label: 'Don\'t have an acocunt?',
+                    label: 'Don\'t have an account?',
                     color: grey500,
                   ),
                   SizedBox(width: 8.w),

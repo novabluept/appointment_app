@@ -4,7 +4,7 @@
 enum FirebaseCollections { USER, SHOP, SERVICE, APPOINTMENT }
 enum UserRole { USER, PROFESSIONAL, ADMIN}
 enum LanguageTypes { PT, EN }
-enum AppointmentStatus { BOOKED, COMPLETED, CANCELED }
+enum AppointmentStatus { BOOKED, COMPLETED, CANCELLED }
 
 /// Page Transitions
 enum PageNavigatorType { PUSH, PUSH_REPLACEMENT }
@@ -16,7 +16,7 @@ enum MyButtonType { FILLED, OUTLINED, IMAGE }
 enum MyDividerType { GENERAL }
 enum MyAppBarType { GENERAL, LEADING_ICON, BOTTOM_TAB, LEADING_SUFFIX_ICON }
 enum SnackBarType { WARNING, SUCCESS }
-enum MyAppointmentTileType { UPCOMMING, COMPLETED, CANCELLED }
+enum MyAppointmentTileType { BOOKED, COMPLETED, CANCELLED, SHIMMER }
 enum MyProfileTileType { GENERAL }
 enum MyPillType { PRIMARY_OUTLINED, DANGER_OUTLINED, SUCCESS_OUTLINED ,PRIMARY_FILLED_TRANSPARENT, DANGER_FILLED_TRANSPARENT, SUCCESS_FILLED_TRANSPARENT }
 enum MyHomeShopType { GENERAL, SHIMMER }
@@ -27,3 +27,4 @@ enum MyChooseShopTileType { GENERAL, SHIMMER }
 enum MyNotificationTileType { GENERAL }
 enum MyKeepPageAliveType { GENERAL }
 enum MyChooseScheduleTileType { GENERAL, SHIMMER }
+enum MyExceptionType { NO_DATA }
