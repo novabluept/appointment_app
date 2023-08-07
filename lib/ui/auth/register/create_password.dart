@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:appointment_app_v2/state_management/choose_shop_state.dart';
 import 'package:appointment_app_v2/ui/auth/register/fill_profile.dart';
-import 'package:appointment_app_v2/ui/main_page.dart';
+import 'package:appointment_app_v2/ui/auth_observer.dart';
 import 'package:appointment_app_v2/ui_items/my_text_form_field.dart';
 import 'package:appointment_app_v2/utils/enums.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -124,7 +124,7 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
   Future _addProfilePicture(File file,String pathToSave) async{
     await CreatePasswordModelImp().addProfilePicture(file,pathToSave).then((value) {
       MethodHelper.clearFillProfileControllers(ref);
-      MethodHelper.transitionPage(context, widget, MainPage(),PageNavigatorType.PUSH_REPLACEMENT, PageTransitionType.rightToLeftJoined);
+      MethodHelper.transitionPage(context, widget, AuthObserver(),PageNavigatorType.PUSH_REPLACEMENT, PageTransitionType.rightToLeftJoined);
     }).catchError((onError){
       MethodHelper.showSnackBar(context, SnackBarType.WARNING, 'Ocorreu algo inesperado. Por favor, tente mais tarde.');
     });

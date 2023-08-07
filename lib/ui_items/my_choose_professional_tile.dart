@@ -9,7 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconly/iconly.dart';
 import 'package:shimmer/shimmer.dart';
 import '../model/user_model.dart';
-import '../state_management/appointments_state.dart';
+import '../state_management/make_appointments_state.dart';
 import '../state_management/choose_shop_state.dart';
 import '../style/general_style.dart';
 import '../utils/enums.dart';
@@ -92,12 +92,7 @@ class MyChooseProfessionalTile extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
 
-                  MyLabel(
-                    type: MyLabelType.BODY_XSMALL,
-                    label: shopName,
-                    fontWeight: MyLabel.MEDIUM,
-                    color: index == currentIndex ? grey300 : grey800,
-                  ),
+                  MyPill(type: MyPillType.PRIMARY_FILLED_TRANSPARENT,label: 'Barbeiro  ( Colocar dinamico )'),
 
                   SizedBox(height: 8.h),
 
@@ -110,7 +105,14 @@ class MyChooseProfessionalTile extends ConsumerWidget {
 
                   SizedBox(height: 8.h),
 
-                  MyPill(type: MyPillType.PRIMARY_FILLED_TRANSPARENT,label: 'Barbeiro  ( Colocar dinamico )'),
+                  MyLabel(
+                    type: MyLabelType.BODY_XSMALL,
+                    label: shopName,
+                    fontWeight: MyLabel.MEDIUM,
+                    color: index == currentIndex ? grey300 : grey800,
+                  ),
+
+
 
 
 

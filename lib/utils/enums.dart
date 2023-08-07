@@ -27,4 +27,4 @@ enum MyChooseShopTileType { GENERAL, SHIMMER }
 enum MyNotificationTileType { GENERAL }
 enum MyKeepPageAliveType { GENERAL }
 enum MyChooseScheduleTileType { GENERAL, SHIMMER }
-enum MyExceptionType { NO_DATA }
+enum MyExceptionType { GENERAL }

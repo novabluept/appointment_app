@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:appointment_app_v2/ui/home/user/appointments_history/content/appointments_completed.dart';
 import 'package:appointment_app_v2/ui/home/user/appointments_history/content/appointments_upcoming.dart';
-import 'package:appointment_app_v2/ui/home/user/home/content/choose_service.dart';
 import 'package:appointment_app_v2/ui_items/my_notification_tile.dart';
 import 'package:appointment_app_v2/utils/enums.dart';
 import 'package:firebase_auth/firebase_auth.dart';

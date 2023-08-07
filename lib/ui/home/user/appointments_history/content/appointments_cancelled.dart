@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconly/iconly.dart';
 
+import '../../../../../data_ref/appointment_ref.dart';
 import '../../../../../model/appointment_model.dart';
 import '../../../../../style/general_style.dart';
 import '../../../../../ui_items/my_appointment_tile.dart';
@@ -30,15 +31,11 @@ class AppointmentsHistoryState extends ConsumerState<AppointmentsCancelled> with
     return MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody());
   }
 
-  Future<List<AppointmentModel>> _getUserAppointmentsFromFirebase(AppointmentStatus appointmentStatus){
-    return AppointmentsHistoryModelImp().getUserAppointments(AppointmentStatus.CANCELLED);
-  }
-
   Widget mobileBody(){
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 24.w),
-      child: FutureBuilder(
-          future: _getUserAppointmentsFromFirebase(AppointmentStatus.CANCELLED),
+      child: StreamBuilder(
+          stream: getUserAppointmentsRef(AppointmentStatus.CANCELLED),
           builder: (BuildContext context, AsyncSnapshot<List<AppointmentModel>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return ListView.separated(
@@ -54,9 +51,9 @@ class AppointmentsHistoryState extends ConsumerState<AppointmentsCancelled> with
                 },
               );
             } else if (snapshot.hasError) {
-              return MyException(type: MyExceptionType.NO_DATA,imagePath: 'images/warning_image.svg',firstLabel: 'Something went wrong',secondLabel: 'Please try again later.',);
+              return MyException(type: MyExceptionType.GENERAL,imagePath: 'images/warning_image.svg',firstLabel: 'Something went wrong',secondLabel: 'Please try again later.',);
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return MyException(type: MyExceptionType.NO_DATA,imagePath: 'images/no_data_image.svg',firstLabel: 'There is no data available',secondLabel: 'You have no appointments cancelled at the moment.',);
+              return MyException(type: MyExceptionType.GENERAL,imagePath: 'images/no_data_image.svg',firstLabel: 'There is no data available',secondLabel: 'You have no appointments cancelled at the moment.',);
             } else {
 
               List<AppointmentModel> list = snapshot.data!;

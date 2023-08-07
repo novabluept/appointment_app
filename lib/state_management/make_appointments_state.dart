@@ -12,10 +12,12 @@ import '../model/user_model.dart';
 final currentAppointmentIndexProvider = StateProvider<int>((ref) => 0);
 
 /// Professional
+final listProfessionals = StateProvider<List<UserModel>>((ref) => []);
 final currentProfessionalProvider = StateProvider<UserModel>((ref) => UserModel(firstname: '', lastname: '', dateOfBirth: '', email: '', phone: '', role: ''));
 final currentProfessionalIndexProvider = StateProvider<int>((ref) => -1);
 
 /// Service
+final listServices = StateProvider<List<ServiceModel>>((ref) => []);
 final currentServiceProvider = StateProvider<ServiceModel>((ref) => ServiceModel(professionalId: '', shopId: '', name: '', description: '', duration: 0, price: 0));
 final currentServiceIndexProvider = StateProvider<int>((ref) => -1);
 

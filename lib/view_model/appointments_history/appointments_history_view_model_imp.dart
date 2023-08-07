@@ -12,16 +12,6 @@ import 'appointments_history_view_model.dart';
 
 class AppointmentsHistoryModelImp implements AppointmentsHistoryViewModel{
 
-  @override
-  Future<List<AppointmentModel>> getUserAppointments(AppointmentStatus status) async {
-    List<AppointmentModel> list = await getUserAppointmentsRef(status);
 
-    await Future.forEach(list,(element) async {
-      Uint8List? image = await MethodHelper.getImageAndCovertToUint8list(element.professionalImagePath);
-      image != null ? element.professionalImageUint8list = image : element.professionalImageUint8list = null;
-    });
-
-    return list;
-  }
 
 }

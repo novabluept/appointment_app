@@ -6,7 +6,6 @@ import 'dart:io';
 import 'package:appointment_app_v2/model/user_model.dart';
 import 'package:appointment_app_v2/ui/home/user/appointments_history/content/appointments_completed.dart';
 import 'package:appointment_app_v2/ui/home/user/appointments_history/content/appointments_upcoming.dart';
-import 'package:appointment_app_v2/ui/home/user/home/content/choose_service.dart';
 import 'package:appointment_app_v2/ui_items/my_choose_schedule_tile.dart';
 import 'package:appointment_app_v2/utils/enums.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -26,7 +25,7 @@ import '../../../../../model/appointment_model.dart';
 import '../../../../../model/service_model.dart';
 import '../../../../../model/shop_model.dart';
 import '../../../../../model/time_slot_model.dart';
-import '../../../../../state_management/appointments_state.dart';
+import '../../../../../state_management/make_appointments_state.dart';
 import '../../../../../state_management/choose_shop_state.dart';
 import '../../../../../style/general_style.dart';
 import '../../../../../ui_items/my_app_bar.dart';
@@ -181,7 +180,7 @@ class ChooseScheduleState extends ConsumerState<ChooseSchedule> {
                 if(snapshot.connectionState == ConnectionState.waiting){
                   return Text('waiting');
                 }else if(snapshot.hasError){
-                  return MyException(type: MyExceptionType.NO_DATA,imagePath: 'images/warning_image.svg',firstLabel: 'Something went wrong',secondLabel: 'Please try again later.',);
+                  return MyException(type: MyExceptionType.GENERAL,imagePath: 'images/warning_image.svg',firstLabel: 'Something went wrong',secondLabel: 'Please try again later.',);
                 }else{
 
                   List<TimeSlotModel> list = _getAvailableSlots(ref,snapshot.data!,ref.read(currentServiceProvider).duration);
@@ -242,9 +241,10 @@ _saveAppointment(BuildContext context,WidgetRef ref){
     ServiceModel service = ref.read(currentServiceProvider);
     TimeSlotModel slot = ref.read(currentSlotProvider);
     UserModel professional = ref.read(currentProfessionalProvider);
+    ShopModel shop = ref.read(currentShopProvider);
 
     AppointmentModel appointment = AppointmentModel(
-        shopId: ref.read(currentShopProvider).shopId,
+        shopId: shop.shopId,
         professionalId: professional.userId,
         clientId: user.uid,
         serviceId: service.serviceId,

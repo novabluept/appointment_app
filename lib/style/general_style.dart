@@ -18,8 +18,8 @@ final grey50 = const Color(0xFFFAFAFA);
 
 /// Cores principais da app
 final blue = const Color(0xFF246BFD);
-final red = const Color(0xFFF44336);
-final green = const Color(0xFF4CAF50);
+final red = const Color(0xFFF75555);
+final green = const Color(0xFF07BD74);
 
 /// Cores claras
 final lightBlue = const Color(0xFFEEF4FF);

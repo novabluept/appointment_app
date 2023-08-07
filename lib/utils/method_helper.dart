@@ -12,7 +12,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:path_provider/path_provider.dart';
-import '../state_management/appointments_state.dart';
+import '../state_management/make_appointments_state.dart';
 import '../state_management/choose_shop_state.dart';
 import '../state_management/fill_profile_state.dart';
 import '../style/general_style.dart';

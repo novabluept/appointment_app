@@ -2,7 +2,7 @@
 
 import '../../utils/enums.dart';
 
-abstract class HomeViewModel{
+abstract class PersistentBottomNavbarViewModel{
 
   Future<UserRole> getUserRole();
 

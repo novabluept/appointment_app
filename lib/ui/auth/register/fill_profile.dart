@@ -21,7 +21,7 @@ import '../../../utils/constants.dart';
 import '../../../utils/method_helper.dart';
 import '../../../utils/validators.dart';
 import '../../../view_model/fill_profile/fill_profile_view_model_imp.dart';
-import '../../main_page.dart';
+import '../../auth_observer.dart';
 
 class FillProfile extends ConsumerStatefulWidget {
   const FillProfile({Key? key}): super(key: key);
@@ -106,7 +106,7 @@ class FillProfileState extends ConsumerState<FillProfile> {
     return WillPopScope(
       onWillPop: () async{
         MethodHelper.clearFillProfileControllers(ref);
-        MethodHelper.transitionPage(context, widget, MainPage(), PageNavigatorType.PUSH_REPLACEMENT,PageTransitionType.leftToRightJoined);
+        MethodHelper.transitionPage(context, widget, AuthObserver(), PageNavigatorType.PUSH_REPLACEMENT,PageTransitionType.leftToRightJoined);
         return false;
       },
       child: Scaffold(
@@ -118,7 +118,7 @@ class FillProfileState extends ConsumerState<FillProfile> {
           label: 'Fill your profile',
           onTap: (){
             MethodHelper.clearFillProfileControllers(ref);
-            MethodHelper.transitionPage(context, widget, MainPage(), PageNavigatorType.PUSH_REPLACEMENT, PageTransitionType.leftToRightJoined);
+            MethodHelper.transitionPage(context, widget, AuthObserver(), PageNavigatorType.PUSH_REPLACEMENT, PageTransitionType.leftToRightJoined);
           },
         ),
         body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())

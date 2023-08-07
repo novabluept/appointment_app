@@ -1,13 +1,16 @@
 
 
 
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../model/appointment_model.dart';
-import '../state_management/appointments_state.dart';
+import '../state_management/make_appointments_state.dart';
 import '../utils/enums.dart';
+import '../utils/method_helper.dart';
 import '../view_model/choose_schedule/choose_schedule_view_model_imp.dart';
 
 Stream<List<AppointmentModel>> getAppointmentByProfessionalShopStatusDateFromFirebaseRef(String professionalId,String shopId,AppointmentStatus status,String date) async*{
@@ -38,26 +41,28 @@ Future addAppointmentRef(AppointmentModel appointment) async{
   await docAppointment.set(json);
 }
 
-Future<List<AppointmentModel>> getUserAppointmentsRef(AppointmentStatus status) async{
-
+Stream<List<AppointmentModel>> getUserAppointmentsRef(AppointmentStatus status) async* {
   FirebaseAuth auth = FirebaseAuth.instance;
   final User user = auth.currentUser!;
-
   List<AppointmentModel> list = [];
+
   var db = await FirebaseFirestore.instance;
 
-  await db.collection(FirebaseCollections.APPOINTMENT.name)
+  await for (var querySnapshot in db
+      .collection(FirebaseCollections.APPOINTMENT.name)
       .where(AppointmentModel.col_clientId, isEqualTo: user.uid)
       .where(AppointmentModel.col_status, isEqualTo: status.name)
-      .get()
-      .then((querySnapshot) {
-    for (var docSnapshot in querySnapshot.docs) {
-      //print('${docSnapshot.id} => ${docSnapshot.data()}');
-      list.add(AppointmentModel.fromJson(docSnapshot.data()));
-    }
-  },
-    onError: (e) => print("Error completing: $e"),
-  );
+      .snapshots()) {
+    list = querySnapshot.docs
+        .map((docSnapshot) => AppointmentModel.fromJson(docSnapshot.data()))
+        .toList();
 
-  return list;
+    await Future.forEach(list, (element) async {
+      Uint8List? image = await MethodHelper.getImageAndCovertToUint8list(element.professionalImagePath);
+      element.professionalImageUint8list = image;
+    });
+
+    yield list;
+  }
 }
+

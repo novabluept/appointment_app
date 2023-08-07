@@ -17,7 +17,7 @@ import '../../ui_items/my_responsive_layout.dart';
 import '../../utils/method_helper.dart';
 import '../../utils/validators.dart';
 import '../../view_model/forgot_password/forgot_password_view_model_imp.dart';
-import '../main_page.dart';
+import '../auth_observer.dart';
 
 class ForgotPassword extends ConsumerStatefulWidget {
   const ForgotPassword({Key? key}): super(key: key);
@@ -71,7 +71,7 @@ class ForgotPasswordState extends ConsumerState<ForgotPassword> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async{
-        MethodHelper.transitionPage(context, widget, MainPage(), PageNavigatorType.PUSH_REPLACEMENT, PageTransitionType.leftToRightJoined);
+        MethodHelper.transitionPage(context, widget, AuthObserver(), PageNavigatorType.PUSH_REPLACEMENT, PageTransitionType.leftToRightJoined);
         return false;
       },
       child: Scaffold(
@@ -81,7 +81,7 @@ class ForgotPasswordState extends ConsumerState<ForgotPassword> {
           leadingIcon: IconlyLight.arrow_left,
           label: 'Forgot password',
           onTap: (){
-            MethodHelper.transitionPage(context, widget, MainPage(), PageNavigatorType.PUSH_REPLACEMENT, PageTransitionType.leftToRightJoined);
+            MethodHelper.transitionPage(context, widget, AuthObserver(), PageNavigatorType.PUSH_REPLACEMENT, PageTransitionType.leftToRightJoined);
           },
         ),
         resizeToAvoidBottomInset : true,

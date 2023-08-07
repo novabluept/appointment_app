@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconly/iconly.dart';
 
+import '../../../../../data_ref/appointment_ref.dart';
 import '../../../../../ui_items/my_appointment_tile.dart';
 import '../../../../../ui_items/my_button.dart';
 import '../../../../../ui_items/my_exception.dart';
@@ -33,15 +34,11 @@ class AppointmentsUpcomingState extends ConsumerState<AppointmentsUpcoming> with
     return MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody());
   }
 
-  Future<List<AppointmentModel>> _getUserAppointmentsFromFirebase(AppointmentStatus appointmentStatus){
-    return AppointmentsHistoryModelImp().getUserAppointments(appointmentStatus);
-  }
-
   Widget mobileBody(){
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 24.w),
-      child: FutureBuilder(
-        future: _getUserAppointmentsFromFirebase(AppointmentStatus.BOOKED),
+      child: StreamBuilder(
+        stream: getUserAppointmentsRef(AppointmentStatus.BOOKED),
         builder: (BuildContext context, AsyncSnapshot<List<AppointmentModel>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return ListView.separated(
@@ -58,9 +55,9 @@ class AppointmentsUpcomingState extends ConsumerState<AppointmentsUpcoming> with
               },
             );
           } else if (snapshot.hasError) {
-            return MyException(type: MyExceptionType.NO_DATA,imagePath: 'images/warning_image.svg',firstLabel: 'Something went wrong',secondLabel: 'Please try again later.',);
+            return MyException(type: MyExceptionType.GENERAL,imagePath: 'images/warning_image.svg',firstLabel: 'Something went wrong',secondLabel: 'Please try again later.',);
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return MyException(type: MyExceptionType.NO_DATA,imagePath: 'images/no_data_image.svg',firstLabel: 'There is no data available',secondLabel: 'You have no appointments booked at the moment.',);
+            return MyException(type: MyExceptionType.GENERAL,imagePath: 'images/no_data_image.svg',firstLabel: 'There is no data available',secondLabel: 'You have no appointments booked at the moment.',);
           } else {
 
             List<AppointmentModel> list = snapshot.data!;
@@ -77,7 +74,51 @@ class AppointmentsUpcomingState extends ConsumerState<AppointmentsUpcoming> with
                   type: MyAppointmentTileType.BOOKED,
                   index: index,
                   appointment: appointment,
-                  hasButtons: true
+                  hasButtons: true,
+                  negativeButtonOnPressed: () async{
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      useRootNavigator: true,
+                      builder: (context) {
+                        return Container(
+                          padding: EdgeInsets.symmetric(horizontal: 24.w),
+                          decoration: BoxDecoration(
+                            color: light1,
+                            borderRadius: BorderRadius.only(topLeft: Radius.circular(40).r,topRight: Radius.circular(48).r),
+                          ),
+                          height: 391.h,
+                          child: Column(
+                            children: [
+                              SizedBox(height: 32.h,),
+                              MyLabel(
+                                type: MyLabelType.H4,
+                                fontWeight: MyLabel.BOLD,
+                                label: 'Cancel Appointment',
+                                color: red,
+                              ),
+                              MyLabel(
+                                type: MyLabelType.BODY_XLARGE,
+                                fontWeight: MyLabel.MEDIUM,
+                                label: 'Are you sure you want to cancel your appointment?',
+                                textAlign: TextAlign.center,
+                              ),
+                              Row(
+                                children: [
+                                  Flexible(child: MyButton(type: MyButtonType.OUTLINED, label: 'Cancel Appointment',height: 32,verticalPadding: 6,onPressed: (){})),
+                                  SizedBox(width: 16.w),
+                                  Flexible(child: MyButton(type: MyButtonType.FILLED, label: 'Reschedule',height: 32,verticalPadding: 6,onPressed: (){}))
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    );
+                  },
+                  positiveButtonOnPressed: (){
+
+                  },
                 );
               },
             );

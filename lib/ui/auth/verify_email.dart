@@ -1,6 +1,6 @@
 
 import 'dart:async';
-import 'package:appointment_app_v2/ui/home/home.dart';
+import 'package:appointment_app_v2/ui/home/persistent_bottom_navbar.dart';
 import 'package:appointment_app_v2/utils/enums.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -71,7 +71,7 @@ class VerifyEmailState extends ConsumerState<VerifyEmail> {
 
   @override
   Widget build(BuildContext context) {
-    return _isEmailVerified ? Home() : WillPopScope(
+    return _isEmailVerified ? PersistentBottomNavbar() : WillPopScope(
       onWillPop: () async{
         await _signOut();
         return false;

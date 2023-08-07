@@ -3,7 +3,6 @@ import 'package:appointment_app_v2/ui/home/user/appointments_history/appointment
 import 'package:appointment_app_v2/ui/home/user/home/home_user.dart';
 import 'package:appointment_app_v2/ui/home/user/profile/profile.dart';
 import 'package:appointment_app_v2/utils/enums.dart';
-import 'package:appointment_app_v2/view_model/home/home_view_model_imp.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,16 +16,17 @@ import '../../ui_items/my_app_bar.dart';
 import '../../ui_items/my_button.dart';
 import '../../ui_items/my_label.dart';
 import '../../ui_items/my_responsive_layout.dart';
+import '../../view_model/persistent_bottom_navbar/persistent_bottom_navbar_view_model_imp.dart';
 
 
-class Home extends ConsumerStatefulWidget {
-  const Home({Key? key}): super(key: key);
+class PersistentBottomNavbar extends ConsumerStatefulWidget {
+  const PersistentBottomNavbar({Key? key}): super(key: key);
 
   @override
-  HomeState createState() => HomeState();
+  PersistentBottomNavbarState createState() => PersistentBottomNavbarState();
 }
 
-class HomeState extends ConsumerState<Home> {
+class PersistentBottomNavbarState extends ConsumerState<PersistentBottomNavbar> {
 
   PersistentTabController _controller = PersistentTabController(initialIndex: 0);
 
@@ -141,7 +141,7 @@ class HomeState extends ConsumerState<Home> {
 
   Widget mobileBody(){
     return FutureBuilder(
-      future: HomeViewModelImp().getUserRole(),
+      future: PersistentBottomNavbarViewModelImp().getUserRole(),
       builder: (BuildContext context, AsyncSnapshot<UserRole> snapshot) {
         if(snapshot.connectionState == ConnectionState.waiting){
           return Center(

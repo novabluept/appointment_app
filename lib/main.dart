@@ -1,6 +1,6 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:appointment_app_v2/style/general_style.dart';
-import 'package:appointment_app_v2/ui/main_page.dart';
+import 'package:appointment_app_v2/ui/auth_observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
             splash: SvgPicture.asset('images/logo_medica_full.svg',width: 240.w,height: 60.h),
             screenFunction: () async{
               /*await _manageDataInLocalDataBase();*/
-              return const MainPage();
+              return const AuthObserver();
             },
             splashTransition: SplashTransition.fadeTransition,
             pageTransitionType: PageTransitionType.fade,

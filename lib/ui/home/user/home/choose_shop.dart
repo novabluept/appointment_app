@@ -2,9 +2,10 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:appointment_app_v2/model/service_model.dart';
+import 'package:appointment_app_v2/state_management/make_appointments_state.dart';
 import 'package:appointment_app_v2/ui/home/user/appointments_history/content/appointments_completed.dart';
 import 'package:appointment_app_v2/ui/home/user/appointments_history/content/appointments_upcoming.dart';
-import 'package:appointment_app_v2/ui/home/user/home/content/choose_service.dart';
 import 'package:appointment_app_v2/utils/enums.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -27,7 +28,9 @@ import '../../../../../utils/constants.dart';
 import '../../../../../utils/method_helper.dart';
 import '../../../../../utils/validators.dart';
 import '../../../../model/shop_model.dart';
+import '../../../../model/user_model.dart';
 import '../../../../state_management/choose_shop_state.dart';
+import '../../../../state_management/home_user_state.dart';
 import '../../../../ui_items/my_choose_shop_tile.dart';
 import '../../../../ui_items/my_exception.dart';
 import '../../../../view_model/choose_shop/choose_shop_view_model_imp.dart';
@@ -72,56 +75,41 @@ class ChooseShopState extends ConsumerState<ChooseShop> {
     );
   }
 
+  Widget _shopsList(List<ShopModel> list){
+
+    return ListView.separated(
+      padding: EdgeInsets.symmetric(vertical: 24.h),
+      separatorBuilder: (context, index) => SizedBox(height: 20.h),
+      itemCount: list.length,
+      itemBuilder: (context, index) {
+
+        ShopModel shop = list[index];
+
+        return MyChooseShopTile(
+            type: MyChooseShopTileType.GENERAL,
+            index: index,
+            shop: shop,
+            onTap: (){
+              ChooseShopViewModelImp().setValue(currentShopProvider.notifier, ref, shop);
+              ChooseShopViewModelImp().setValue(currentShopIndexProvider.notifier, ref, index);
+
+              ChooseShopViewModelImp().setValue(listProfessionals.notifier, ref, <UserModel>[]);
+              ChooseShopViewModelImp().setValue(listServices.notifier, ref, <ServiceModel>[]);
+
+              Timer(Duration(milliseconds: TRANSITION_DURATION), () {
+                Navigator.of(context).pop();
+              });
+
+            }
+        );
+      },
+    );
+  }
+
   Widget mobileBody(){
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 24.w),
-      child: FutureBuilder(
-        future: _getShopsFromFirebase(),
-        builder: (BuildContext context, AsyncSnapshot<List<ShopModel>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return ListView.separated(
-              physics: const NeverScrollableScrollPhysics(),
-              padding: EdgeInsets.symmetric(vertical: 24.h),
-              separatorBuilder: (context, index) => SizedBox(height: 20.h),
-              itemCount: 5,
-              itemBuilder: (context, index) {
-                return MyChooseShopTile(type: MyChooseShopTileType.SHIMMER);
-              },
-            );
-          } else if (snapshot.hasError) {
-            return MyException(type: MyExceptionType.NO_DATA,imagePath: 'images/warning_image.svg',firstLabel: 'Something went wrong',secondLabel: 'Please try again later.',);
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return MyException(type: MyExceptionType.NO_DATA,imagePath: 'images/no_data_image.svg',firstLabel: 'There is no data available',secondLabel: 'No shops available',);
-          } else {
-
-            List<ShopModel> list = snapshot.data!;
-
-            return ListView.separated(
-              padding: EdgeInsets.symmetric(vertical: 24.h),
-              separatorBuilder: (context, index) => SizedBox(height: 20.h),
-              itemCount: list.length,
-              itemBuilder: (context, index) {
-
-                ShopModel shop = list[index];
-
-                return MyChooseShopTile(
-                  type: MyChooseShopTileType.GENERAL,
-                  index: index,
-                  shop: shop,
-                  onTap: (){
-                    ChooseShopViewModelImp().setValue(currentShopProvider.notifier, ref, shop);
-                    ChooseShopViewModelImp().setValue(currentShopIndexProvider.notifier, ref, index);
-                    Timer(Duration(milliseconds: TRANSITION_DURATION), () {
-                      Navigator.of(context).pop();
-                    });
-
-                  }
-                );
-              },
-            );
-          }
-        },
-      )
+      child: _shopsList(ref.read(listShops))
     );
   }
 

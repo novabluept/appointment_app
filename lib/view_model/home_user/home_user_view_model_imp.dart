@@ -10,11 +10,9 @@ import 'home_user_view_model.dart';
 class HomeUserModelImp implements HomeUserViewModel{
 
   @override
-  void setCurrentShop(AlwaysAliveRefreshable<StateController<ShopModel>> notifier,WidgetRef ref,ShopModel value) async {
+  void setValue(AlwaysAliveRefreshable<StateController<dynamic>> notifier,WidgetRef ref,dynamic value) {
     ref.read(notifier).state = value;
   }
-
-
 
   @override
   Future<List<ShopModel>> getShopsFromFirebase() async{

@@ -11,15 +11,15 @@ import '../style/general_style.dart';
 import 'auth/login.dart';
 
 
-class MainPage extends ConsumerStatefulWidget{
-  const MainPage({Key? key}): super(key: key);
+class AuthObserver extends ConsumerStatefulWidget{
+  const AuthObserver({Key? key}): super(key: key);
 
   @override
-  MainPageState createState() => MainPageState();
+  AuthObserverState createState() => AuthObserverState();
 }
 
 
-class MainPageState extends ConsumerState<MainPage> {
+class AuthObserverState extends ConsumerState<AuthObserver> {
 
   @override
   void initState() {

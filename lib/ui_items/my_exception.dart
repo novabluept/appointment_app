@@ -22,7 +22,7 @@ class MyException extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
 
     switch (type) {
-      case MyExceptionType.NO_DATA:
+      case MyExceptionType.GENERAL:
         return generalException(imagePath!, firstLabel!,secondLabel!);
       default:
         return Container();
@@ -49,9 +49,6 @@ class MyException extends ConsumerWidget {
           MyLabel(
             type: MyLabelType.BODY_LARGE,
             fontWeight: MyLabel.NORMAL,
-            /*label: appointmentStatus == AppointmentStatus.BOOKED ? 'You have no appointments booked at the moment.' :
-            appointmentStatus == AppointmentStatus.COMPLETED ? 'You have no appointments completed at the moment.' :
-            appointmentStatus == AppointmentStatus.CANCELLED ? 'You have no appointments cancelled at the moment' : '',*/
             label: secondLabel,
             color: grey900,
             textAlign: TextAlign.center,

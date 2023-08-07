@@ -22,9 +22,11 @@ class MyAppointmentTile extends ConsumerWidget {
   final int? index;
   final AppointmentModel? appointment;
   final bool hasButtons;
+  final Function()? negativeButtonOnPressed;
+  final Function()? positiveButtonOnPressed;
 
 
-  const MyAppointmentTile({super.key, required this.type, this.index,this.appointment,this.hasButtons = false});
+  const MyAppointmentTile({super.key, required this.type, this.index,this.appointment,this.hasButtons = false,this.negativeButtonOnPressed,this.positiveButtonOnPressed});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -70,7 +72,7 @@ class MyAppointmentTile extends ConsumerWidget {
                   Expanded(
                     child: Row(
                       children: [
-                        ClipRRect(
+                        appointment.professionalImageUint8list != null ? ClipRRect(
                           borderRadius: BorderRadius.circular(16).r,
                           child: Image.memory(
                               frameBuilder: (BuildContext context, Widget child, int? frame, bool? wasSynchronouslyLoaded) {
@@ -89,7 +91,7 @@ class MyAppointmentTile extends ConsumerWidget {
                               height: 110.h,
                               fit: BoxFit.cover
                           ),
-                        ),
+                        ) : Container(),
                         SizedBox(width: 16.w),
                         Flexible(
                           child: Column(
@@ -159,9 +161,9 @@ class MyAppointmentTile extends ConsumerWidget {
                 padding: EdgeInsets.only(left: 16.w,bottom: 16.w,right: 16.w),
                 child: Row(
                   children: [
-                    Flexible(child: MyButton(type: MyButtonType.OUTLINED, label: 'Cancel Appointment',height: 32,verticalPadding: 6,onPressed:() {})),
+                    Flexible(child: MyButton(type: MyButtonType.OUTLINED, label: 'Cancel Appointment',height: 32,verticalPadding: 6,onPressed: negativeButtonOnPressed!)),
                     SizedBox(width: 16.w),
-                    Flexible(child: MyButton(type: MyButtonType.FILLED, label: 'Reschedule',height: 32,verticalPadding: 6,onPressed:() {}))
+                    Flexible(child: MyButton(type: MyButtonType.FILLED, label: 'Reschedule',height: 32,verticalPadding: 6,onPressed: positiveButtonOnPressed!))
                   ],
                 ),
               )

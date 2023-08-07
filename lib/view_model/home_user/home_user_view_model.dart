@@ -8,7 +8,7 @@ import '../../model/shop_model.dart';
 
 abstract class HomeUserViewModel{
 
-  void setCurrentShop(AlwaysAliveRefreshable<StateController<ShopModel>> notifier,WidgetRef ref,ShopModel value);
+  void setValue(AlwaysAliveRefreshable<StateController<dynamic>> notifier,WidgetRef ref,dynamic value);
   Future<List<ShopModel>> getShopsFromFirebase();
 
 }

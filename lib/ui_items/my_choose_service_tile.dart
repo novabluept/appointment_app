@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconly/iconly.dart';
 import 'package:shimmer/shimmer.dart';
-import '../state_management/appointments_state.dart';
+import '../state_management/make_appointments_state.dart';
 import '../state_management/choose_shop_state.dart';
 import '../style/general_style.dart';
 import '../utils/enums.dart';
@@ -132,7 +132,7 @@ class MyChooseServiceTile extends ConsumerWidget {
                     child: MyLabel(
                       type: MyLabelType.BODY_XSMALL,
                       fontWeight: MyLabel.BOLD,
-                      label: 'aackaae',
+                      label: 'aacaaae',
                       color: dark1,
                     ),
                   ),
