@@ -1,28 +1,33 @@
 
-
-
-import 'package:appointment_app_v2/model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../model/shop_model.dart';
-import '../state_management/choose_shop_state.dart';
 import '../utils/enums.dart';
 
-Future<List<ShopModel>> getShopsFromFirebaseRef() async{
-
+/// Retrieves a list of shops from Firebase Firestore.
+///
+/// This function fetches a list of [ShopModel] instances from Firebase Firestore.
+/// The resulting list contains details of various shops available in the database.
+///
+/// Returns: A [Future] that completes with a list of [ShopModel] instances.
+Future<List<ShopModel>> getShopsFromFirebaseRef() async {
+  // List to hold the fetched shop models.
   List<ShopModel> list = [];
+
+  // Get a reference to the Firebase Firestore instance.
   var db = await FirebaseFirestore.instance;
 
-
-  await db.collection(FirebaseCollections.SHOP.name).get().then((querySnapshot) {
-    for (var docSnapshot in querySnapshot.docs) {
-      //print('${docSnapshot.id} => ${docSnapshot.data()}');
-      list.add(ShopModel.fromJson(docSnapshot.data()));
-    }
-  },
+  // Fetch shops from the Firestore collection.
+  await db.collection(FirebaseCollections.SHOP.name).get().then(
+        (querySnapshot) {
+      for (var docSnapshot in querySnapshot.docs) {
+        // Add the fetched shop details to the list.
+        list.add(ShopModel.fromJson(docSnapshot.data()));
+      }
+    },
     onError: (e) => print("Error completing: $e"),
   );
 
+  // Return the list of fetched shop models.
   return list;
 }
+

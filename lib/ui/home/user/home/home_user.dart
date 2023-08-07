@@ -195,7 +195,7 @@ class HomeUserState extends ConsumerState<HomeUser> {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return _shopsShimmer();
               } else if (snapshot.hasError) {
-                return MyException(type: MyExceptionType.GENERAL,imagePath: 'images/warning_image.svg',firstLabel: 'Something went wrong',secondLabel: 'Please try again later.',);
+                return MyException(type: MyExceptionType.GENERAL,imagePath: 'images/blue/warning_image.svg',firstLabel: 'Something went wrong',secondLabel: 'Please try again later.',);
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                 return Container(child: Text('no data or empty'));
               } else {

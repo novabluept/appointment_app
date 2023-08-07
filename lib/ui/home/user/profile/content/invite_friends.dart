@@ -66,7 +66,7 @@ class InviteFriendsState extends ConsumerState<InviteFriends> {
 
             SizedBox(height: 43.h),
 
-            SvgPicture.asset('images/invite_friends_image.svg',width: 276.w,height: 250.h),
+            SvgPicture.asset('images/blue/invite_friends_image.svg',width: 276.w,height: 250.h),
 
             SizedBox(height: 33.h),
 

@@ -169,7 +169,7 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
 
             SizedBox(height: 43.h),
 
-            SvgPicture.asset('images/create_password_image.svg',width: 329.w,height: 250.h),
+            SvgPicture.asset('images/blue/create_password_image.svg',width: 329.w,height: 250.h),
 
             SizedBox(height: 71.h),
 

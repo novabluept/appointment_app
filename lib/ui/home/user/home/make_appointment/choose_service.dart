@@ -120,9 +120,9 @@ class ChooseServiceState extends ConsumerState<ChooseService> with AutomaticKeep
             if (snapshot.connectionState == ConnectionState.waiting) {
               return _servicesListShimmer();
             } else if (snapshot.hasError) {
-              return MyException(type: MyExceptionType.GENERAL,imagePath: 'images/warning_image.svg',firstLabel: 'Something went wrong',secondLabel: 'Please try again later.',);
+              return MyException(type: MyExceptionType.GENERAL,imagePath: 'images/blue/warning_image.svg',firstLabel: 'Something went wrong',secondLabel: 'Please try again later.',);
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return MyException(type: MyExceptionType.GENERAL,imagePath: 'images/no_data_image.svg',firstLabel: 'There is no data available',secondLabel: 'No services available',);
+              return MyException(type: MyExceptionType.GENERAL,imagePath: 'images/blue/no_data_image.svg',firstLabel: 'There is no data available',secondLabel: 'No services available',);
             } else {
               List<ServiceModel> list = snapshot.data!;
               return _servicesList(list);

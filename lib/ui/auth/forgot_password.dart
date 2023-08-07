@@ -101,7 +101,7 @@ class ForgotPasswordState extends ConsumerState<ForgotPassword> {
           children: [
             SizedBox(height: 43.h),
 
-            SvgPicture.asset('images/forgot_password_image.svg',width: 276.w,height: 250.h),
+            SvgPicture.asset('images/blue/forgot_password_image.svg',width: 276.w,height: 250.h),
 
             SizedBox(height: 33.h),
 

@@ -100,7 +100,7 @@ class VerifyEmailState extends ConsumerState<VerifyEmail> {
         children: [
           SizedBox(height: 43.h),
 
-          SvgPicture.asset('images/verify_email_image.svg',width: 237.w,height: 200.h),
+          SvgPicture.asset('images/blue/verify_email_image.svg',width: 237.w,height: 200.h),
 
           SizedBox(height: 33.h),
 

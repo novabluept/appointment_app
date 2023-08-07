@@ -180,7 +180,7 @@ class ChooseScheduleState extends ConsumerState<ChooseSchedule> {
                 if(snapshot.connectionState == ConnectionState.waiting){
                   return Text('waiting');
                 }else if(snapshot.hasError){
-                  return MyException(type: MyExceptionType.GENERAL,imagePath: 'images/warning_image.svg',firstLabel: 'Something went wrong',secondLabel: 'Please try again later.',);
+                  return MyException(type: MyExceptionType.GENERAL,imagePath: 'images/blue/warning_image.svg',firstLabel: 'Something went wrong',secondLabel: 'Please try again later.',);
                 }else{
 
                   List<TimeSlotModel> list = _getAvailableSlots(ref,snapshot.data!,ref.read(currentServiceProvider).duration);
