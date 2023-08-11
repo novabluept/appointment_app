@@ -11,15 +11,17 @@ import 'my_label.dart';
 class MyDivider extends ConsumerWidget {
 
   final MyDividerType type;
-  final String label;
+  final String? label;
 
-  const MyDivider({super.key, required this.type, required this.label});
+  const MyDivider({super.key, required this.type, this.label});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
     switch (type) {
-      case MyDividerType.GENERAL:
+      case MyDividerType.SIMPLE:
+        return generalDivider(null);
+      case MyDividerType.TEXT:
         return generalDivider(label);
       default:
         return Container();
@@ -27,9 +29,9 @@ class MyDivider extends ConsumerWidget {
 
   }
 
-  Widget generalDivider(String label){
+  Widget generalDivider(String? label){
 
-    return Row(
+    return label != null ? Row(
       children: [
         Expanded(
             child: Divider(
@@ -43,12 +45,21 @@ class MyDivider extends ConsumerWidget {
         MyLabel(
           type: MyLabelType.BODY_XLARGE,
           fontWeight: MyLabel.SEMI_BOLD,
-          label: label,
+          label: label!,
           color: grey600,
         ),
 
         SizedBox(width: 16.w),
 
+        Expanded(
+            child: Divider(
+              color: grey200,
+              thickness: 1.0,
+            )
+        ),
+      ],
+    ) : Row(
+      children: [
         Expanded(
             child: Divider(
               color: grey200,

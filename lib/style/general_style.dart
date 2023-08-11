@@ -17,14 +17,14 @@ final grey100 = const Color(0xFFF5F5F5);
 final grey50 = const Color(0xFFFAFAFA);
 
 /// Cores principais da app
-final blue = const Color(0xFF246BFD);
-final red = const Color(0xFFF75555);
-final green = const Color(0xFF07BD74);
+final blue = Color(0xFF246BFD);
+final red = Color(0xFFF75555);
+final green = Color(0xFF07BD74);
 
 /// Cores claras
-final lightBlue = const Color(0xFFEEF4FF);
-final lightRed = const Color(0xFFFFF5F5);
-final lightGreen = const Color(0xFFF2FFFC);
+final lightBlue = blue.withAlpha(10);
+final lightRed = red.withAlpha(10);
+final lightGreen = green.withAlpha(10);
 
 
 

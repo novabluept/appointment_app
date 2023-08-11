@@ -168,7 +168,7 @@ class LoginState extends ConsumerState<Login> {
 
                   SizedBox(height: 20.h),
 
-                  MyButton(type: MyButtonType.FILLED, label: 'Sign in',onPressed: _signIn),
+                  MyButton(type: MyButtonType.FILLED,labelColor: light1,backgroundColor: blue,foregroundColor: light1, label: 'Sign in',onPressed: _signIn),
 
                 ],
               ),
@@ -193,7 +193,7 @@ class LoginState extends ConsumerState<Login> {
 
             SizedBox(height: 27.h),
 
-            MyDivider(type: MyDividerType.GENERAL,label: 'or'),
+            MyDivider(type: MyDividerType.TEXT,label: 'or'),
 
             SizedBox(height: 30.h),
 

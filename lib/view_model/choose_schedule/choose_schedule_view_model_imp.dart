@@ -21,4 +21,9 @@ class ChooseScheduleViewModelImp implements ChooseScheduleViewModel{
     await addAppointmentRef(appointment);
   }
 
+  @override
+  Future updateAppointment(String appointmentId, Map<String, dynamic> fields) async{
+    await updateAppointmentRef(appointmentId, fields);
+  }
+
 }

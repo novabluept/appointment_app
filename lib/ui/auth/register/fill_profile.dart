@@ -302,7 +302,7 @@ class FillProfileState extends ConsumerState<FillProfile> {
 
                   SizedBox(height: 24.h),
 
-                  MyButton(type: MyButtonType.FILLED, label: 'Continue',onPressed: _saveValues),
+                  MyButton(type: MyButtonType.FILLED,labelColor: light1,backgroundColor: blue,foregroundColor: light1, label: 'Continue',onPressed: _saveValues),
                 ],
               ),
             ),

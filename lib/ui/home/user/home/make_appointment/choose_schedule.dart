@@ -54,9 +54,12 @@ class ChooseScheduleState extends ConsumerState<ChooseSchedule> {
   void initState() {
     super.initState();
     // Subscribe to the stream when the widget is initialized
+    bool _isNavigationFromHome = ref.read(isNavigationFromHomeProvider);
+    AppointmentModel appointment = ref.read(appointmentFromAppointmentsHistoryProvider);
+
     _streamSubscription = getAppointmentByProfessionalShopStatusDateFromFirebaseRef(
-      ref.read(currentProfessionalProvider).userId,
-      ref.read(currentShopProvider).shopId,
+      _isNavigationFromHome ? appointment.professionalId : ref.read(currentProfessionalProvider).userId,
+      _isNavigationFromHome ? appointment.shopId : ref.read(currentShopProvider).shopId,
       AppointmentStatus.BOOKED,
       DateFormat(DATE_FORMAT_DAY_MONTH_YEAR).format(ref.read(selectedDayProvider)),
     ).listen((List<AppointmentModel> data) {
@@ -105,6 +108,8 @@ class ChooseScheduleState extends ConsumerState<ChooseSchedule> {
   }
 
   Widget mobileBody(){
+    bool _isNavigationFromHome = ref.read(isNavigationFromHomeProvider);
+    AppointmentModel appointment = ref.read(appointmentFromAppointmentsHistoryProvider);
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: Column(
@@ -172,8 +177,8 @@ class ChooseScheduleState extends ConsumerState<ChooseSchedule> {
             height: 180.h,
             child: StreamBuilder(
               stream: getAppointmentByProfessionalShopStatusDateFromFirebaseRef(
-                  ref.read(currentProfessionalProvider).userId,
-                  ref.read(currentShopProvider).shopId,
+                  _isNavigationFromHome ? appointment.professionalId : ref.read(currentProfessionalProvider).userId,
+                  _isNavigationFromHome ? appointment.shopId : ref.read(currentShopProvider).shopId,
                   AppointmentStatus.BOOKED,
                   DateFormat(DATE_FORMAT_DAY_MONTH_YEAR).format(ref.read(selectedDayProvider))),
               builder: (BuildContext context, AsyncSnapshot<List<AppointmentModel>> snapshot) {
@@ -183,7 +188,7 @@ class ChooseScheduleState extends ConsumerState<ChooseSchedule> {
                   return MyException(type: MyExceptionType.GENERAL,imagePath: 'images/blue/warning_image.svg',firstLabel: 'Something went wrong',secondLabel: 'Please try again later.',);
                 }else{
 
-                  List<TimeSlotModel> list = _getAvailableSlots(ref,snapshot.data!,ref.read(currentServiceProvider).duration);
+                  List<TimeSlotModel> list = _getAvailableSlots(ref,snapshot.data!,_isNavigationFromHome ? appointment.serviceDuration : ref.read(currentServiceProvider).duration);
 
                   return GridView.count(
                     crossAxisCount: 3,
@@ -218,9 +223,12 @@ class ChooseScheduleState extends ConsumerState<ChooseSchedule> {
           SizedBox(height: 16.h),
           MyButton(
             type: MyButtonType.FILLED,
+            labelColor: light1,
+            backgroundColor: blue,
+            foregroundColor: light1,
             label: 'Continue',
             onPressed: (){
-              _saveAppointment(context,ref);
+              _saveAppointment(context,ref,_isNavigationFromHome);
             }
           ),
           SizedBox(height: 24.h,)
@@ -231,37 +239,59 @@ class ChooseScheduleState extends ConsumerState<ChooseSchedule> {
 
 }
 
-_saveAppointment(BuildContext context,WidgetRef ref){
+_saveAppointment(BuildContext context,WidgetRef ref,bool isNavigationFromHome){
   if(ref.read(currentSlotIndexProvider) == -1){
     MethodHelper.showSnackBar(context, SnackBarType.WARNING, 'Terá de selecionar um horario para continuar');
   }else{
 
-    FirebaseAuth auth = FirebaseAuth.instance;
-    final User user = auth.currentUser!;
-    ServiceModel service = ref.read(currentServiceProvider);
+    AppointmentModel appointment;
     TimeSlotModel slot = ref.read(currentSlotProvider);
-    UserModel professional = ref.read(currentProfessionalProvider);
-    ShopModel shop = ref.read(currentShopProvider);
+    DateTime selectedDate = ref.read(selectedDayProvider);
 
-    AppointmentModel appointment = AppointmentModel(
-        shopId: shop.shopId,
-        professionalId: professional.userId,
-        clientId: user.uid,
-        serviceId: service.serviceId,
-        professionalPhone: professional.phone,
-        professionalFirstName: professional.firstname,
-        professionalLastName: professional.lastname,
-        professionalImagePath: professional.imagePath,
-        startDate: MethodHelper.convertTimeOfDayToTimestamp(TimeOfDay(hour: slot.startTime.hour, minute: slot.startTime.minute)),
-        endDate: MethodHelper.convertTimeOfDayToTimestamp(TimeOfDay(hour: slot.endTime.hour, minute: slot.endTime.minute)),
-        date: DateFormat(DATE_FORMAT_DAY_MONTH_YEAR).format(ref.read(selectedDayProvider)),
-        serviceName: service.name,
-        servicePrice: service.price,
-        serviceDuration: service.duration,
-        status: AppointmentStatus.BOOKED.name
-    );
+    Timestamp startDate = MethodHelper.convertTimeOfDayToTimestamp(TimeOfDay(hour: slot.startTime.hour, minute: slot.startTime.minute));
+    Timestamp endDate = MethodHelper.convertTimeOfDayToTimestamp(TimeOfDay(hour: slot.endTime.hour, minute: slot.endTime.minute));
+    String date = DateFormat(DATE_FORMAT_DAY_MONTH_YEAR).format(selectedDate);
 
-    ChooseScheduleViewModelImp().addAppointment(appointment);
+    if(!isNavigationFromHome){
+      FirebaseAuth auth = FirebaseAuth.instance;
+      final User user = auth.currentUser!;
+      ServiceModel service = ref.read(currentServiceProvider);
+      UserModel professional = ref.read(currentProfessionalProvider);
+      ShopModel shop = ref.read(currentShopProvider);
+
+      appointment = AppointmentModel(
+          shopId: shop.shopId,
+          professionalId: professional.userId,
+          clientId: user.uid,
+          serviceId: service.serviceId,
+          professionalPhone: professional.phone,
+          professionalFirstName: professional.firstname,
+          professionalLastName: professional.lastname,
+          professionalImagePath: professional.imagePath,
+          startDate: startDate,
+          endDate: endDate,
+          date: date,
+          serviceName: service.name,
+          servicePrice: service.price,
+          serviceDuration: service.duration,
+          status: AppointmentStatus.BOOKED.name
+      );
+
+      ChooseScheduleViewModelImp().addAppointment(appointment);
+    }else{
+      appointment = ref.read(appointmentFromAppointmentsHistoryProvider);
+
+      Map<String, dynamic> fields = {
+        AppointmentModel.col_startDate : startDate,
+        AppointmentModel.col_endDate : endDate,
+        AppointmentModel.col_date : date
+      };
+
+      ChooseScheduleViewModelImp().updateAppointment(appointment.appointmentId, fields);
+
+    }
+
+
 
     // Create a Completer to manage the timer completion
     Completer<void> completer = Completer<void>();

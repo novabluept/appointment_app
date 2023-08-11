@@ -116,11 +116,11 @@ class VerifyEmailState extends ConsumerState<VerifyEmail> {
 
           SizedBox(height: 24.h),
 
-          MyButton(type: MyButtonType.FILLED, label: 'Resend email',onPressed: _sendVerificationEmail),
+          MyButton(type: MyButtonType.FILLED,labelColor: light1,backgroundColor: blue,foregroundColor: light1, label: 'Resend email',onPressed: _sendVerificationEmail),
 
           SizedBox(height: 24.h),
 
-          MyButton(type: MyButtonType.OUTLINED, label: 'Cancel',onPressed: _signOut),
+          MyButton(type: MyButtonType.OUTLINED,labelColor: blue,backgroundColor: Colors.transparent,foregroundColor: blue, label: 'Cancel',onPressed: _signOut),
 
 
         ],

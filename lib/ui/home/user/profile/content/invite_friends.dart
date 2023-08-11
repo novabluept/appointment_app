@@ -82,7 +82,7 @@ class InviteFriendsState extends ConsumerState<InviteFriends> {
 
             SizedBox(height: 24.h),
 
-            MyButton(type: MyButtonType.FILLED, label: 'Invite Friends',onPressed: (){}),
+            MyButton(type: MyButtonType.FILLED,labelColor: light1,backgroundColor: blue,foregroundColor: light1, label: 'Invite Friends',onPressed: (){}),
 
           ],
         ),

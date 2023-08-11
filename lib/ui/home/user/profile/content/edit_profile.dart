@@ -257,7 +257,7 @@ class EditProfileState extends ConsumerState<EditProfile> {
 
                   SizedBox(height: 24.h),
 
-                  MyButton(type: MyButtonType.FILLED, label: 'Update',onPressed: _saveValues),
+                  MyButton(type: MyButtonType.FILLED,labelColor: light1,backgroundColor: blue,foregroundColor: light1, label: 'Update',onPressed: _saveValues),
                 ],
               ),
             ),

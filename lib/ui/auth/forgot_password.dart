@@ -146,7 +146,7 @@ class ForgotPasswordState extends ConsumerState<ForgotPassword> {
 
                   SizedBox(height: 20.h),
 
-                  MyButton(type: MyButtonType.FILLED, label: 'Recover Password',onPressed: () => _sendPasswordResetByEmail(_emailController.text.trim())),
+                  MyButton(type: MyButtonType.FILLED,labelColor: light1,backgroundColor: blue,foregroundColor: light1, label: 'Recover Password',onPressed: () => _sendPasswordResetByEmail(_emailController.text.trim())),
 
                 ],
               ),

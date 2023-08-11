@@ -246,7 +246,7 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
 
                   SizedBox(height: 24.h),
 
-                  MyButton(type: MyButtonType.FILLED, label: 'Continue',onPressed: _signUpAndAddUserDetails),
+                  MyButton(type: MyButtonType.FILLED,labelColor: light1,backgroundColor: blue,foregroundColor: light1, label: 'Continue',onPressed: _signUpAndAddUserDetails),
                 ],
               ),
             ),

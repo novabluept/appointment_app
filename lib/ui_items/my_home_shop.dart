@@ -115,7 +115,7 @@ class MyHomeShop extends ConsumerWidget {
                   ],
                 ),
                 SizedBox(height: 12.h),
-                MyButton(type: MyButtonType.FILLED, label: 'Book Appointment',onPressed: (){}),
+                MyButton(type: MyButtonType.FILLED,labelColor: light1,backgroundColor: blue,foregroundColor: light1, label: 'Book Appointment',onPressed: (){}),
               ],
             ),
           ),

@@ -92,7 +92,13 @@ class MyChooseProfessionalTile extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
 
-                  MyPill(type: MyPillType.PRIMARY_FILLED_TRANSPARENT,label: 'Barbeiro  ( Colocar dinamico )'),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: light1,
+                      borderRadius: BorderRadius.circular(24.0).r,
+                    ),
+                    child: MyPill(type: MyPillType.PRIMARY_FILLED_TRANSPARENT,label: 'Barbeiro  ( Colocar dinamico )')
+                  ),
 
                   SizedBox(height: 8.h),
 
@@ -111,11 +117,6 @@ class MyChooseProfessionalTile extends ConsumerWidget {
                     fontWeight: MyLabel.MEDIUM,
                     color: index == currentIndex ? grey300 : grey800,
                   ),
-
-
-
-
-
                 ],
               )
 

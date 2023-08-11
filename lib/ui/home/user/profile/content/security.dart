@@ -162,7 +162,7 @@ class SecurityState extends ConsumerState<Security> {
 
                   SizedBox(height: 24.h),
 
-                  MyButton(type: MyButtonType.FILLED, label: 'Continue',onPressed: (){}),
+                  MyButton(type: MyButtonType.FILLED,labelColor: light1,backgroundColor: blue,foregroundColor: light1, label: 'Continue',onPressed: (){}),
                 ],
               ),
             ),

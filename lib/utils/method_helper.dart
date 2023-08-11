@@ -154,6 +154,7 @@ class MethodHelper{
     ChooseScheduleViewModelImp().setValue(currentServiceIndexProvider.notifier, ref, -1);
     ChooseScheduleViewModelImp().setValue(currentSlotIndexProvider.notifier, ref, -1);
     ChooseScheduleViewModelImp().setValue(currentAppointmentIndexProvider.notifier, ref, 0);
+    ChooseScheduleViewModelImp().setValue(selectedDayProvider.notifier, ref, DateTime.now());
   }
 
   static Future<Uint8List?> getImageAndCovertToUint8list(String path) async{

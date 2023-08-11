@@ -17,6 +17,7 @@ import '../../../../../../ui_items/my_label.dart';
 import '../../../../../../ui_items/my_responsive_layout.dart';
 import '../../../../model/shop_model.dart';
 import '../../../../state_management/choose_shop_state.dart';
+import '../../../../state_management/make_appointments_state.dart';
 import '../../../../ui_items/my_app_bar.dart';
 import '../../../../ui_items/my_exception.dart';
 import '../../../../ui_items/my_home_shop.dart';
@@ -154,6 +155,7 @@ class HomeUserState extends ConsumerState<HomeUser> {
           city: shop.city,
           state: shop.state,
           onTap: () {
+            HomeUserModelImp().setValue(isNavigationFromHomeProvider.notifier, ref, false);
             pushNewScreen(
               context,
               screen: ChooseScreen(),

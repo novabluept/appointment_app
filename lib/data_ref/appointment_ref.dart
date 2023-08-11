@@ -107,4 +107,16 @@ Stream<List<AppointmentModel>> getUserAppointmentsRef(AppointmentStatus status) 
   }
 }
 
+Future updateAppointmentRef(String appointmentId,Map<String,dynamic> fields) async{
+
+  var db = await FirebaseFirestore.instance;
+
+  await db.collection(FirebaseCollections.APPOINTMENT.name)
+      .doc(appointmentId)
+      .update(fields) // <-- Updated data
+      .then((_) => print('Success'))
+      .catchError((error) => print('Failed: $error'));
+
+}
+
 

@@ -1,4 +1,5 @@
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:appointment_app_v2/ui/home/user/appointments_history/content/appointments_completed.dart';
@@ -68,20 +69,27 @@ class ChooseScreenState extends ConsumerState<ChooseScreen> with TickerProviderS
     super.dispose();
   }
 
+  _goBack(){
+
+    int index = ref.read(currentAppointmentIndexProvider);
+    bool isNavigationFromHome = ref.read(isNavigationFromHomeProvider);
+
+
+    if(index > 0 && !isNavigationFromHome){
+      MakeAppointmentScreenViewModelImp().setValue(currentAppointmentIndexProvider.notifier, ref, --index);
+    }else{
+      Navigator.of(context).pop();
+      Timer(Duration(milliseconds: TRANSITION_DURATION), () {
+        MethodHelper.cleanAppointmentsVariables(ref);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async{
-
-        /// Este codigo esta igual ao de baixo por causa do back nativo
-        int index = ref.read(currentAppointmentIndexProvider);
-        if(index > 0){
-          MakeAppointmentScreenViewModelImp().setValue(currentAppointmentIndexProvider.notifier, ref, --index);
-        }else{
-          Navigator.of(context).pop();
-          MethodHelper.cleanAppointmentsVariables(ref);
-        }
-
+        _goBack();
         return false;
       },
       child: Scaffold(
@@ -95,13 +103,7 @@ class ChooseScreenState extends ConsumerState<ChooseScreen> with TickerProviderS
             ref.watch(currentAppointmentIndexProvider) == 1 ? 'Choose Service' :
             ref.watch(currentAppointmentIndexProvider) == 2 ? 'Choose Schedule' : '',
             onTap: (){
-              int index = ref.read(currentAppointmentIndexProvider);
-              if(index > 0){
-                MakeAppointmentScreenViewModelImp().setValue(currentAppointmentIndexProvider.notifier, ref, --index);
-              }else{
-                Navigator.of(context).pop();
-                MethodHelper.cleanAppointmentsVariables(ref);
-              }
+              _goBack();
             },
           ),
           body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())

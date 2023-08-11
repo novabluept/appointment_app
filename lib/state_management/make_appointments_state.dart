@@ -9,6 +9,8 @@ import '../model/service_model.dart';
 import '../model/user_model.dart';
 
 /// Pagination
+final isNavigationFromHomeProvider = StateProvider<bool>((ref) => false);
+final appointmentFromAppointmentsHistoryProvider = StateProvider<AppointmentModel>((ref) => AppointmentModel(shopId: '', professionalId: '', clientId: '', serviceId: '', professionalPhone: '', professionalFirstName: '', professionalLastName: '', professionalImagePath: '', startDate: Timestamp.fromDate(DateTime.utc(1971,1,1)), endDate: Timestamp.fromDate(DateTime.utc(1971,1,1)), date: '', serviceName: '', servicePrice: 0, serviceDuration: 0, status: ''));
 final currentAppointmentIndexProvider = StateProvider<int>((ref) => 0);
 
 /// Professional

@@ -31,6 +31,39 @@ class AppointmentsHistoryState extends ConsumerState<AppointmentsCancelled> with
     return MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody());
   }
 
+  Widget _cancelledAppointmentListShimmer(){
+    return ListView.separated(
+      physics: const NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.symmetric(vertical: 24.h),
+      separatorBuilder: (context, index) => SizedBox(height: 20.h),
+      itemCount: 5,
+      itemBuilder: (context, index) {
+
+        return MyAppointmentTile(
+          type: MyAppointmentTileType.SHIMMER,
+        );
+      },
+    );
+  }
+
+  Widget _cancelledAppointmentList(List<AppointmentModel> list){
+    return ListView.separated(
+      padding: EdgeInsets.symmetric(vertical: 24.h),
+      separatorBuilder: (context, index) => SizedBox(height: 20.h),
+      itemCount: list.length,
+      itemBuilder: (context, index) {
+
+        AppointmentModel appointment = list[index];
+
+        return MyAppointmentTile(
+          type: MyAppointmentTileType.CANCELLED,
+          index: index,
+          appointment: appointment,
+        );
+      },
+    );
+  }
+
   Widget mobileBody(){
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -38,41 +71,14 @@ class AppointmentsHistoryState extends ConsumerState<AppointmentsCancelled> with
           stream: getUserAppointmentsRef(AppointmentStatus.CANCELLED),
           builder: (BuildContext context, AsyncSnapshot<List<AppointmentModel>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return ListView.separated(
-                physics: const NeverScrollableScrollPhysics(),
-                padding: EdgeInsets.symmetric(vertical: 24.h),
-                separatorBuilder: (context, index) => SizedBox(height: 20.h),
-                itemCount: 5,
-                itemBuilder: (context, index) {
-
-                  return MyAppointmentTile(
-                      type: MyAppointmentTileType.SHIMMER,
-                  );
-                },
-              );
+              return _cancelledAppointmentListShimmer();
             } else if (snapshot.hasError) {
               return MyException(type: MyExceptionType.GENERAL,imagePath: 'images/blue/warning_image.svg',firstLabel: 'Something went wrong',secondLabel: 'Please try again later.',);
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return MyException(type: MyExceptionType.GENERAL,imagePath: 'images/blue/no_data_image.svg',firstLabel: 'There is no data available',secondLabel: 'You have no appointments cancelled at the moment.',);
             } else {
-
               List<AppointmentModel> list = snapshot.data!;
-
-              return ListView.separated(
-                padding: EdgeInsets.symmetric(vertical: 24.h),
-                separatorBuilder: (context, index) => SizedBox(height: 20.h),
-                itemCount: list.length,
-                itemBuilder: (context, index) {
-
-                  AppointmentModel appointment = list[index];
-
-                  return MyAppointmentTile(
-                      type: MyAppointmentTileType.CANCELLED,
-                      index: index,
-                      appointment: appointment,
-                  );
-                },
-              );
+              return _cancelledAppointmentList(list);
             }
           }
       ),

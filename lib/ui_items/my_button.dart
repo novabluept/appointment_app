@@ -13,6 +13,9 @@ import 'my_label.dart';
 class MyButton extends ConsumerWidget {
 
   final MyButtonType type;
+  final Color? labelColor;
+  final Color? backgroundColor;
+  final Color? foregroundColor;
   final String label;
   final String? imgUrl;
   final int height;
@@ -20,16 +23,16 @@ class MyButton extends ConsumerWidget {
   final Function() onPressed;
 
 
-  const MyButton({super.key, required this.type, required this.label, this.imgUrl,this.height = 60,this.verticalPadding = 18, required this.onPressed});
+  const MyButton({super.key, required this.type, this.labelColor, this.backgroundColor, this.foregroundColor, required this.label, this.imgUrl,this.height = 60,this.verticalPadding = 18, required this.onPressed});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
     switch (type) {
       case MyButtonType.FILLED:
-        return generalButton(label,light1,blue,light1,height,verticalPadding,onPressed);
+        return generalButton(MyButtonType.FILLED,label,labelColor!,backgroundColor!,foregroundColor!,height,verticalPadding,onPressed);
       case MyButtonType.OUTLINED:
-        return generalButton(label,blue,Colors.transparent,blue,height,verticalPadding,onPressed);
+        return generalButton(MyButtonType.OUTLINED,label,labelColor!,backgroundColor!,foregroundColor!,height,verticalPadding,onPressed);
       case MyButtonType.IMAGE:
         return buttonImage(label,imgUrl!,onPressed);
       default:
@@ -38,7 +41,7 @@ class MyButton extends ConsumerWidget {
 
   }
 
-  Widget generalButton(String label,Color labelColor,Color backgroundColor,Color foregroundColor,int height,int verticalPadding,Function() onPressed){
+  Widget generalButton(MyButtonType type,String label,Color labelColor,Color backgroundColor,Color foregroundColor,int height,int verticalPadding,Function() onPressed){
     return SizedBox(
       width: double.infinity,
       height: height.h,
@@ -47,7 +50,7 @@ class MyButton extends ConsumerWidget {
           padding: EdgeInsets.symmetric(vertical: verticalPadding.h),
           foregroundColor: foregroundColor,
           backgroundColor: backgroundColor,
-          side: BorderSide(color: blue)
+          side: BorderSide(color: type == MyButtonType.FILLED ? backgroundColor : foregroundColor)
         ),
         child: MyLabel(
           type: MyLabelType.BODY_LARGE,

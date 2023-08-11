@@ -161,9 +161,9 @@ class MyAppointmentTile extends ConsumerWidget {
                 padding: EdgeInsets.only(left: 16.w,bottom: 16.w,right: 16.w),
                 child: Row(
                   children: [
-                    Flexible(child: MyButton(type: MyButtonType.OUTLINED, label: 'Cancel Appointment',height: 32,verticalPadding: 6,onPressed: negativeButtonOnPressed!)),
+                    Flexible(child: MyButton(type: MyButtonType.OUTLINED,labelColor: blue,backgroundColor: Colors.transparent,foregroundColor: blue, label: 'Cancel Appointment',height: 32,verticalPadding: 6,onPressed: negativeButtonOnPressed!)),
                     SizedBox(width: 16.w),
-                    Flexible(child: MyButton(type: MyButtonType.FILLED, label: 'Reschedule',height: 32,verticalPadding: 6,onPressed: positiveButtonOnPressed!))
+                    Flexible(child: MyButton(type: MyButtonType.FILLED,labelColor: light1,backgroundColor: blue,foregroundColor: light1, label: 'Reschedule',height: 32,verticalPadding: 6,onPressed: positiveButtonOnPressed!))
                   ],
                 ),
               )
@@ -286,7 +286,7 @@ class MyAppointmentTile extends ConsumerWidget {
                       highlightColor: grey100,
                       child: CircleAvatar(
                         radius: 28.sp,
-                        backgroundColor: lightBlue,
+                        backgroundColor: blue,
                         child: IconButton(
                           icon: Icon(
                             IconlyBold.chat,
@@ -323,6 +323,9 @@ class MyAppointmentTile extends ConsumerWidget {
                         highlightColor: grey100,
                         child: MyButton(
                           type: MyButtonType.FILLED,
+                          labelColor: light1,
+                          backgroundColor: blue,
+                          foregroundColor: light1,
                           label: 'Cancel Appointment',
                           height: 32,
                           verticalPadding: 6,
@@ -339,6 +342,9 @@ class MyAppointmentTile extends ConsumerWidget {
                         highlightColor: grey100,
                         child: MyButton(
                           type: MyButtonType.FILLED,
+                          labelColor: light1,
+                          backgroundColor: blue,
+                          foregroundColor: light1,
                           label: 'Reschedule',
                           height: 32,
                           verticalPadding: 6,
