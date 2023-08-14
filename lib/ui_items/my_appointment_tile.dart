@@ -99,7 +99,7 @@ class MyAppointmentTile extends ConsumerWidget {
                               MyLabel(
                                 type: MyLabelType.H6,
                                 fontWeight: MyLabel.BOLD,
-                                label: appointment.professionalFirstName + " " + appointment.professionalLastName,
+                                label: "${appointment.professionalFirstName} ${appointment.professionalLastName}",
                                 overflow: TextOverflow.ellipsis,
                               ),
                               MyLabel(
@@ -198,7 +198,7 @@ class MyAppointmentTile extends ConsumerWidget {
                             height: 110.h,
                             decoration: BoxDecoration(
                                 color: light1,
-                                borderRadius: BorderRadius.all(Radius.circular(16).r)
+                                borderRadius: BorderRadius.all(const Radius.circular(16).r)
                             ),
                           ),
                         ),
@@ -215,9 +215,9 @@ class MyAppointmentTile extends ConsumerWidget {
                                   width: 75.w,
                                   decoration: BoxDecoration(
                                       color: light1,
-                                      borderRadius: BorderRadius.all(Radius.circular(16).r)
+                                      borderRadius: BorderRadius.all(const Radius.circular(16).r)
                                   ),
-                                  child: MyPill(type: MyPillType.DANGER_FILLED_TRANSPARENT,label: 'Cancelled'),
+                                  child: const MyPill(type: MyPillType.DANGER_FILLED_TRANSPARENT,label: 'Cancelled'),
                                 ),
                               ),
                               Shimmer.fromColors(
@@ -227,9 +227,9 @@ class MyAppointmentTile extends ConsumerWidget {
                                   width: 150.w,
                                   decoration: BoxDecoration(
                                       color: light1,
-                                      borderRadius: BorderRadius.all(Radius.circular(16).r)
+                                      borderRadius: BorderRadius.all(const Radius.circular(16).r)
                                   ),
-                                  child: MyLabel(
+                                  child: const MyLabel(
                                     type: MyLabelType.BODY_XSMALL,
                                     label: 'Porta 54',
                                     fontWeight: MyLabel.MEDIUM,
@@ -243,9 +243,9 @@ class MyAppointmentTile extends ConsumerWidget {
                                   width: 100.w,
                                   decoration: BoxDecoration(
                                       color: light1,
-                                      borderRadius: BorderRadius.all(Radius.circular(16).r)
+                                      borderRadius: BorderRadius.all(const Radius.circular(16).r)
                                   ),
-                                  child: MyLabel(
+                                  child: const MyLabel(
                                     type: MyLabelType.BODY_XSMALL,
                                     label: 'Porta 54',
                                     fontWeight: MyLabel.MEDIUM,
@@ -259,9 +259,9 @@ class MyAppointmentTile extends ConsumerWidget {
                                   width: 75.w,
                                   decoration: BoxDecoration(
                                       color: light1,
-                                      borderRadius: BorderRadius.all(Radius.circular(16).r)
+                                      borderRadius: BorderRadius.all(const Radius.circular(16).r)
                                   ),
-                                  child: MyLabel(
+                                  child: const MyLabel(
                                     type: MyLabelType.BODY_XSMALL,
                                     label: 'Porta 54',
                                     fontWeight: MyLabel.MEDIUM,

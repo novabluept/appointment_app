@@ -86,7 +86,7 @@ class MyChooseProfessionalTile extends ConsumerWidget {
                       color: light1,
                       borderRadius: BorderRadius.circular(24.0).r,
                     ),
-                    child: MyPill(type: MyPillType.PRIMARY_FILLED_TRANSPARENT,label: 'Barbeiro  ( Colocar dinamico )')
+                    child: const MyPill(type: MyPillType.PRIMARY_FILLED_TRANSPARENT,label: 'Barbeiro  ( Colocar dinamico )')
                   ),
                   SizedBox(height: 8.h),
                   MyLabel(
@@ -136,7 +136,7 @@ class MyChooseProfessionalTile extends ConsumerWidget {
                 height: 110.h,
                 decoration: BoxDecoration(
                   color: light1,
-                  borderRadius: BorderRadius.all(Radius.circular(16).r)
+                  borderRadius: BorderRadius.all(const Radius.circular(16).r)
                 ),
               ),
             ),
@@ -151,9 +151,9 @@ class MyChooseProfessionalTile extends ConsumerWidget {
                     width: 50.w,
                     decoration: BoxDecoration(
                         color: light1,
-                        borderRadius: BorderRadius.all(Radius.circular(16).r)
+                        borderRadius: BorderRadius.all(const Radius.circular(16).r)
                     ),
-                    child: MyLabel(
+                    child: const MyLabel(
                       type: MyLabelType.BODY_XSMALL,
                       label: 'Porta 54',
                       fontWeight: MyLabel.MEDIUM,
@@ -168,9 +168,9 @@ class MyChooseProfessionalTile extends ConsumerWidget {
                     width: 200.w,
                     decoration: BoxDecoration(
                         color: light1,
-                        borderRadius: BorderRadius.all(Radius.circular(16).r)
+                        borderRadius: BorderRadius.all(const Radius.circular(16).r)
                     ),
-                    child: MyLabel(
+                    child: const MyLabel(
                       type: MyLabelType.BODY_XSMALL,
                       label: 'Jenna Watson',
                       fontWeight: MyLabel.BOLD,
@@ -185,9 +185,9 @@ class MyChooseProfessionalTile extends ConsumerWidget {
                     width: 100.w,
                     decoration: BoxDecoration(
                         color: light1,
-                        borderRadius: BorderRadius.all(Radius.circular(16).r)
+                        borderRadius: BorderRadius.all(const Radius.circular(16).r)
                     ),
-                    child: MyLabel(
+                    child: const MyLabel(
                       type: MyLabelType.BODY_XSMALL,
                       label: 'Jenna Watson',
                       fontWeight: MyLabel.BOLD,

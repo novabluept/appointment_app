@@ -1,17 +1,13 @@
 
-
 import 'package:appointment_app_v2/model/service_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:iconly/iconly.dart';
 import 'package:shimmer/shimmer.dart';
 import '../state_management/make_appointments_state.dart';
-import '../state_management/choose_shop_state.dart';
 import '../style/general_style.dart';
 import '../utils/enums.dart';
-import 'my_button.dart';
 import 'my_inkwell.dart';
 import 'my_label.dart';
 
@@ -78,14 +74,14 @@ class MyChooseServiceTile extends ConsumerWidget {
                   MyLabel(
                     type: MyLabelType.BODY_XLARGE,
                     fontWeight: MyLabel.BOLD,
-                    label: service.price.toString() + "€",
+                    label: "${service.price}€",
                     color: index == currentIndex ? light1 : blue,
                   ),
                   SizedBox(height: 8.h),
                   MyLabel(
                     type: MyLabelType.BODY_SMALL,
                     fontWeight: MyLabel.MEDIUM,
-                    label: service.duration.toString()+ " min",
+                    label: "${service.duration} min",
                     color: index == currentIndex ? grey300 : grey800,
                   ),
                 ],
@@ -125,7 +121,7 @@ class MyChooseServiceTile extends ConsumerWidget {
                     width: 150.w,
                     decoration: BoxDecoration(
                         color: light1,
-                        borderRadius: BorderRadius.all(Radius.circular(16).r)
+                        borderRadius: BorderRadius.all(const Radius.circular(16).r)
                     ),
                     child: MyLabel(
                       type: MyLabelType.BODY_XSMALL,
@@ -143,7 +139,7 @@ class MyChooseServiceTile extends ConsumerWidget {
                     width: 50.w,
                     decoration: BoxDecoration(
                         color: light1,
-                        borderRadius: BorderRadius.all(Radius.circular(16).r)
+                        borderRadius: BorderRadius.all(const Radius.circular(16).r)
                     ),
                     child: MyLabel(
                       type: MyLabelType.BODY_XSMALL,
@@ -165,7 +161,7 @@ class MyChooseServiceTile extends ConsumerWidget {
                     width: 20.w,
                     decoration: BoxDecoration(
                         color: light1,
-                        borderRadius: BorderRadius.all(Radius.circular(16).r)
+                        borderRadius: BorderRadius.all(const Radius.circular(16).r)
                     ),
                     child: MyLabel(
                       type: MyLabelType.BODY_XSMALL,
@@ -183,7 +179,7 @@ class MyChooseServiceTile extends ConsumerWidget {
                     width: 50.w,
                     decoration: BoxDecoration(
                         color: light1,
-                        borderRadius: BorderRadius.all(Radius.circular(16).r)
+                        borderRadius: BorderRadius.all(const Radius.circular(16).r)
                     ),
                     child: MyLabel(
                       type: MyLabelType.BODY_XSMALL,

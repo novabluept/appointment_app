@@ -1,12 +1,10 @@
 
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../style/general_style.dart';
 import '../utils/enums.dart';
-import 'my_label.dart';
 
 class MyModalBottomSheet extends ConsumerWidget {
 
@@ -31,7 +29,7 @@ class MyModalBottomSheet extends ConsumerWidget {
       padding: EdgeInsets.symmetric(horizontal: 24.w),
       decoration: BoxDecoration(
         color: light1,
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(48).r,topRight: Radius.circular(48).r),
+        borderRadius: BorderRadius.only(topLeft: const Radius.circular(48).r,topRight: const Radius.circular(48).r),
       ),
       height: height.h,
       child: Column(

@@ -1,16 +1,11 @@
 
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconly/iconly.dart';
 import '../style/general_style.dart';
 import '../utils/enums.dart';
-import 'my_button.dart';
-import 'my_inkwell.dart';
 import 'my_label.dart';
-import 'my_pill.dart';
 
 class MyNotificationTile extends ConsumerWidget {
 
@@ -50,13 +45,13 @@ class MyNotificationTile extends ConsumerWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                MyLabel(
+                const MyLabel(
                   type: MyLabelType.H5,
                   fontWeight: MyLabel.BOLD,
                   label: 'Appointment Success!',
                 ),
                 SizedBox(height: 6.h),
-                MyLabel(
+                const MyLabel(
                   type: MyLabelType.BODY_MEDIUM,
                   fontWeight: MyLabel.MEDIUM,
                   label: '19 Dec, 2022 | 18:35 PM',

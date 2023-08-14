@@ -1,26 +1,16 @@
 
-
-import 'dart:typed_data';
-
 import 'package:appointment_app_v2/utils/method_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:iconly/iconly.dart';
 import 'package:shimmer/shimmer.dart';
-import '../model/appointment_model.dart';
 import '../model/time_slot_model.dart';
-import '../model/user_model.dart';
 import '../state_management/make_appointments_state.dart';
-import '../state_management/choose_shop_state.dart';
 import '../style/general_style.dart';
-import '../utils/constants.dart';
 import '../utils/enums.dart';
-import 'my_button.dart';
 import 'my_inkwell.dart';
 import 'my_label.dart';
-import 'my_pill.dart';
 
 class MyChooseScheduleTile extends ConsumerWidget {
 

@@ -1,9 +1,5 @@
 
-
 import 'dart:typed_data';
-import 'dart:ui';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,7 +9,6 @@ import '../utils/enums.dart';
 import 'my_button.dart';
 import 'my_inkwell.dart';
 import 'my_label.dart';
-import 'my_pill.dart';
 
 class MyHomeShop extends ConsumerWidget {
 
@@ -46,7 +41,7 @@ class MyHomeShop extends ConsumerWidget {
           Column(
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(16.0).r),
+                borderRadius: BorderRadius.all(const Radius.circular(16.0).r),
                 child: Image.memory(
                     frameBuilder: (BuildContext context, Widget child, int? frame, bool? wasSynchronouslyLoaded) {
                       if (wasSynchronouslyLoaded!) {
@@ -71,7 +66,7 @@ class MyHomeShop extends ConsumerWidget {
             width: 380.w,
             height: 380.h,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(16.0).r),
+              borderRadius: BorderRadius.all(const Radius.circular(16.0).r),
               gradient: LinearGradient(
                 begin: Alignment.center,
                 end: Alignment.bottomCenter,
@@ -105,7 +100,7 @@ class MyHomeShop extends ConsumerWidget {
                     MyLabel(
                       type: MyLabelType.BODY_XLARGE,
                       fontWeight: MyLabel.MEDIUM,
-                      label: '${city}, ${state}',
+                      label: '$city, $state',
                       color: light1,
                     ),
                   ],
@@ -131,7 +126,7 @@ class MyHomeShop extends ConsumerWidget {
           child: Column(
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(16.0).r),
+                borderRadius: BorderRadius.all(const Radius.circular(16.0).r),
                 child: Container(
                   color: grey300,
                   width: 380.w,
@@ -156,9 +151,9 @@ class MyHomeShop extends ConsumerWidget {
                   width: 100.w,
                   decoration: BoxDecoration(
                       color: light1,
-                      borderRadius: BorderRadius.all(Radius.circular(16).r)
+                      borderRadius: BorderRadius.all(const Radius.circular(16).r)
                   ),
-                  child: Text(''),
+                  child: const Text(''),
                 ),
               ),
               SizedBox(height: 12.h),
@@ -169,9 +164,9 @@ class MyHomeShop extends ConsumerWidget {
                   width: 250.w,
                   decoration: BoxDecoration(
                       color: light1,
-                      borderRadius: BorderRadius.all(Radius.circular(16).r)
+                      borderRadius: BorderRadius.all(const Radius.circular(16).r)
                   ),
-                  child: Text(''),
+                  child: const Text(''),
                 ),
               ),
               SizedBox(height: 12.h),
@@ -183,9 +178,9 @@ class MyHomeShop extends ConsumerWidget {
                     height: 60.h,
                     decoration: BoxDecoration(
                         color: light1,
-                        borderRadius: BorderRadius.all(Radius.circular(16).r)
+                        borderRadius: BorderRadius.all(const Radius.circular(16).r)
                     ),
-                    child: Text(''),
+                    child: const Text(''),
                   ),
               )
             ],

@@ -1,12 +1,9 @@
 
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../style/general_style.dart';
 import '../utils/enums.dart';
-import 'my_label.dart';
 
 class MyInkwell extends ConsumerWidget {
 
