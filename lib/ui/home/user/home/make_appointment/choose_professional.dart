@@ -14,6 +14,7 @@ import '../../../../../ui_items/my_choose_professional_tile.dart';
 import '../../../../../ui_items/my_exception.dart';
 import '../../../../../ui_items/my_responsive_layout.dart';
 import '../../../../../utils/constants.dart';
+import '../../../../../view_model/choose_professional/choose_professional_view_model.dart';
 import '../../../../../view_model/choose_professional/choose_professional_view_model_imp.dart';
 
 class ChooseProfessional extends ConsumerStatefulWidget {
@@ -46,7 +47,7 @@ class ChooseProfessionalState extends ConsumerState<ChooseProfessional> with Aut
     // Retrieve the list of professional users associated with the current shop.
     List<UserModel> list = await ChooseProfessionalViewModelImp().getProfessionalUsersByShop(ref);
     // Store the retrieved list of professionals in the listProfessionals state variable.
-    MakeAppointmentScreenViewModelImp().setValue(listProfessionals.notifier, ref, list);
+    ChooseProfessionalViewModelImp().setValue(listProfessionals.notifier, ref, list);
     // Return the list of professional users after a delay.
     return await Future.delayed(Duration(milliseconds: LOAD_DATA_DURATION), () => list);
   }

@@ -1,6 +1,8 @@
 
 import 'package:appointment_app_v2/state_management/home_user_state.dart';
+import 'package:appointment_app_v2/state_management/persistent_bottom_navbar_state.dart';
 import 'package:appointment_app_v2/style/general_style.dart';
+import 'package:appointment_app_v2/ui/home/user/home/make_appointment/make_appointment_screen.dart';
 import 'package:appointment_app_v2/ui/home/user/home/notifications.dart';
 import 'package:appointment_app_v2/utils/enums.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +45,7 @@ class HomeUserState extends ConsumerState<HomeUser> {
     ShopModel shop = ref.read(currentShopProvider) != ShopModel(imagePath: '', imageUnit8list: null, name: '', city: '', state: '', streetName: '', zipCode: '',professionals: []) ? ref.read(currentShopProvider) : list[0];
 
     HomeUserModelImp().setValue(currentShopProvider.notifier,ref,shop);
-    return await Future.delayed(Duration(milliseconds: LOAD_DATA_DURATION), () => list);
+    return await Future.delayed(const Duration(milliseconds: LOAD_DATA_DURATION), () => list);
   }
 
   @override
@@ -57,6 +59,7 @@ class HomeUserState extends ConsumerState<HomeUser> {
           height: kToolbarHeight,
           leadingIcon: IconlyLight.notification,
           suffixIcon: IconlyLight.notification,
+          user: ref.watch(currentUserProvider),
           onTap: (){
             MethodHelper.switchPage(context, PageNavigatorType.PUSH_NEW_PAGE, const Notifications(), null);
           },
@@ -75,7 +78,7 @@ class HomeUserState extends ConsumerState<HomeUser> {
             Shimmer.fromColors(
               baseColor: grey300,
               highlightColor: grey100,
-              child: MyLabel(
+              child: const MyLabel(
                 type: MyLabelType.H5,
                 fontWeight: MyLabel.BOLD,
                 label: 'Featured',
@@ -94,7 +97,7 @@ class HomeUserState extends ConsumerState<HomeUser> {
           ],
         ),
         SizedBox(height: 24.h),
-        MyHomeShop(type: MyHomeShopType.SHIMMER),
+        const MyHomeShop(type: MyHomeShopType.SHIMMER),
       ],
     );
   }
@@ -106,7 +109,7 @@ class HomeUserState extends ConsumerState<HomeUser> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            MyLabel(
+            const MyLabel(
               type: MyLabelType.H5,
               fontWeight: MyLabel.BOLD,
               label: 'Featured',
@@ -133,8 +136,7 @@ class HomeUserState extends ConsumerState<HomeUser> {
           state: shop.state,
           onTap: () {
             HomeUserModelImp().setValue(isNavigationFromHomeProvider.notifier, ref, false);
-            MethodHelper.switchPage(context, PageNavigatorType.PUSH_NEW_PAGE, const ChooseShop(), null);
-
+            MethodHelper.switchPage(context, PageNavigatorType.PUSH_NEW_PAGE, const MakeAppointmentScreen(), null);
           },
         ),
       ],
@@ -164,9 +166,9 @@ class HomeUserState extends ConsumerState<HomeUser> {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return _shopsShimmer();
               } else if (snapshot.hasError) {
-                return MyException(type: MyExceptionType.GENERAL,imagePath: 'images/blue/warning_image.svg',firstLabel: 'Something went wrong',secondLabel: 'Please try again later.',);
+                return const MyException(type: MyExceptionType.GENERAL,imagePath: 'images/blue/warning_image.svg',firstLabel: 'Something went wrong',secondLabel: 'Please try again later.',);
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Container(child: Text('no data or empty'));
+                return const Text('no data or empty');
               } else {
                 List<ShopModel> list = snapshot.data!;
                 return _shopsList(list);

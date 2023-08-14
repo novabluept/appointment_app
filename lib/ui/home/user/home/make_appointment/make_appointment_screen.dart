@@ -15,14 +15,14 @@ import 'choose_professional.dart';
 import 'choose_schedule.dart';
 import 'choose_service.dart';
 
-class ChooseScreen extends ConsumerStatefulWidget {
-  const ChooseScreen({Key? key}): super(key: key);
+class MakeAppointmentScreen extends ConsumerStatefulWidget {
+  const MakeAppointmentScreen({Key? key}): super(key: key);
 
   @override
-  ChooseScreenState createState() => ChooseScreenState();
+  MakeAppointmentScreenState createState() => MakeAppointmentScreenState();
 }
 
-class ChooseScreenState extends ConsumerState<ChooseScreen> with TickerProviderStateMixin{
+class MakeAppointmentScreenState extends ConsumerState<MakeAppointmentScreen> with TickerProviderStateMixin{
 
   final List<Widget> _pages = [
     const ChooseProfessional(),

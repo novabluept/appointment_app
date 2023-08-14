@@ -1,7 +1,9 @@
 
-import 'package:appointment_app_v2/model/appointment_model.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/src/consumer.dart';
+import 'package:riverpod/src/framework.dart';
+import 'package:riverpod/src/state_controller.dart';
 import '../../data_ref/appointment_ref.dart';
+import '../../model/appointment_model.dart';
 import 'choose_schedule_view_model.dart';
 
 class ChooseScheduleViewModelImp implements ChooseScheduleViewModel{

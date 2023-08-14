@@ -1,5 +1,6 @@
 
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:appointment_app_v2/utils/method_helper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -113,8 +114,10 @@ Future<void> signUpRef(String email, String password) async {
 ///
 /// Returns: A [Future] that completes when the user is successfully added.
 Future<void> addUserRef(UserModel user) async {
-  // Create a new document reference within the "users" collection.
-  final docUser = FirebaseFirestore.instance.collection(FirebaseCollections.USER.name).doc();
+  // Use the user's userId as the document ID.
+  final docUser = FirebaseFirestore.instance
+      .collection(FirebaseCollections.USER.name)
+      .doc(user.userId); // Assuming `uuid` is the field in your `UserModel`.
 
   // Convert the user model to JSON format.
   final json = user.toJson();
@@ -122,6 +125,7 @@ Future<void> addUserRef(UserModel user) async {
   // Set the JSON data within the document reference.
   await docUser.set(json);
 }
+
 
 
 /// Uploads a profile picture to Firebase Storage.
@@ -183,43 +187,27 @@ Future<void> sendEmailVerificationRef() async {
   await user.sendEmailVerification();
 }
 
-/// Retrieves the role of the current user from Firebase Firestore.
-///
-/// This function fetches the role of the current user from Firebase Firestore based on their UID.
-/// The resulting role is used to determine whether the user is a "PROFESSIONAL" or a "USER".
-///
-/// Returns: A [Future] that completes with the [UserRole] of the current user.
-Future<UserRole> getUserRoleRef() async {
+Future<UserModel> getUserRef() async {
   // Get the UID of the current user from FirebaseAuth.
   String userId = FirebaseAuth.instance.currentUser!.uid;
 
-  // Initialize the role variable.
-  String role = "";
-
   // Get a reference to the Firebase Firestore instance.
-  await FirebaseFirestore.instance
+  return await FirebaseFirestore.instance
       .collection(FirebaseCollections.USER.name)
-      .where(UserModel.col_userId, isEqualTo: userId)
+      .doc(userId)
       .get()
-      .then(
-        (querySnapshot) {
-      // Print a success message for debugging.
-      debugPrint("Successfully completed");
+      .then((documentSnapshot) async{
 
-      // Retrieve the role from the first document in the query results.
-      var doc = querySnapshot.docs.first;
-      role = doc.data()[UserModel.col_role];
-    },
-    onError: (e) => debugPrint("Error completing: $e"),
-  );
+        Map<String, dynamic>? data = documentSnapshot.data();
+        UserModel user = UserModel.fromJson(data!);
 
-  // Return the corresponding UserRole based on the retrieved role.
-  switch (role) {
-    case 'PROFESSIONAL':
-      return UserRole.PROFESSIONAL;
-    default:
-      return UserRole.USER;
-  }
+        Uint8List? image = await MethodHelper.getImageAndConvertToUint8List(user.imagePath);
+        image != null ? user.imageUnit8list = image : user.imageUnit8list = null;
+
+        return user;
+      }
+    );
+
 }
 
 /// Retrieves a list of users associated with the current shop from Firebase Firestore.

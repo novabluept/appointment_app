@@ -78,10 +78,6 @@ class MyChooseScheduleTile extends ConsumerWidget {
             decoration: BoxDecoration(
               color: light1,
               borderRadius: BorderRadius.circular(100.0).r,
-              border: Border.all(
-                  width: 2.w,
-                  color: blue,
-                  strokeAlign: BorderSide.strokeAlignCenter),
             ),
             child: Center(
               child: MyLabel(

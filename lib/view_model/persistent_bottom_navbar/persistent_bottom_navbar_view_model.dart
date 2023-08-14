@@ -1,6 +1,8 @@
 
-import '../../utils/enums.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../model/user_model.dart';
 
 abstract class PersistentBottomNavbarViewModel{
-  Future<UserRole> getUserRole();
+  Future<UserModel> getUser();
+  void setValue(AlwaysAliveRefreshable<StateController<dynamic>> notifier,WidgetRef ref,dynamic value);
 }

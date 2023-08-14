@@ -51,17 +51,17 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: light1,
-        resizeToAvoidBottomInset : true,
-        appBar: MyAppBar(
-          type: MyAppBarType.LEADING_ICON,
-          leadingIcon: IconlyLight.arrow_left,
-          label: 'Create password',
-          onTap: (){
-            Navigator.of(context).pop();
-          },
-        ),
-        body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())
+      backgroundColor: light1,
+      resizeToAvoidBottomInset : true,
+      appBar: MyAppBar(
+        type: MyAppBarType.LEADING_ICON,
+        leadingIcon: IconlyLight.arrow_left,
+        label: 'Create password',
+        onTap: (){
+          Navigator.of(context).pop();
+        },
+      ),
+      body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())
     );
   }
 

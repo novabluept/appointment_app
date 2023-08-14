@@ -48,7 +48,7 @@ class ChooseServiceState extends ConsumerState<ChooseService> with AutomaticKeep
     List<ServiceModel> list = await ChooseServiceViewModelImp().getServicesByProfessionalShop(userId, shopId);
 
     // Update the list of services in the notifier
-    MakeAppointmentScreenViewModelImp().setValue(listServices.notifier, ref, list);
+    ChooseServiceViewModelImp().setValue(listServices.notifier, ref, list);
 
     // Return the list of services after a delay
     return await Future.delayed(Duration(milliseconds: LOAD_DATA_DURATION), () => list);

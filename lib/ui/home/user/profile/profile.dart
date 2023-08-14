@@ -1,6 +1,7 @@
 
 import 'dart:io';
 
+import 'package:appointment_app_v2/state_management/persistent_bottom_navbar_state.dart';
 import 'package:appointment_app_v2/ui/home/user/appointments_history/content/appointments_completed.dart';
 import 'package:appointment_app_v2/ui/home/user/appointments_history/content/appointments_upcoming.dart';
 import 'package:appointment_app_v2/ui/home/user/profile/content/edit_language.dart';
@@ -16,6 +17,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconly/iconly.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
+import '../../../../model/user_model.dart';
 import '../../../../state_management/choose_shop_state.dart';
 import '../../../../state_management/fill_profile_state.dart';
 import '../../../../style/general_style.dart';
@@ -42,7 +44,7 @@ class ProfileState extends ConsumerState<Profile> {
     super.dispose();
   }
 
-  Future pickImage() async{
+  Future _pickImage() async{
     ///TODO: Fazer try catch e tratar de configurações
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (image == null) return;
@@ -60,6 +62,7 @@ class ProfileState extends ConsumerState<Profile> {
 
   @override
   Widget build(BuildContext context) {
+    UserModel user = ref.watch(currentUserProvider);
     return Scaffold(
         backgroundColor: light1,
         appBar: const MyAppBar(
@@ -68,11 +71,11 @@ class ProfileState extends ConsumerState<Profile> {
           height: kToolbarHeight,
         ),
         resizeToAvoidBottomInset : true,
-        body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())
+        body: MyResponsiveLayout(mobileBody: mobileBody(user), tabletBody: mobileBody(user))
     );
   }
 
-  Widget mobileBody(){
+  Widget mobileBody(UserModel user){
     return SingleChildScrollView(
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -81,7 +84,7 @@ class ProfileState extends ConsumerState<Profile> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             GestureDetector(
-              onTap: pickImage,
+              onTap: _pickImage,
               child: SizedBox(
                 width: 140.h,
                 height: 140.h,
@@ -91,6 +94,16 @@ class ProfileState extends ConsumerState<Profile> {
                   backgroundImage: ref.watch(imagePathProvider) != PROFILE_IMAGE_DIRECTORY ? Image.file(File(ref.watch(imagePathProvider))).image : Image.asset(PROFILE_IMAGE_DIRECTORY).image,
                   child: Stack(
                     children: [
+                      Center(
+                        child: ClipOval(
+                          child: Image.memory(
+                            user.imageUnit8list!,
+                            width: 140.w, // Adjust the width as needed
+                            height: 140.w, // Adjust the height as needed
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
                       Align(
                         alignment: Alignment.bottomRight,
                         child: SizedBox(
@@ -112,14 +125,14 @@ class ProfileState extends ConsumerState<Profile> {
             MyLabel(
               type: MyLabelType.H4,
               fontWeight: MyLabel.BOLD,
-              label: 'Andrew Ainsley',
+              label: '${user.firstname} ${user.lastname}',
               color: grey900,
             ),
             SizedBox(height: 8.h),
             MyLabel(
               type: MyLabelType.BODY_MEDIUM,
               fontWeight: MyLabel.SEMI_BOLD,
-              label: '+1 111 467 378 399',
+              label: '+351' + ' ' + MethodHelper.insertSpacesInString(user.phone, [3,3,3]),
               color: grey900,
             ),
             SizedBox(height: 24.h),

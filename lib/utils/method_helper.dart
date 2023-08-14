@@ -3,6 +3,9 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:appointment_app_v2/view_model/choose_professional/choose_professional_view_model_imp.dart';
+import 'package:appointment_app_v2/view_model/choose_schedule/choose_schedule_view_model_imp.dart';
+import 'package:appointment_app_v2/view_model/choose_service/choose_service_view_model_imp.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -16,8 +19,8 @@ import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import '../state_management/fill_profile_state.dart';
 import '../state_management/make_appointments_state.dart';
 import '../ui_items/my_dialog.dart';
-import '../view_model/choose_schedule/choose_schedule_view_model_imp.dart';
 import '../view_model/fill_profile/fill_profile_view_model_imp.dart';
+import '../view_model/make_appointment_screen/make_appointment_screen_view_model_imp.dart';
 import 'constants.dart';
 import 'enums.dart';
 
@@ -276,11 +279,11 @@ class MethodHelper{
   /// and scheduling to their default or initial values. It's useful when you need
   /// to clean up the state or data related to appointments and scheduling.
   static void cleanAppointmentsVariables(WidgetRef ref) {
-    ChooseScheduleViewModelImp().setValue(currentProfessionalIndexProvider.notifier, ref, -1);
-    ChooseScheduleViewModelImp().setValue(currentServiceIndexProvider.notifier, ref, -1);
+    ChooseProfessionalViewModelImp().setValue(currentProfessionalIndexProvider.notifier, ref, -1);
+    ChooseServiceViewModelImp().setValue(currentServiceIndexProvider.notifier, ref, -1);
     ChooseScheduleViewModelImp().setValue(currentSlotIndexProvider.notifier, ref, -1);
-    ChooseScheduleViewModelImp().setValue(currentAppointmentIndexProvider.notifier, ref, 0);
     ChooseScheduleViewModelImp().setValue(selectedDayProvider.notifier, ref, DateTime.now());
+    MakeAppointmentScreenViewModelImp().setValue(currentAppointmentIndexProvider.notifier, ref, 0);
   }
 
   /// Retrieves an image from Firebase Storage and converts it to Uint8List.
@@ -339,6 +342,33 @@ class MethodHelper{
     // Return the File instance of the downloaded image
     return file;
   }
+
+  /// Inserts spaces at specified intervals in a given input string.
+  ///
+  /// This function takes an input string and a list of integers representing a pattern. It inserts spaces at the specified intervals defined by the pattern to format the input string.
+  ///
+  /// Parameters:
+  /// - `input`: The input string where spaces will be inserted.
+  /// - `pattern`: A list of integers representing the pattern of space insertion intervals.
+  ///
+  /// Returns:
+  /// - A new formatted string with spaces inserted according to the provided pattern.
+  static String insertSpacesInString(String input, List<int> pattern) {
+    StringBuffer result = StringBuffer();
+    int index = 0;
+
+    for (int partLength in pattern) {
+      result.write(input.substring(index, index + partLength));
+      index += partLength;
+
+      if (index < input.length) {
+        result.write(' ');
+      }
+    }
+
+    return result.toString();
+  }
+
 }
 
 

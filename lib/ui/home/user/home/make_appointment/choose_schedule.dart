@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:appointment_app_v2/model/user_model.dart';
 import 'package:appointment_app_v2/ui_items/my_choose_schedule_tile.dart';
 import 'package:appointment_app_v2/utils/enums.dart';
+import 'package:appointment_app_v2/view_model/make_appointment_screen/make_appointment_screen_view_model_imp.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -125,8 +126,62 @@ class ChooseScheduleState extends ConsumerState<ChooseSchedule> {
       ChooseScheduleViewModelImp().setValue(selectedDayProvider.notifier, ref, day);
     } else {
       // Show a warning dialog indicating that appointments on past days are not allowed.
-      MethodHelper.showDialogAlert(context, MyDialogType.WARNING, 'Não é possível efetuar marcações em um dia do passado.');
+      MethodHelper.showDialogAlert(context, MyDialogType.WARNING, 'It\'s not possible to make an appointment on a day in the past');
     }
+  }
+
+  Widget _timeSlotListShimmer(){
+    return GridView.count(
+      crossAxisCount: 3,
+      childAspectRatio: (120.0.w / 45.h),
+      shrinkWrap: true,
+      padding: EdgeInsets.symmetric(vertical: 1.h,horizontal: 1.w),
+      crossAxisSpacing: 12.w,
+      mainAxisSpacing: 16.h,
+      children: List.generate(12, (index) {
+        return MyChooseScheduleTile(type: MyChooseScheduleTileType.SHIMMER);
+      }),
+    );
+  }
+
+  /// Handles the selection of a time slot.
+  ///
+  /// This function is responsible for managing the selection state of a time slot based on the provided index. If the provided index matches the current selected slot index, the method deselects the slot. Otherwise, it selects the slot.
+  ///
+  /// Parameters:
+  /// - `slot`: The time slot model that is being selected or deselected.
+  /// - `index`: The index of the time slot in the list of available slots.
+  _selectTimeSlot(TimeSlotModel slot, int index) {
+    int currentSelectedIndex = ref.read(currentSlotIndexProvider);
+
+    if (index == currentSelectedIndex) {
+      // Deselect the currently selected slot
+      ChooseScheduleViewModelImp().setValue(currentSlotIndexProvider.notifier, ref, -1);
+    } else {
+      // Select the clicked slot
+      ChooseScheduleViewModelImp().setValue(currentSlotProvider.notifier, ref, slot);
+      ChooseScheduleViewModelImp().setValue(currentSlotIndexProvider.notifier, ref, index);
+    }
+  }
+
+  Widget _timeSlotList(List<TimeSlotModel> list){
+    return GridView.count(
+      crossAxisCount: 3,
+      childAspectRatio: (120.0.w / 45.h),
+      shrinkWrap: true,
+      padding: EdgeInsets.symmetric(vertical: 1.h,horizontal: 1.w),
+      crossAxisSpacing: 12.w,
+      mainAxisSpacing: 16.h,
+      children: List.generate(list.length, (index) {
+        TimeSlotModel slot = list[index];
+        return MyChooseScheduleTile(
+            type: MyChooseScheduleTileType.GENERAL,
+            index: index,
+            timeSlot: slot,
+            onTap: () => _selectTimeSlot(slot,index)
+        );
+      }),
+    );
   }
 
   Widget mobileBody(){
@@ -205,35 +260,12 @@ class ChooseScheduleState extends ConsumerState<ChooseSchedule> {
                   DateFormat(DATE_FORMAT_DAY_MONTH_YEAR).format(ref.read(selectedDayProvider))),
               builder: (BuildContext context, AsyncSnapshot<List<AppointmentModel>> snapshot) {
                 if(snapshot.connectionState == ConnectionState.waiting){
-                  return const Text('waiting');
+                  return _timeSlotListShimmer();
                 }else if(snapshot.hasError){
                   return const MyException(type: MyExceptionType.GENERAL,imagePath: 'images/blue/warning_image.svg',firstLabel: 'Something went wrong',secondLabel: 'Please try again later.',);
                 }else{
                   List<TimeSlotModel> list = _getAvailableSlots(ref,snapshot.data!,isNavigationFromHome ? appointment.serviceDuration : ref.read(currentServiceProvider).duration);
-                  return GridView.count(
-                    crossAxisCount: 3,
-                    childAspectRatio: (120.0.w / 45.h),
-                    shrinkWrap: true,
-                    padding: EdgeInsets.symmetric(vertical: 1.h,horizontal: 1.w),
-                    crossAxisSpacing: 12.w,
-                    mainAxisSpacing: 16.h,
-                    children: List.generate(list.length, (index) {
-                      TimeSlotModel slot = list[index];
-                      return MyChooseScheduleTile(
-                        type: MyChooseScheduleTileType.GENERAL,
-                        index: index,
-                        timeSlot: slot,
-                        onTap: (){
-                          if(index == ref.read(currentSlotIndexProvider)) {
-                            ChooseScheduleViewModelImp().setValue(currentSlotIndexProvider.notifier, ref, -1);
-                          }else{
-                            ChooseScheduleViewModelImp().setValue(currentSlotProvider.notifier, ref, slot);
-                            ChooseScheduleViewModelImp().setValue(currentSlotIndexProvider.notifier, ref, index);
-                          }
-                        }
-                      );
-                    }),
-                  );
+                  return _timeSlotList(list);
                 }
               },
             ),

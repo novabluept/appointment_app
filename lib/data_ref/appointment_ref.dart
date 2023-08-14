@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import '../model/appointment_model.dart';
+import '../utils/constants.dart';
 import '../utils/enums.dart';
 import '../utils/method_helper.dart';
 
@@ -29,6 +30,8 @@ Stream<List<AppointmentModel>> getAppointmentsByProfessionalShopStatusDateRef(St
   debugPrint("col_shopId: "+shopId);
   debugPrint("col_status: "+status.name);
   debugPrint("col_date: "+date);
+
+  await Future.delayed(const Duration(milliseconds: LOAD_DATA_DURATION));
 
   yield* db.collection(FirebaseCollections.APPOINTMENT.name)
       .where(AppointmentModel.col_professionalId, isEqualTo: professionalId)
@@ -101,6 +104,8 @@ Stream<List<AppointmentModel>> getAppointmentsByUserRef(AppointmentStatus status
       Uint8List? image = await MethodHelper.getImageAndConvertToUint8List(element.professionalImagePath);
       element.professionalImageUint8list = image;
     });
+
+    await Future.delayed(const Duration(milliseconds: LOAD_DATA_DURATION));
 
     // Yield the list of appointment models.
     yield list;

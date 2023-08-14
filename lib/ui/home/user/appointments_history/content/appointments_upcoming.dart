@@ -138,7 +138,7 @@ class AppointmentsUpcomingState extends ConsumerState<AppointmentsUpcoming> with
             AppointmentsHistoryModelImp().setValue(currentAppointmentIndexProvider.notifier, ref, 2);
             AppointmentsHistoryModelImp().setValue(isNavigationFromHomeProvider.notifier, ref, true);
             AppointmentsHistoryModelImp().setValue(appointmentFromAppointmentsHistoryProvider.notifier, ref, appointment);
-            MethodHelper.switchPage(context, PageNavigatorType.PUSH_NEW_PAGE, const ChooseScreen(), null);
+            MethodHelper.switchPage(context, PageNavigatorType.PUSH_NEW_PAGE, const MakeAppointmentScreen(), null);
           },
         );
       },
