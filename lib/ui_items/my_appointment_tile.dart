@@ -1,16 +1,12 @@
 
-
 import 'package:appointment_app_v2/utils/method_helper.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconly/iconly.dart';
-import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 import '../model/appointment_model.dart';
 import '../style/general_style.dart';
-import '../utils/constants.dart';
 import '../utils/enums.dart';
 import 'my_button.dart';
 import 'my_label.dart';
@@ -24,7 +20,6 @@ class MyAppointmentTile extends ConsumerWidget {
   final bool hasButtons;
   final Function()? negativeButtonOnPressed;
   final Function()? positiveButtonOnPressed;
-
 
   const MyAppointmentTile({super.key, required this.type, this.index,this.appointment,this.hasButtons = false,this.negativeButtonOnPressed,this.positiveButtonOnPressed});
 
@@ -359,11 +354,8 @@ class MyAppointmentTile extends ConsumerWidget {
               )
             ],
           ) : Container()
-
         ],
       ),
     );
   }
-
-
 }

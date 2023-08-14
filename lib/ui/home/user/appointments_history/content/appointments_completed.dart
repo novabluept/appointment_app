@@ -4,15 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:iconly/iconly.dart';
-
 import '../../../../../data_ref/appointment_ref.dart';
 import '../../../../../model/appointment_model.dart';
-import '../../../../../style/general_style.dart';
 import '../../../../../ui_items/my_appointment_tile.dart';
 import '../../../../../ui_items/my_exception.dart';
 import '../../../../../ui_items/my_responsive_layout.dart';
-import '../../../../../view_model/appointments_history/appointments_history_view_model_imp.dart';
 
 class AppointmentsCompleted extends ConsumerStatefulWidget {
   const AppointmentsCompleted({Key? key}): super(key: key);
@@ -28,6 +24,7 @@ class AppointmentsCompletedState extends ConsumerState<AppointmentsCompleted> wi
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody());
   }
 
@@ -38,7 +35,7 @@ class AppointmentsCompletedState extends ConsumerState<AppointmentsCompleted> wi
       separatorBuilder: (context, index) => SizedBox(height: 20.h),
       itemCount: 5,
       itemBuilder: (context, index) {
-        return MyAppointmentTile(
+        return const MyAppointmentTile(
           type: MyAppointmentTileType.SHIMMER,
         );
       },
@@ -51,9 +48,7 @@ class AppointmentsCompletedState extends ConsumerState<AppointmentsCompleted> wi
       separatorBuilder: (context, index) => SizedBox(height: 20.h),
       itemCount: list.length,
       itemBuilder: (context, index) {
-
         AppointmentModel appointment = list[index];
-
         return MyAppointmentTile(
           type: MyAppointmentTileType.COMPLETED,
           index: index,
@@ -67,14 +62,14 @@ class AppointmentsCompletedState extends ConsumerState<AppointmentsCompleted> wi
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: StreamBuilder(
-          stream: getUserAppointmentsRef(AppointmentStatus.COMPLETED),
+          stream: getAppointmentsByUserRef(AppointmentStatus.COMPLETED),
           builder: (BuildContext context, AsyncSnapshot<List<AppointmentModel>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return _completedAppointmentListShimmer();
             } else if (snapshot.hasError) {
-              return MyException(type: MyExceptionType.GENERAL,imagePath: 'images/blue/warning_image.svg',firstLabel: 'Something went wrong',secondLabel: 'Please try again later.',);
+              return const MyException(type: MyExceptionType.GENERAL,imagePath: 'images/blue/warning_image.svg',firstLabel: 'Something went wrong',secondLabel: 'Please try again later.',);
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return MyException(type: MyExceptionType.GENERAL,imagePath: 'images/blue/no_data_image.svg',firstLabel: 'There is no data available',secondLabel: 'You have no appointments completed at the moment.',);
+              return const MyException(type: MyExceptionType.GENERAL,imagePath: 'images/blue/no_data_image.svg',firstLabel: 'There is no data available',secondLabel: 'You have no appointments completed at the moment.',);
             } else {
               List<AppointmentModel> list = snapshot.data!;
               return _completedAppointmentList(list);

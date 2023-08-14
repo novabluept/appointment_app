@@ -17,23 +17,19 @@ class MyProfileTile extends ConsumerWidget {
   final bool isLogout;
   final Function()? onTap;
 
-
   const MyProfileTile({super.key, required this.type, required this.icon, required this.label,this.isLogout = false, required this.onTap});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     switch (type) {
       case MyProfileTileType.GENERAL:
         return generalProfileTile();
       default:
         return Container();
     }
-
   }
 
   Widget generalProfileTile(){
-
     return GestureDetector(
       onTap: onTap,
       child: Row(

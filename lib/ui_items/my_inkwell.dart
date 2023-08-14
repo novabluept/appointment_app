@@ -18,18 +18,15 @@ class MyInkwell extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     switch (type) {
       case MyInkwellType.GENERAL:
         return generalInkwell(widget,onTap);
       default:
         return Container();
     }
-
   }
 
   Widget generalInkwell(Widget widget,Function()? onTap){
-
     return Stack(
       children: [
         widget,

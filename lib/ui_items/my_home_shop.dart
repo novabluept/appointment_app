@@ -24,12 +24,10 @@ class MyHomeShop extends ConsumerWidget {
   final String? state;
   final Function()? onTap;
 
-
   const MyHomeShop({super.key,required this.type,this.image,this.name,this.city,this.state,this.onTap});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     switch (type) {
       case MyHomeShopType.GENERAL:
         return generalHomeShop(image!,name!,city!,state!,onTap);
@@ -38,11 +36,9 @@ class MyHomeShop extends ConsumerWidget {
       default:
         return Container();
     }
-
   }
 
   Widget generalHomeShop(Uint8List image,String name,String city,String state,Function()? onTap){
-
     return MyInkwell(
       type: MyInkwellType.GENERAL,
       widget: Stack(
@@ -127,7 +123,6 @@ class MyHomeShop extends ConsumerWidget {
 
 
   Widget shimmerHomeShop(){
-
     return Stack(
       children: [
         Shimmer.fromColors(

@@ -1,3 +1,0 @@
-
-
-final String CURRENTshopId="currentshopId";

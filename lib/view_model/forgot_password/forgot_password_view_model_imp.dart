@@ -8,5 +8,4 @@ class ForgotPasswordModelImp implements ForgotPasswordViewModel{
   Future sendPasswordResetEmail(String email) {
     return sendPasswordResetEmailRef(email);
   }
-
 }

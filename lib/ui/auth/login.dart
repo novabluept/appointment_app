@@ -4,14 +4,11 @@ import 'package:appointment_app_v2/ui/auth/register/fill_profile.dart';
 import 'package:appointment_app_v2/ui_items/my_text_form_field.dart';
 import 'package:appointment_app_v2/utils/enums.dart';
 import 'package:appointment_app_v2/utils/method_helper.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:iconly/iconly.dart';
-import 'package:page_transition/page_transition.dart';
 import '../../style/general_style.dart';
 import '../../ui_items/my_button.dart';
 import '../../ui_items/my_divider.dart';
@@ -50,7 +47,6 @@ class LoginState extends ConsumerState<Login> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,36 +56,58 @@ class LoginState extends ConsumerState<Login> {
     );
   }
 
-  Future _signIn() async{
-    if(await MethodHelper.hasInternetConnection()){
-      if(_formKey.currentState!.validate()){
+  /// Initiates the sign-in process with the provided email and password.
+  ///
+  /// This function first checks if the device has an internet connection using [MethodHelper.hasInternetConnection()].
+  /// If there's a connection, it validates the form using [_formKey]. If the form is valid,
+  /// it initiates the sign-in process using [LoginViewModelImp().signIn()].
+  /// If an error occurs during the sign-in process, specific error messages are shown based on the error code.
+  ///
+  /// Returns: A [Future] that completes when the sign-in process is finished.
+  Future<void> _signIn() async {
+    // Check if the device has an internet connection.
+    if (await MethodHelper.hasInternetConnection()) {
+      // Validate the form using _formKey.
+      if (_formKey.currentState!.validate()) {
+        // Initiate the sign-in process using LoginViewModelImp().
         LoginViewModelImp().signIn(
           _emailController.text.trim(),
           _passwordController.text.trim(),
-        ).catchError((e){
-          if(e.code == 'invalid-email'){
-            MethodHelper.showSnackBar(context, SnackBarType.WARNING, 'Email address is not valid.');
-          }else if(e.code == 'user-disabled'){
-            MethodHelper.showSnackBar(context, SnackBarType.WARNING, 'The user corresponding to the given email has been disabled.');
-          }else if(e.code == 'user-not-found'){
-            MethodHelper.showSnackBar(context, SnackBarType.WARNING, 'No user found for that email.');
-          }else if(e.code == 'wrong-password'){
-            MethodHelper.showSnackBar(context, SnackBarType.WARNING, 'Wrong password provided for that user.');
+        ).catchError((e) {
+          if (e.code == 'invalid-email') {
+            MethodHelper.showDialogAlert(context, MyDialogType.WARNING, 'Email address is not valid.');
+          } else if (e.code == 'user-disabled') {
+            MethodHelper.showDialogAlert(context, MyDialogType.WARNING, 'The user corresponding to the given email has been disabled.');
+          } else if (e.code == 'user-not-found') {
+            MethodHelper.showDialogAlert(context, MyDialogType.WARNING, 'No user found for that email.');
+          } else if (e.code == 'wrong-password') {
+            MethodHelper.showDialogAlert(context, MyDialogType.WARNING, 'Wrong password provided for that user.');
+          } else {
+            MethodHelper.showDialogAlert(context, MyDialogType.WARNING, 'Something went wrong. Please try again later.');
           }
         });
       }
-    }else{
-      MethodHelper.showSnackBar(context, SnackBarType.WARNING, 'Sem ligação à internet.');
+    } else {
+      MethodHelper.showDialogAlert(context, MyDialogType.WARNING, 'Sem ligação à internet.');
     }
   }
 
-  Future _signInWithGoogle() async{
-    if(await MethodHelper.hasInternetConnection()){
-      LoginViewModelImp().signInWithGoogle().catchError((e){
-        print(e);
+  /// Initiates the Google sign-in process.
+  ///
+  /// This function first checks if the device has an internet connection using [MethodHelper.hasInternetConnection()].
+  /// If there's a connection, it initiates the Google sign-in process using [LoginViewModelImp().signInWithGoogle()].
+  /// If an error occurs during the sign-in process, the error is printed to the console.
+  ///
+  /// Returns: A [Future] that completes when the Google sign-in process is finished.
+  Future<void> _signInWithGoogle() async {
+    // Check if the device has an internet connection.
+    if (await MethodHelper.hasInternetConnection()) {
+      // Initiate the Google sign-in process using LoginViewModelImp().
+      LoginViewModelImp().signInWithGoogle().catchError((e) {
+        debugPrint(e);
       });
-    }else{
-      MethodHelper.showSnackBar(context, SnackBarType.WARNING, 'Sem ligação à internet.');
+    } else {
+      MethodHelper.showDialogAlert(context, MyDialogType.WARNING, 'Sem ligação à internet.');
     }
   }
 
@@ -103,25 +121,19 @@ class LoginState extends ConsumerState<Login> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(height: 99.h),
-
             SvgPicture.asset('images/logo_medica.svg',width: 140.w,height: 140.h),
-
             SizedBox(height: 27.h),
-
-            MyLabel(
+            const MyLabel(
               type: MyLabelType.H3,
               fontWeight: MyLabel.BOLD,
               label: 'Login to your account',
             ),
-
             SizedBox(height: 27.h),
-
             Form(
               key: _formKey,
               autovalidateMode: AutovalidateMode.disabled,
               child: Column(
                 children: [
-
                   MyTextFormField(
                     type: MyTextFormFieldType.PREFIX,
                     textEditingController: _emailController,
@@ -142,9 +154,7 @@ class LoginState extends ConsumerState<Login> {
                       return null;
                     }
                   ),
-
                   SizedBox(height: 20.h),
-
                   MyTextFormField(
                     type: MyTextFormFieldType.PREFIX_SUFIX,
                     textEditingController: _passwordController,
@@ -165,20 +175,15 @@ class LoginState extends ConsumerState<Login> {
                       setState(() {_showPasswordText = !_showPasswordText;});
                     },
                   ),
-
                   SizedBox(height: 20.h),
-
                   MyButton(type: MyButtonType.FILLED,labelColor: light1,backgroundColor: blue,foregroundColor: light1, label: 'Sign in',onPressed: _signIn),
-
                 ],
               ),
             ),
-
             SizedBox(height: 20.h),
-
             GestureDetector(
               onTap: (){
-                MethodHelper.transitionPage(context, widget, ForgotPassword(), PageNavigatorType.PUSH_REPLACEMENT,PageTransitionType.rightToLeftJoined);
+                MethodHelper.switchPage(context, PageNavigatorType.PUSH, const ForgotPassword(), widget);
               },
               child: Align(
                 alignment: Alignment.centerRight,
@@ -190,20 +195,14 @@ class LoginState extends ConsumerState<Login> {
                 ),
               ),
             ),
-
             SizedBox(height: 27.h),
-
-            MyDivider(type: MyDividerType.TEXT,label: 'or'),
-
+            const MyDivider(type: MyDividerType.TEXT,label: 'or'),
             SizedBox(height: 30.h),
-
             MyButton(type: MyButtonType.IMAGE, label: 'Continue with google',imgUrl: 'images/google_logo.svg',onPressed: _signInWithGoogle),
-
             SizedBox(height: 27.h),
-
             GestureDetector(
               onTap: (){
-                MethodHelper.transitionPage(context, widget, FillProfile(), PageNavigatorType.PUSH_REPLACEMENT, PageTransitionType.rightToLeftJoined);
+                MethodHelper.switchPage(context, PageNavigatorType.PUSH, const FillProfile(), widget);
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,

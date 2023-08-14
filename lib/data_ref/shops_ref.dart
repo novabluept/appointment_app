@@ -1,15 +1,16 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import '../model/shop_model.dart';
 import '../utils/enums.dart';
 
-/// Retrieves a list of shops from Firebase Firestore.
+/// Retrieves a list of shop models from Firebase Firestore.
 ///
-/// This function fetches a list of [ShopModel] instances from Firebase Firestore.
-/// The resulting list contains details of various shops available in the database.
+/// This function fetches a list of [ShopModel] instances from Firebase Firestore,
+/// containing details of various shops available in the database.
 ///
 /// Returns: A [Future] that completes with a list of [ShopModel] instances.
-Future<List<ShopModel>> getShopsFromFirebaseRef() async {
+Future<List<ShopModel>> getShopsRef() async {
   // List to hold the fetched shop models.
   List<ShopModel> list = [];
 
@@ -24,10 +25,9 @@ Future<List<ShopModel>> getShopsFromFirebaseRef() async {
         list.add(ShopModel.fromJson(docSnapshot.data()));
       }
     },
-    onError: (e) => print("Error completing: $e"),
+    onError: (e) => debugPrint("Error completing: $e"),
   );
 
   // Return the list of fetched shop models.
   return list;
 }
-

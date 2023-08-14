@@ -1,5 +1,4 @@
 
-
 import '../../data_ref/users_ref.dart';
 import 'login_view_model.dart';
 
@@ -14,7 +13,4 @@ class LoginViewModelImp implements LoginViewModel{
   Future signInWithGoogle() {
     return signInWithGoogleRef();
   }
-
-
-
 }

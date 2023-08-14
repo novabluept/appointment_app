@@ -23,7 +23,6 @@ class ShopModel {
   String zipCode;
   List<dynamic> professionals;
 
-
   ShopModel({
     this.shopId = '',
     required this.imagePath,

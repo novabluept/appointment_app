@@ -1,34 +1,15 @@
 
 import 'dart:async';
-import 'dart:io';
-
-import 'package:appointment_app_v2/ui/home/user/appointments_history/content/appointments_completed.dart';
-import 'package:appointment_app_v2/ui/home/user/appointments_history/content/appointments_upcoming.dart';
-import 'package:appointment_app_v2/ui_items/my_choose_service_tile.dart';
 import 'package:appointment_app_v2/utils/enums.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconly/iconly.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
-import 'package:page_transition/page_transition.dart';
-import '../../../../../model/service_model.dart';
 import '../../../../../state_management/make_appointments_state.dart';
-import '../../../../../state_management/choose_shop_state.dart';
 import '../../../../../style/general_style.dart';
 import '../../../../../ui_items/my_app_bar.dart';
-import '../../../../../ui_items/my_button.dart';
-import '../../../../../ui_items/my_choose_professional_tile.dart';
 import '../../../../../ui_items/my_responsive_layout.dart';
-import '../../../../../ui_items/my_text_form_field.dart';
 import '../../../../../utils/constants.dart';
 import '../../../../../utils/method_helper.dart';
-import '../../../../../utils/validators.dart';
-import '../../../../../view_model/choose_service/choose_service_view_model_imp.dart';
 import '../../../../../view_model/make_appointment_screen/make_appointment_screen_view_model_imp.dart';
 import 'choose_professional.dart';
 import 'choose_schedule.dart';
@@ -43,10 +24,10 @@ class ChooseScreen extends ConsumerStatefulWidget {
 
 class ChooseScreenState extends ConsumerState<ChooseScreen> with TickerProviderStateMixin{
 
-  List<Widget> _pages = [
-    ChooseProfessional(),
-    ChooseService(),
-    ChooseSchedule(),
+  final List<Widget> _pages = [
+    const ChooseProfessional(),
+    const ChooseService(),
+    const ChooseSchedule(),
   ];
 
   late var _controller;
@@ -58,7 +39,7 @@ class ChooseScreenState extends ConsumerState<ChooseScreen> with TickerProviderS
 
   @override
   void didChangeDependencies() {
-    print('indexMakeAppointmentProvider: ' + ref.read(currentAppointmentIndexProvider).toString());
+    debugPrint('indexMakeAppointmentProvider: ${ref.read(currentAppointmentIndexProvider)}');
     _controller = TabController(length: _pages.length, initialIndex: ref.watch(currentAppointmentIndexProvider), vsync: this);
     super.didChangeDependencies();
   }
@@ -69,17 +50,21 @@ class ChooseScreenState extends ConsumerState<ChooseScreen> with TickerProviderS
     super.dispose();
   }
 
-  _goBack(){
-
+  /// Handles navigation back or resetting appointment-related variables.
+  ///
+  /// This function determines whether to navigate back to the previous screen or reset appointment-related variables and then navigate back. It uses the values from the [currentAppointmentIndexProvider] and [isNavigationFromHomeProvider] to make decisions. If the [index] of the current appointment is greater than 0 and the navigation is not from the home screen, it decrements the [index] using [MakeAppointmentScreenViewModelImp]. Otherwise, it pops the current screen and after a delay of [TRANSITION_DURATION] milliseconds, it cleans up appointment-related variables using [MethodHelper.cleanAppointmentsVariables].
+  void _goBack() {
     int index = ref.read(currentAppointmentIndexProvider);
     bool isNavigationFromHome = ref.read(isNavigationFromHomeProvider);
 
-
-    if(index > 0 && !isNavigationFromHome){
+    if (index > 0 && !isNavigationFromHome) {
       MakeAppointmentScreenViewModelImp().setValue(currentAppointmentIndexProvider.notifier, ref, --index);
-    }else{
+    } else {
+      // Pop the current screen
       Navigator.of(context).pop();
-      Timer(Duration(milliseconds: TRANSITION_DURATION), () {
+
+      // Clean up appointment-related variables after a delay
+      Timer(const Duration(milliseconds: TRANSITION_DURATION), () {
         MethodHelper.cleanAppointmentsVariables(ref);
       });
     }
@@ -102,9 +87,7 @@ class ChooseScreenState extends ConsumerState<ChooseScreen> with TickerProviderS
             label: ref.watch(currentAppointmentIndexProvider) == 0 ? 'Choose Professional' :
             ref.watch(currentAppointmentIndexProvider) == 1 ? 'Choose Service' :
             ref.watch(currentAppointmentIndexProvider) == 2 ? 'Choose Schedule' : '',
-            onTap: (){
-              _goBack();
-            },
+            onTap: _goBack,
           ),
           body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())
       ),
@@ -114,12 +97,10 @@ class ChooseScreenState extends ConsumerState<ChooseScreen> with TickerProviderS
   Widget mobileBody(){
     return Consumer(
       builder: (BuildContext context, WidgetRef ref, Widget? child) {
-
         final index = ref.watch(currentAppointmentIndexProvider);
         _controller = TabController(length: _pages.length, initialIndex: index, vsync: this);
-
         return TabBarView(
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           controller: _controller,
           children: _pages,
         );

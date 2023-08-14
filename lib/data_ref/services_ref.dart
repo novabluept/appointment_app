@@ -1,9 +1,10 @@
 
 import 'package:appointment_app_v2/utils/enums.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import '../model/service_model.dart';
 
-/// Retrieves a list of services based on the specified professional and shop IDs.
+/// Retrieves a list of services based on the provided professional and shop IDs.
 ///
 /// This function fetches a list of [ServiceModel] instances from Firebase Firestore
 /// that match the provided [professionalId] and [shopId]. The resulting list contains
@@ -14,7 +15,7 @@ import '../model/service_model.dart';
 /// - [shopId]: The ID of the shop associated with the services.
 ///
 /// Returns: A [Future] that completes with a list of [ServiceModel] instances.
-Future<List<ServiceModel>> getServicesByUserIdAndShopIdFromFirebaseRef(
+Future<List<ServiceModel>> getServicesByUserShopRef(
     String professionalId,
     String shopId,
     ) async {
@@ -23,10 +24,6 @@ Future<List<ServiceModel>> getServicesByUserIdAndShopIdFromFirebaseRef(
 
   // Get a reference to the Firebase Firestore instance.
   var db = await FirebaseFirestore.instance;
-
-  // Print debugging information.
-  print("col_userId: " + professionalId.toString());
-  print("col_shopId: " + shopId.toString());
 
   // Fetch services based on professional and shop IDs.
   await db.collection(FirebaseCollections.SERVICE.name)
@@ -40,7 +37,7 @@ Future<List<ServiceModel>> getServicesByUserIdAndShopIdFromFirebaseRef(
         list.add(ServiceModel.fromJson(docSnapshot.data()));
       }
     },
-    onError: (e) => print("Error completing: $e"),
+    onError: (e) => debugPrint("Error completing: $e"),
   );
 
   // Return the list of fetched service models.

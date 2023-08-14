@@ -1,5 +1,4 @@
 
-
 import 'package:appointment_app_v2/model/appointment_model.dart';
 import 'package:appointment_app_v2/model/time_slot_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

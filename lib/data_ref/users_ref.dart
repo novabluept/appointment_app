@@ -1,19 +1,16 @@
 
 import 'dart:io';
-import 'dart:math';
 import 'package:appointment_app_v2/utils/method_helper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
 import '../model/user_model.dart';
 import '../state_management/choose_shop_state.dart';
 import '../utils/constants.dart';
 import '../utils/enums.dart';
-
 
 /// Signs in a user using their email and password.
 ///
@@ -33,7 +30,6 @@ Future<void> signInRef(String email, String password) async {
     password: password,
   );
 }
-
 
 /// Signs in a user using their Google account.
 ///
@@ -80,45 +76,13 @@ Future<void> signInWithGoogleRef() async {
     );
 
     // Add user details to Firebase
-    await addUserDetailsRef(user);
+    await addUserRef(user);
 
     // Add user profile picture
-    File file = await _urlToFile(userCredentialUser.photoURL!);
-    await addProfilePictureRef(file, '/${FirebaseCollections.USER.name}/${userCredentialUser.uid}');
+    File file = await MethodHelper.urlToFile(userCredentialUser.photoURL!);
+    await addUserPictureRef(file, '/${FirebaseCollections.USER.name}/${userCredentialUser.uid}');
   }
 }
-
-
-/// Downloads an image from a URL and saves it as a temporary file.
-///
-/// This function downloads an image from the specified [imageUrl], saves it as a
-/// temporary file on the device, and returns the [File] instance representing the
-/// downloaded image.
-///
-/// Parameters:
-/// - [imageUrl]: The URL of the image to be downloaded.
-///
-/// Returns: A [Future] that completes with the [File] instance of the downloaded image.
-Future<File> _urlToFile(String imageUrl) async {
-  var rng = new Random();
-
-  // Get the device's temporary directory
-  Directory tempDir = await getTemporaryDirectory();
-  String tempPath = tempDir.path;
-
-  // Generate a unique filename for the downloaded image
-  File file = new File('$tempPath' + (rng.nextInt(100)).toString() + '.png');
-
-  // Download the image using an HTTP request
-  http.Response response = await http.get(Uri.parse(imageUrl));
-
-  // Write the downloaded image data to the temporary file
-  await file.writeAsBytes(response.bodyBytes);
-
-  // Return the File instance of the downloaded image
-  return file;
-}
-
 
 /// Creates a new user account using the provided email and password.
 ///
@@ -139,17 +103,16 @@ Future<void> signUpRef(String email, String password) async {
   );
 }
 
-
-/// Adds user details to Firebase Firestore.
+/// Adds a user to Firebase Firestore.
 ///
-/// This function adds the provided [user] details to the Firebase Firestore database.
-/// The user details are stored in the "users" collection under a newly generated document.
+/// This function creates a new document in the "users" collection of Firebase Firestore
+/// and populates it with the provided [user] details in JSON format.
 ///
 /// Parameters:
-/// - [user]: The [UserModel] instance representing the user details to be added.
+/// - [user]: The [UserModel] instance representing the user to be added.
 ///
-/// Returns: A [Future] that completes when the user details are successfully added.
-Future<void> addUserDetailsRef(UserModel user) async {
+/// Returns: A [Future] that completes when the user is successfully added.
+Future<void> addUserRef(UserModel user) async {
   // Create a new document reference within the "users" collection.
   final docUser = FirebaseFirestore.instance.collection(FirebaseCollections.USER.name).doc();
 
@@ -173,7 +136,7 @@ Future<void> addUserDetailsRef(UserModel user) async {
 /// - [pathToSave]: The path under which the image should be saved in Firebase Storage.
 ///
 /// Returns: A [Future] that completes when the image upload is finished.
-Future<void> addProfilePictureRef(File file, String pathToSave) async {
+Future<void> addUserPictureRef(File file, String pathToSave) async {
   // Check if the provided file represents the default profile image.
   if (file.path == PROFILE_IMAGE_DIRECTORY) {
     // Convert to an actual file representing the default profile image.
@@ -190,7 +153,6 @@ Future<void> addProfilePictureRef(File file, String pathToSave) async {
   ref.putFile(imageCompressed ?? file);
 }
 
-
 /// Sends a password reset email to the provided email address.
 ///
 /// This function sends a password reset email to the specified [email] address
@@ -206,7 +168,6 @@ Future<void> sendPasswordResetEmailRef(String email) async {
   await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
 }
 
-
 /// Sends an email verification link to the current user's email address.
 ///
 /// This function sends an email verification link to the email address associated
@@ -221,7 +182,6 @@ Future<void> sendEmailVerificationRef() async {
   // Send an email verification link to the user's email address.
   await user.sendEmailVerification();
 }
-
 
 /// Retrieves the role of the current user from Firebase Firestore.
 ///
@@ -244,13 +204,13 @@ Future<UserRole> getUserRoleRef() async {
       .then(
         (querySnapshot) {
       // Print a success message for debugging.
-      print("Successfully completed");
+      debugPrint("Successfully completed");
 
       // Retrieve the role from the first document in the query results.
       var doc = querySnapshot.docs.first;
       role = doc.data()[UserModel.col_role];
     },
-    onError: (e) => print("Error completing: $e"),
+    onError: (e) => debugPrint("Error completing: $e"),
   );
 
   // Return the corresponding UserRole based on the retrieved role.
@@ -262,55 +222,16 @@ Future<UserRole> getUserRoleRef() async {
   }
 }
 
-
-/// Retrieves a list of users with specified roles from Firebase Firestore.
-///
-/// This function fetches a list of [UserModel] instances from Firebase Firestore
-/// based on the roles specified, including "PROFESSIONAL" and "ADMIN". The resulting
-/// list contains user details of professionals and administrators.
-///
-/// Returns: A [Future] that completes with a list of [UserModel] instances.
-Future<List<UserModel>> getUsersFromFirebaseRef() async {
-  // List to hold the fetched user models.
-  List<UserModel> list = [];
-
-  // Get a reference to the Firebase Firestore instance.
-  var db = await FirebaseFirestore.instance;
-
-  // Fetch users with specified roles from the Firestore collection.
-  await db.collection(FirebaseCollections.USER.name)
-      .where(UserModel.col_role, whereIn: [UserRole.PROFESSIONAL.name, UserRole.ADMIN.name])
-      .get()
-      .then(
-        (querySnapshot) {
-      for (var docSnapshot in querySnapshot.docs) {
-        // Replace the role "ADMIN" with "PROFESSIONAL" for disguising purposes.
-        Map<String, dynamic> data = docSnapshot.data();
-        data[UserModel.col_role] = UserRole.PROFESSIONAL.name;
-
-        // Add the fetched user details to the list.
-        list.add(UserModel.fromJson(data));
-      }
-    },
-    onError: (e) => print("Error completing: $e"),
-  );
-
-  // Return the list of fetched user models.
-  return list;
-}
-
-
-/// Retrieves a list of users associated with specific shops from Firebase Firestore.
+/// Retrieves a list of users associated with the current shop from Firebase Firestore.
 ///
 /// This function fetches a list of [UserModel] instances from Firebase Firestore,
-/// based on the list of professionals associated with a specific shop. The resulting
-/// list contains user details of professionals linked to the shop.
+/// based on the list of professionals associated with the current shop.
 ///
 /// Parameters:
 /// - [ref]: A [WidgetRef] used to access state data (e.g., professionals associated with a shop).
 ///
 /// Returns: A [Future] that completes with a list of [UserModel] instances.
-Future<List<UserModel>> getUsersFromShopsFromFirebaseRef(WidgetRef ref) async {
+Future<List<UserModel>> getProfessionalUsersByShopRef(WidgetRef ref) async {
   // Get the list of professionals associated with the current shop.
   List usersFromShop = ref.read(currentShopProvider).professionals;
 
@@ -331,7 +252,7 @@ Future<List<UserModel>> getUsersFromShopsFromFirebaseRef(WidgetRef ref) async {
         list.add(UserModel.fromJson(docSnapshot.data()));
       }
     },
-    onError: (e) => print("Error completing: $e"),
+    onError: (e) => debugPrint("Error completing: $e"),
   );
 
   // Return the list of fetched user models.

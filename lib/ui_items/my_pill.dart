@@ -34,9 +34,7 @@ class MyPill extends ConsumerWidget {
       default:
         return Container();
     }
-
   }
-
 
   Color _borderColor(MyPillType type){
     switch(type){
@@ -73,7 +71,6 @@ class MyPill extends ConsumerWidget {
   }
 
   Color _backgroundColor(MyPillType type){
-
     switch(type){
       case MyPillType.PRIMARY_OUTLINED:
         return light1;
@@ -97,9 +94,10 @@ class MyPill extends ConsumerWidget {
         borderRadius: BorderRadius.circular(16.0).r,
         color: _backgroundColor(type),
         border: Border.all(
-            width: 1.w,
-            color: _borderColor(type),
-            strokeAlign: BorderSide.strokeAlignCenter)
+          width: 1.w,
+          color: _borderColor(type),
+          strokeAlign: BorderSide.strokeAlignCenter
+        )
       ),
       child: MyLabel(
         type: MyLabelType.BODY_SMALL,

@@ -1,9 +1,6 @@
 
 import 'dart:typed_data';
 
-import '../utils/constants.dart';
-import '../utils/enums.dart';
-
 class UserModel {
 
   static final String col_userId = "userId";
@@ -72,7 +69,7 @@ class UserModel {
         email = json[col_email] != null ? json[col_email] : '',
         role = json[col_role] != null ? json[col_role] : '',
         imagePath = json[col_imagePath]  != null ? json[col_imagePath] : '',
-        imageUnit8list = json['imageUnit8list']  != null ? json['imageUnit8list'] : null
+        imageUnit8list = json[col_imageUnit8list]  != null ? json[col_imageUnit8list] : null
   ;
 
   Map<String, dynamic> toJson() => {

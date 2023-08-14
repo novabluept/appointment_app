@@ -18,18 +18,15 @@ class MyModalBottomSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     switch (type) {
       case MyModalBottomSheetType.GENERAL:
         return generalModalBottomSheet(height,content);
       default:
         return Container();
     }
-
   }
 
   Widget generalModalBottomSheet(double height,Widget content){
-
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 24.w),
       decoration: BoxDecoration(

@@ -6,10 +6,7 @@ class MyResponsiveLayout extends StatelessWidget {
   final Widget mobileBody;
   final Widget tabletBody;
 
-  MyResponsiveLayout({
-    required this.mobileBody,
-    required this.tabletBody,
-  });
+  const MyResponsiveLayout({super.key, required this.mobileBody, required this.tabletBody,});
 
   @override
   Widget build(BuildContext context) {

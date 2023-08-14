@@ -3,16 +3,11 @@ import 'package:appointment_app_v2/state_management/home_user_state.dart';
 import 'package:appointment_app_v2/style/general_style.dart';
 import 'package:appointment_app_v2/ui/home/user/home/notifications.dart';
 import 'package:appointment_app_v2/utils/enums.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconly/iconly.dart';
-import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:shimmer/shimmer.dart';
-
-import '../../../../../../ui_items/my_appointment_tile.dart';
-import '../../../../../../ui_items/my_button.dart';
 import '../../../../../../ui_items/my_label.dart';
 import '../../../../../../ui_items/my_responsive_layout.dart';
 import '../../../../model/shop_model.dart';
@@ -21,11 +16,10 @@ import '../../../../state_management/make_appointments_state.dart';
 import '../../../../ui_items/my_app_bar.dart';
 import '../../../../ui_items/my_exception.dart';
 import '../../../../ui_items/my_home_shop.dart';
-import '../../../../ui_items/my_pill.dart';
 import '../../../../utils/constants.dart';
+import '../../../../utils/method_helper.dart';
 import '../../../../view_model/home_user/home_user_view_model_imp.dart';
 import 'choose_shop.dart';
-import 'make_appointment/make_appointment_screen.dart';
 
 class HomeUser extends ConsumerStatefulWidget {
   const HomeUser({Key? key}): super(key: key);
@@ -41,9 +35,9 @@ class HomeUserState extends ConsumerState<HomeUser> {
     super.dispose();
   }
 
-  Future<List<ShopModel>> _getShopsFromFirebase() async{
+  Future<List<ShopModel>> _getShops() async{
     List<ShopModel> list = [];
-    list = await HomeUserModelImp().getShopsFromFirebase();
+    list = await HomeUserModelImp().getShops();
     HomeUserModelImp().setValue(listShops.notifier, ref, list);
     /// Selecionar a shop
     ShopModel shop = ref.read(currentShopProvider) != ShopModel(imagePath: '', imageUnit8list: null, name: '', city: '', state: '', streetName: '', zipCode: '',professionals: []) ? ref.read(currentShopProvider) : list[0];
@@ -64,12 +58,7 @@ class HomeUserState extends ConsumerState<HomeUser> {
           leadingIcon: IconlyLight.notification,
           suffixIcon: IconlyLight.notification,
           onTap: (){
-            pushNewScreen(
-              context,
-              screen: Notifications(),
-              withNavBar: false,
-              pageTransitionAnimation: PageTransitionAnimation.cupertino,
-            );
+            MethodHelper.switchPage(context, PageNavigatorType.PUSH_NEW_PAGE, const Notifications(), null);
           },
         ),
         resizeToAvoidBottomInset : true,
@@ -104,19 +93,14 @@ class HomeUserState extends ConsumerState<HomeUser> {
             ),
           ],
         ),
-
         SizedBox(height: 24.h),
-
         MyHomeShop(type: MyHomeShopType.SHIMMER),
-
       ],
     );
   }
 
   Widget _shopsList(List<ShopModel> list){
-
     ShopModel shop = ref.watch(currentShopProvider) != ShopModel(imagePath: '', imageUnit8list: null, name: '', city: '', state: '', streetName: '', zipCode: '',professionals: []) ? ref.read(currentShopProvider) : list[0];
-
     return Column(
       children: [
         Row(
@@ -129,12 +113,7 @@ class HomeUserState extends ConsumerState<HomeUser> {
             ),
             GestureDetector(
               onTap: () {
-                pushNewScreen(
-                  context,
-                  screen: ChooseShop(),
-                  withNavBar: false,
-                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                );
+                MethodHelper.switchPage(context, PageNavigatorType.PUSH_NEW_PAGE, const ChooseShop(), null);
               },
               child: MyLabel(
                 type: MyLabelType.BODY_LARGE,
@@ -145,9 +124,7 @@ class HomeUserState extends ConsumerState<HomeUser> {
             ),
           ],
         ),
-
         SizedBox(height: 24.h),
-
         MyHomeShop(
           type: MyHomeShopType.GENERAL,
           image: shop.imageUnit8list,
@@ -156,12 +133,8 @@ class HomeUserState extends ConsumerState<HomeUser> {
           state: shop.state,
           onTap: () {
             HomeUserModelImp().setValue(isNavigationFromHomeProvider.notifier, ref, false);
-            pushNewScreen(
-              context,
-              screen: ChooseScreen(),
-              withNavBar: false,
-              pageTransitionAnimation: PageTransitionAnimation.cupertino,
-            );
+            MethodHelper.switchPage(context, PageNavigatorType.PUSH_NEW_PAGE, const ChooseShop(), null);
+
           },
         ),
       ],
@@ -169,9 +142,7 @@ class HomeUserState extends ConsumerState<HomeUser> {
   }
 
   Widget mobileBody(){
-
     List<ShopModel> list = ref.watch(listShops);
-
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: Column(
@@ -186,13 +157,9 @@ class HomeUserState extends ConsumerState<HomeUser> {
               color: blue,
             ),
           ),
-
           SizedBox(height: 96.h),
-
-
-
           list.isEmpty ? FutureBuilder(
-            future: _getShopsFromFirebase(),
+            future: _getShops(),
             builder: (BuildContext context, AsyncSnapshot<List<ShopModel>> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return _shopsShimmer();
@@ -206,7 +173,6 @@ class HomeUserState extends ConsumerState<HomeUser> {
               }
             }
           ) : _shopsList(list),
-
           SizedBox(height: 24.h)
         ],
       )

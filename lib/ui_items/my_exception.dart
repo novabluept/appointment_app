@@ -20,18 +20,15 @@ class MyException extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     switch (type) {
       case MyExceptionType.GENERAL:
         return generalException(imagePath!, firstLabel!,secondLabel!);
       default:
         return Container();
     }
-
   }
 
   Widget generalException(String imagePath,String firstLabel,String secondLabel){
-
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

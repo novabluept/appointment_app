@@ -28,7 +28,6 @@ class MyChooseShopTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     switch (type) {
       case MyChooseShopTileType.GENERAL:
         return generalChooseShopTile(index!,shop!,ref,onTap);
@@ -37,7 +36,6 @@ class MyChooseShopTile extends ConsumerWidget {
       default:
         return Container();
     }
-
   }
 
   Widget generalChooseShopTile(int index,ShopModel shop,WidgetRef ref,Function()? onTap){
@@ -63,32 +61,29 @@ class MyChooseShopTile extends ConsumerWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(16).r,
                     child: Image.memory(
-                        frameBuilder: (BuildContext context, Widget child, int? frame, bool? wasSynchronouslyLoaded) {
-                          if (wasSynchronouslyLoaded!) {
-                            return child;
-                          }
-                          return AnimatedOpacity(
-                            opacity: frame == null ? 0 : 1,
-                            duration: const Duration(seconds: 1),
-                            curve: Curves.linear,
-                            child: child,
-                          );
-                        },
-                        shop.imageUnit8list!,
-                        width: 110.h,
-                        height: 110.h,
-                        fit: BoxFit.cover
+                      frameBuilder: (BuildContext context, Widget child, int? frame, bool? wasSynchronouslyLoaded) {
+                        if (wasSynchronouslyLoaded!) {
+                          return child;
+                        }
+                        return AnimatedOpacity(
+                          opacity: frame == null ? 0 : 1,
+                          duration: const Duration(seconds: 1),
+                          curve: Curves.linear,
+                          child: child,
+                        );
+                      },
+                      shop.imageUnit8list!,
+                      width: 110.h,
+                      height: 110.h,
+                      fit: BoxFit.cover
                     ),
                   ),
                 ],
               ),
-
               SizedBox(width: 16.w),
-
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   Row(
                     children: [
                       Icon(Icons.location_on,size: 10.sp,color: index == currentIndex ? light1 : blue),
@@ -101,29 +96,22 @@ class MyChooseShopTile extends ConsumerWidget {
                       ),
                     ],
                   ),
-
                   SizedBox(height: 8.h),
-
                   MyLabel(
                     type: MyLabelType.H6,
                     label: shop.name,
                     fontWeight: MyLabel.BOLD,
                     color: index == currentIndex ? light1 : grey800,
                   ),
-
                   SizedBox(height: 8.h),
-
                   MyLabel(
                     type: MyLabelType.BODY_SMALL,
                     label: 'Obter direções',
                     fontWeight: MyLabel.MEDIUM,
                     color: index == currentIndex ? grey300 : blue,
-                  ),
-
-
-                ],
+                  )
+                ]
               )
-
             ]
           ),
         ),
@@ -146,84 +134,72 @@ class MyChooseShopTile extends ConsumerWidget {
       child: Padding(
         padding: EdgeInsets.all(16.w),
         child: Row(
-            children: [
-
-              Shimmer.fromColors(
-                baseColor: grey300,
-                highlightColor: grey100,
-                child: Container(
-                  width: 110.h,
-                  height: 110.h,
-                  decoration: BoxDecoration(
-                      color: light1,
-                      borderRadius: BorderRadius.all(Radius.circular(16).r)
-                  ),
+          children: [
+            Shimmer.fromColors(
+              baseColor: grey300,
+              highlightColor: grey100,
+              child: Container(
+                width: 110.h,
+                height: 110.h,
+                decoration: BoxDecoration(
+                    color: light1,
+                    borderRadius: BorderRadius.all(Radius.circular(16).r)
                 ),
               ),
-
-              SizedBox(width: 16.w),
-
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-
-                  Shimmer.fromColors(
-                    baseColor: grey300,
-                    highlightColor: grey100,
-                    child: Container(
-                      width: 150.w,
-                      decoration: BoxDecoration(
-                          color: light1,
-                          borderRadius: BorderRadius.all(Radius.circular(16).r)
-                      ),
-                      child:  MyLabel(
-                        type: MyLabelType.BODY_XSMALL,
-                        label: 'Porto, Paços de Ferreira',
-                        fontWeight: MyLabel.MEDIUM,
-                      ),
+            ),
+            SizedBox(width: 16.w),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Shimmer.fromColors(
+                  baseColor: grey300,
+                  highlightColor: grey100,
+                  child: Container(
+                    width: 150.w,
+                    decoration: BoxDecoration(
+                        color: light1,
+                        borderRadius: BorderRadius.all(Radius.circular(16).r)
                     ),
-                  ),
-
-                  SizedBox(height: 8.h),
-
-                  Shimmer.fromColors(
-                    baseColor: grey300,
-                    highlightColor: grey100,
-                    child: Container(
-                      width: 100.w,
-                      decoration: BoxDecoration(
-                          color: light1,
-                          borderRadius: BorderRadius.all(Radius.circular(16).r)
-                      ),
-                      child: MyLabel(
-                        type: MyLabelType.BODY_XSMALL,
-                        label: 'Porta 54',
-                        fontWeight: MyLabel.MEDIUM,
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(height: 8.h),
-
-                  Shimmer.fromColors(
-                    baseColor: grey300,
-                    highlightColor: grey100,
-                    child: MyLabel(
-                      type: MyLabelType.BODY_SMALL,
-                      label: 'Obter direções',
+                    child:  MyLabel(
+                      type: MyLabelType.BODY_XSMALL,
+                      label: 'Porto, Paços de Ferreira',
                       fontWeight: MyLabel.MEDIUM,
-                      color: blue,
                     ),
                   ),
-
-
-                ],
-              )
-
-            ]
+                ),
+                SizedBox(height: 8.h),
+                Shimmer.fromColors(
+                  baseColor: grey300,
+                  highlightColor: grey100,
+                  child: Container(
+                    width: 100.w,
+                    decoration: BoxDecoration(
+                        color: light1,
+                        borderRadius: BorderRadius.all(Radius.circular(16).r)
+                    ),
+                    child: MyLabel(
+                      type: MyLabelType.BODY_XSMALL,
+                      label: 'Porta 54',
+                      fontWeight: MyLabel.MEDIUM,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                Shimmer.fromColors(
+                  baseColor: grey300,
+                  highlightColor: grey100,
+                  child: MyLabel(
+                    type: MyLabelType.BODY_SMALL,
+                    label: 'Obter direções',
+                    fontWeight: MyLabel.MEDIUM,
+                    color: blue,
+                  ),
+                ),
+              ],
+            )
+          ]
         ),
       ),
     );
   }
-
 }

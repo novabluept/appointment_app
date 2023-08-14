@@ -21,19 +21,15 @@ class MyNotificationTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     switch (type) {
       case MyNotificationTileType.GENERAL:
         return generalNotificationTile(index);
       default:
         return Container();
     }
-
   }
 
   Widget generalNotificationTile(int index){
-
-
     return Column(
       children: [
         Row(

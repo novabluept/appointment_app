@@ -10,14 +10,12 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../style/general_style.dart';
 import 'auth/login.dart';
 
-
 class AuthObserver extends ConsumerStatefulWidget{
   const AuthObserver({Key? key}): super(key: key);
 
   @override
   AuthObserverState createState() => AuthObserverState();
 }
-
 
 class AuthObserverState extends ConsumerState<AuthObserver> {
 
@@ -30,6 +28,7 @@ class AuthObserverState extends ConsumerState<AuthObserver> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async{
+        debugPrint("");
         return false;
       },
       child: Scaffold(
@@ -45,12 +44,11 @@ class AuthObserverState extends ConsumerState<AuthObserver> {
                   ),
                 );
               }else if(snapshot.hasError) {
-                return Text('has error');
+                return const Text('has error');
               }else if(snapshot.hasData){
-                //return Home();
-                return VerifyEmail();
+                return const VerifyEmail();
               }else{
-                return Login();
+                return const Login();
               }
             }
         ),

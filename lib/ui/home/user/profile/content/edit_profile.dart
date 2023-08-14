@@ -1,18 +1,10 @@
 
-import 'dart:io';
-
-import 'package:appointment_app_v2/ui/home/user/appointments_history/content/appointments_completed.dart';
-import 'package:appointment_app_v2/ui/home/user/appointments_history/content/appointments_upcoming.dart';
 import 'package:appointment_app_v2/utils/enums.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconly/iconly.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-
 import '../../../../../style/general_style.dart';
 import '../../../../../ui_items/my_app_bar.dart';
 import '../../../../../ui_items/my_button.dart';
@@ -95,17 +87,17 @@ class EditProfileState extends ConsumerState<EditProfile> {
         return false;
       },
       child: Scaffold(
-          backgroundColor: light1,
-          resizeToAvoidBottomInset : true,
-          appBar: MyAppBar(
-            type: MyAppBarType.LEADING_ICON,
-            leadingIcon: IconlyLight.arrow_left,
-            label: 'Edit profile',
-            onTap: (){
-              Navigator.of(context).pop();
-            },
-          ),
-          body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())
+        backgroundColor: light1,
+        resizeToAvoidBottomInset : true,
+        appBar: MyAppBar(
+          type: MyAppBarType.LEADING_ICON,
+          leadingIcon: IconlyLight.arrow_left,
+          label: 'Edit profile',
+          onTap: (){
+            Navigator.of(context).pop();
+          },
+        ),
+        body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())
       ),
     );
   }

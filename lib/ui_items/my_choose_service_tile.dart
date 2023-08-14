@@ -22,12 +22,10 @@ class MyChooseServiceTile extends ConsumerWidget {
   final ServiceModel? service;
   final Function()? onTap;
 
-
   const MyChooseServiceTile({super.key, required this.type,this.index,this.service,this.onTap});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     switch (type) {
       case MyChooseServiceTileType.GENERAL:
         return generalChooseServiceTile(index!,service!,ref,onTap);
@@ -36,7 +34,6 @@ class MyChooseServiceTile extends ConsumerWidget {
       default:
         return Container();
     }
-
   }
 
   Widget generalChooseServiceTile(int index,ServiceModel service,WidgetRef ref,Function()? onTap){
@@ -107,9 +104,10 @@ class MyChooseServiceTile extends ConsumerWidget {
       decoration: BoxDecoration(
         color: light1,
         border: Border.all(
-            width: 1.w,
-            color: light1,
-            strokeAlign: BorderSide.strokeAlignCenter),
+          width: 1.w,
+          color: light1,
+          strokeAlign: BorderSide.strokeAlignCenter
+        ),
         borderRadius: BorderRadius.circular(16.0).r,
       ),
       child: Padding(

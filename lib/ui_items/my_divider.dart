@@ -17,7 +17,6 @@ class MyDivider extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     switch (type) {
       case MyDividerType.SIMPLE:
         return generalDivider(null);
@@ -30,7 +29,6 @@ class MyDivider extends ConsumerWidget {
   }
 
   Widget generalDivider(String? label){
-
     return label != null ? Row(
       children: [
         Expanded(
@@ -39,18 +37,14 @@ class MyDivider extends ConsumerWidget {
               thickness: 1.0,
             )
         ),
-
         SizedBox(width: 16.w),
-
         MyLabel(
           type: MyLabelType.BODY_XLARGE,
           fontWeight: MyLabel.SEMI_BOLD,
-          label: label!,
+          label: label,
           color: grey600,
         ),
-
         SizedBox(width: 16.w),
-
         Expanded(
             child: Divider(
               color: grey200,
@@ -58,13 +52,14 @@ class MyDivider extends ConsumerWidget {
             )
         ),
       ],
-    ) : Row(
+    ) :
+    Row(
       children: [
         Expanded(
-            child: Divider(
-              color: grey200,
-              thickness: 1.0,
-            )
+          child: Divider(
+            color: grey200,
+            thickness: 1.0,
+          )
         ),
       ],
     );

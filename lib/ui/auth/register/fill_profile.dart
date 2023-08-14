@@ -3,15 +3,12 @@ import 'dart:io';
 import 'package:appointment_app_v2/ui/auth/register/create_password.dart';
 import 'package:appointment_app_v2/ui_items/my_text_form_field.dart';
 import 'package:appointment_app_v2/utils/enums.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconly/iconly.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:page_transition/page_transition.dart';
-import '../../../state_management/choose_shop_state.dart';
 import '../../../state_management/fill_profile_state.dart';
 import '../../../style/general_style.dart';
 import '../../../ui_items/my_app_bar.dart';
@@ -21,7 +18,6 @@ import '../../../utils/constants.dart';
 import '../../../utils/method_helper.dart';
 import '../../../utils/validators.dart';
 import '../../../view_model/fill_profile/fill_profile_view_model_imp.dart';
-import '../../auth_observer.dart';
 
 class FillProfile extends ConsumerStatefulWidget {
   const FillProfile({Key? key}): super(key: key);
@@ -55,7 +51,6 @@ class FillProfileState extends ConsumerState<FillProfile> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _insertInitialTextEditingControllersValues();
     });
-
   }
 
   @override
@@ -68,36 +63,73 @@ class FillProfileState extends ConsumerState<FillProfile> {
     super.dispose();
   }
 
-  _insertInitialTextEditingControllersValues(){
-    String imagePath = ref.read(imagePathProvider);
-    _firstNameController.text = ref.read(firstNameProvider);
-    _lastNameController.text = ref.read(lastNameProvider);
-    _dateOfBirthController.text = ref.read(dateOfBirthProvider);
-    _emailController.text = ref.read(emailProvider);
-    _phoneNumberController.text = ref.read(phoneNumberProvider);
+  /// Inserts initial values into text editing controllers based on context data.
+  ///
+  /// This function retrieves data from context providers and inserts the initial values
+  /// into the corresponding text editing controllers, such as [_firstNameController],
+  /// [_lastNameController], [_dateOfBirthController], [_emailController], and [_phoneNumberController].
+  ///
+  /// Returns: void
+  void _insertInitialTextEditingControllersValues() {
+    // Retrieve values from context providers.
+    String firstName = ref.read(firstNameProvider);
+    String lastName = ref.read(lastNameProvider);
+    String dateOfBirth = ref.read(dateOfBirthProvider);
+    String email = ref.read(emailProvider);
+    String phoneNumber = ref.read(phoneNumberProvider);
+
+    // Insert values into text editing controllers.
+    _firstNameController.text = firstName;
+    _lastNameController.text = lastName;
+    _dateOfBirthController.text = dateOfBirth;
+    _emailController.text = email;
+    _phoneNumberController.text = phoneNumber;
   }
 
-  Future _saveValues() async{
-
-    if(_formKey.currentState!.validate()){
+  /// Saves form values and navigates to the next page if form validation is successful.
+  ///
+  /// This function validates the form using [_formKey]. If the form is valid, it saves the
+  /// form values to their corresponding providers using [FillProfileModelImp().setValue()].
+  /// After saving the values, it navigates to the [CreatePassword] page.
+  ///
+  /// Returns: A [Future] that completes when the form values are saved and navigation is performed.
+  Future<void> _saveValues() async {
+    if (_formKey.currentState!.validate()) {
+      // Save form values to corresponding providers.
       FillProfileModelImp().setValue(firstNameProvider.notifier, ref, _firstNameController.text.trim());
       FillProfileModelImp().setValue(lastNameProvider.notifier, ref, _lastNameController.text.trim());
       FillProfileModelImp().setValue(dateOfBirthProvider.notifier, ref, _dateOfBirthController.text.trim());
       FillProfileModelImp().setValue(emailProvider.notifier, ref, _emailController.text.trim());
       FillProfileModelImp().setValue(phoneNumberProvider.notifier, ref, _phoneNumberController.text.trim());
 
-      MethodHelper.transitionPage(context, widget, CreatePassword(), PageNavigatorType.PUSH_REPLACEMENT, PageTransitionType.rightToLeftJoined);
+      // Navigate to the next page.
+      MethodHelper.switchPage(context, PageNavigatorType.PUSH, const CreatePassword(), widget);
+
     }
   }
 
-  Future pickImage() async{
-    ///TODO: Fazer try catch e tratar de configurações
+  /// Picks an image from the device's gallery and updates the image path.
+  ///
+  /// This function uses the [ImagePicker] package to allow the user to pick an image
+  /// from the device's gallery. Once an image is selected, its path is retrieved,
+  /// and the image path provider is updated using [FillProfileModelImp().setValue()].
+  /// The widget state is then updated to reflect the change.
+  ///
+  /// Returns: A [Future] that completes when an image is successfully picked and the state is updated.
+  Future<void> _pickImage() async {
+    // Use ImagePicker to pick an image from the gallery.
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    // If no image is picked, return.
     if (image == null) return;
 
+    // Get the selected image's path.
     String imagePath = image.path;
 
+    // Update the image path provider using FillProfileModelImp().
     FillProfileModelImp().setValue(imagePathProvider.notifier, ref, imagePath);
+
+    // Update the widget state to reflect the change.
     setState(() {});
   }
 
@@ -106,8 +138,7 @@ class FillProfileState extends ConsumerState<FillProfile> {
     return WillPopScope(
       onWillPop: () async{
         MethodHelper.clearFillProfileControllers(ref);
-        MethodHelper.transitionPage(context, widget, AuthObserver(), PageNavigatorType.PUSH_REPLACEMENT,PageTransitionType.leftToRightJoined);
-        return false;
+        return true;
       },
       child: Scaffold(
         backgroundColor: light1,
@@ -118,7 +149,7 @@ class FillProfileState extends ConsumerState<FillProfile> {
           label: 'Fill your profile',
           onTap: (){
             MethodHelper.clearFillProfileControllers(ref);
-            MethodHelper.transitionPage(context, widget, AuthObserver(), PageNavigatorType.PUSH_REPLACEMENT, PageTransitionType.leftToRightJoined);
+            Navigator.of(context).pop();
           },
         ),
         body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())
@@ -136,7 +167,7 @@ class FillProfileState extends ConsumerState<FillProfile> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             GestureDetector(
-              onTap: pickImage,
+              onTap: _pickImage,
               child: SizedBox(
                 width: 200.h,
                 height: 200.h,
@@ -163,9 +194,7 @@ class FillProfileState extends ConsumerState<FillProfile> {
                 ),
               ),
             ),
-
             SizedBox(height: 24.h),
-
             Form(
               key: _formKey,
               autovalidateMode: AutovalidateMode.disabled,
@@ -191,9 +220,7 @@ class FillProfileState extends ConsumerState<FillProfile> {
                       return null;
                     }
                   ),
-
                   SizedBox(height: 24.h),
-
                   MyTextFormField(
                     type: MyTextFormFieldType.GENERAL,
                     textEditingController: _lastNameController,
@@ -214,9 +241,7 @@ class FillProfileState extends ConsumerState<FillProfile> {
                       return null;
                     }
                   ),
-
                   SizedBox(height: 24.h),
-
                   MyTextFormField(
                     type: MyTextFormFieldType.SUFFIX,
                     textEditingController: _dateOfBirthController,
@@ -252,9 +277,7 @@ class FillProfileState extends ConsumerState<FillProfile> {
                       return null;
                     }
                   ),
-
                   SizedBox(height: 24.h),
-
                   MyTextFormField(
                     type: MyTextFormFieldType.SUFFIX,
                     textEditingController: _emailController,
@@ -276,9 +299,7 @@ class FillProfileState extends ConsumerState<FillProfile> {
                       return null;
                     }
                   ),
-
                   SizedBox(height: 24.h),
-
                   MyTextFormField(
                     type: MyTextFormFieldType.PHONE,
                     textEditingController: _phoneNumberController,
@@ -299,14 +320,11 @@ class FillProfileState extends ConsumerState<FillProfile> {
                       return null;
                     }
                   ),
-
                   SizedBox(height: 24.h),
-
                   MyButton(type: MyButtonType.FILLED,labelColor: light1,backgroundColor: blue,foregroundColor: light1, label: 'Continue',onPressed: _saveValues),
                 ],
               ),
             ),
-
           ],
         ),
       ),

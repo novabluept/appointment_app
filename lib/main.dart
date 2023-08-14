@@ -41,15 +41,12 @@ class MyApp extends StatelessWidget {
               primary: blue,
             ),
           ),
-          home: AnimatedSplashScreen.withScreenFunction(
+          home: AnimatedSplashScreen(
             splash: SvgPicture.asset('images/logo_medica_full.svg',width: 240.w,height: 60.h),
-            screenFunction: () async{
-              /*await _manageDataInLocalDataBase();*/
-              return const AuthObserver();
-            },
             splashTransition: SplashTransition.fadeTransition,
             pageTransitionType: PageTransitionType.fade,
             backgroundColor: light1,
+            nextScreen: AuthObserver(),
           ),
         );
       },

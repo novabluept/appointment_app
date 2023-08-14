@@ -8,8 +8,6 @@ import '../utils/constants.dart';
 import '../utils/enums.dart';
 import 'my_label.dart';
 
-
-
 class MyAppBar extends ConsumerWidget implements PreferredSizeWidget {
 
   final MyAppBarType type;
@@ -101,13 +99,13 @@ class MyAppBar extends ConsumerWidget implements PreferredSizeWidget {
         ),
         actions: <Widget>[
           Padding(
-              padding: EdgeInsets.only(right: 24.w),
-              child: GestureDetector(
-                onTap: onTap,
-                child: Icon(
-                    IconlyLight.notification,size: 28.sp,color: dark1
-                ),
-              )
+            padding: EdgeInsets.only(right: 24.w),
+            child: GestureDetector(
+              onTap: onTap,
+              child: Icon(
+                  IconlyLight.notification,size: 28.sp,color: dark1
+              ),
+            )
           ),
         ],
       ),

@@ -1,7 +1,6 @@
 
 import 'dart:typed_data';
 import 'package:appointment_app_v2/model/shop_model.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data_ref/shops_ref.dart';
 import '../../utils/method_helper.dart';
@@ -15,16 +14,14 @@ class HomeUserModelImp implements HomeUserViewModel{
   }
 
   @override
-  Future<List<ShopModel>> getShopsFromFirebase() async{
-    List<ShopModel> list = await getShopsFromFirebaseRef();
+  Future<List<ShopModel>> getShops() async{
+    List<ShopModel> list = await getShopsRef();
 
     await Future.forEach(list,(element) async {
-      Uint8List? image = await MethodHelper.getImageAndCovertToUint8list(element.imagePath);
+      Uint8List? image = await MethodHelper.getImageAndConvertToUint8List(element.imagePath);
       image != null ? element.imageUnit8list = image : element.imageUnit8list = null;
     });
 
     return list;
   }
-
-
 }

@@ -4,7 +4,6 @@ import 'package:appointment_app_v2/ui/home/user/home/home_user.dart';
 import 'package:appointment_app_v2/ui/home/user/profile/profile.dart';
 import 'package:appointment_app_v2/utils/enums.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,12 +11,9 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:iconly/iconly.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import '../../style/general_style.dart';
-import '../../ui_items/my_app_bar.dart';
-import '../../ui_items/my_button.dart';
 import '../../ui_items/my_label.dart';
 import '../../ui_items/my_responsive_layout.dart';
 import '../../view_model/persistent_bottom_navbar/persistent_bottom_navbar_view_model_imp.dart';
-
 
 class PersistentBottomNavbar extends ConsumerStatefulWidget {
   const PersistentBottomNavbar({Key? key}): super(key: key);
@@ -28,8 +24,7 @@ class PersistentBottomNavbar extends ConsumerStatefulWidget {
 
 class PersistentBottomNavbarState extends ConsumerState<PersistentBottomNavbar> {
 
-  PersistentTabController _controller = PersistentTabController(initialIndex: 0);
-
+  final PersistentTabController _controller = PersistentTabController(initialIndex: 0);
 
   @override
   void initState() {
@@ -43,16 +38,18 @@ class PersistentBottomNavbarState extends ConsumerState<PersistentBottomNavbar> 
 
   List<Widget> _buildScreensTest() {
     return [
-      Container(color: Colors.green),
+      Container(color: Colors.green,child: TextButton(child: Text("sair"),onPressed: () async{
+        await FirebaseAuth.instance.signOut();
+      },),),
       Container(color: Colors.yellow),
     ];
   }
 
   List<Widget> _buildScreensUser() {
     return [
-      HomeUser(),
-      AppointmentsHistory(),
-      Profile(),
+      const HomeUser(),
+      const AppointmentsHistory(),
+      const Profile(),
     ];
   }
 
@@ -151,7 +148,7 @@ class PersistentBottomNavbarState extends ConsumerState<PersistentBottomNavbar> 
             ),
           );
         }else if(snapshot.hasError){
-          return Text('has error');
+          return const Text('has error');
         }else{
 
           UserRole? role = snapshot.data;

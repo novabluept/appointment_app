@@ -2,6 +2,7 @@
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import '../model/appointment_model.dart';
 import '../utils/enums.dart';
 import '../utils/method_helper.dart';
@@ -20,14 +21,14 @@ import '../utils/method_helper.dart';
 /// - [date]: The specific date for which appointments are to be fetched.
 ///
 /// Returns: A [Stream] that emits lists of [AppointmentModel] instances matching the criteria.
-Stream<List<AppointmentModel>> getAppointmentByProfessionalShopStatusDateFromFirebaseRef(String professionalId,String shopId,AppointmentStatus status,String date) async*{
+Stream<List<AppointmentModel>> getAppointmentsByProfessionalShopStatusDateRef(String professionalId,String shopId,AppointmentStatus status,String date) async*{
 
   var db = await FirebaseFirestore.instance;
 
-  print("col_professionalId: "+professionalId);
-  print("col_shopId: "+shopId);
-  print("col_status: "+status.name);
-  print("col_date: "+date);
+  debugPrint("col_professionalId: "+professionalId);
+  debugPrint("col_shopId: "+shopId);
+  debugPrint("col_status: "+status.name);
+  debugPrint("col_date: "+date);
 
   yield* db.collection(FirebaseCollections.APPOINTMENT.name)
       .where(AppointmentModel.col_professionalId, isEqualTo: professionalId)
@@ -62,7 +63,6 @@ Future<void> addAppointmentRef(AppointmentModel appointment) async {
   await docAppointment.set(json);
 }
 
-
 /// Retrieves a stream of appointments for the current user based on the specified status.
 ///
 /// This function fetches a stream of [AppointmentModel] instances from Firebase
@@ -74,7 +74,7 @@ Future<void> addAppointmentRef(AppointmentModel appointment) async {
 /// - [status]: The [AppointmentStatus] to filter appointments.
 ///
 /// Returns: A [Stream] that emits lists of [AppointmentModel] instances for the user.
-Stream<List<AppointmentModel>> getUserAppointmentsRef(AppointmentStatus status) async* {
+Stream<List<AppointmentModel>> getAppointmentsByUserRef(AppointmentStatus status) async* {
   // Retrieve the current user's authentication information.
   FirebaseAuth auth = FirebaseAuth.instance;
   final User user = auth.currentUser!;
@@ -98,7 +98,7 @@ Stream<List<AppointmentModel>> getUserAppointmentsRef(AppointmentStatus status) 
 
     // Fetch and assign professional images to appointment models.
     await Future.forEach(list, (element) async {
-      Uint8List? image = await MethodHelper.getImageAndCovertToUint8list(element.professionalImagePath);
+      Uint8List? image = await MethodHelper.getImageAndConvertToUint8List(element.professionalImagePath);
       element.professionalImageUint8list = image;
     });
 
@@ -107,16 +107,24 @@ Stream<List<AppointmentModel>> getUserAppointmentsRef(AppointmentStatus status) 
   }
 }
 
-Future updateAppointmentRef(String appointmentId,Map<String,dynamic> fields) async{
-
+/// Updates fields of an existing appointment in Firebase Firestore.
+///
+/// This function updates specified [fields] of an existing appointment in
+/// Firebase Firestore, using the provided [appointmentId] to locate the document.
+///
+/// Parameters:
+/// - [appointmentId]: The ID of the appointment to be updated.
+/// - [fields]: A [Map] containing the fields and their updated values.
+///
+/// Returns: A [Future] that completes when the appointment fields are successfully updated.
+Future<void> updateAppointmentRef(String appointmentId, Map<String, dynamic> fields) async {
+  // Get a reference to the Firebase Firestore instance.
   var db = await FirebaseFirestore.instance;
 
+  // Update the specified fields of the appointment document.
   await db.collection(FirebaseCollections.APPOINTMENT.name)
       .doc(appointmentId)
-      .update(fields) // <-- Updated data
-      .then((_) => print('Success'))
-      .catchError((error) => print('Failed: $error'));
-
+      .update(fields)
+      .then((_) => debugPrint('Success'))
+      .catchError((error) => debugPrint('Failed: $error'));
 }
-
-

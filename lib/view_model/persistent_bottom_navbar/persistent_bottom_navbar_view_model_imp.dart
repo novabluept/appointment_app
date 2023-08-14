@@ -10,5 +10,4 @@ class PersistentBottomNavbarViewModelImp implements PersistentBottomNavbarViewMo
   Future<UserRole> getUserRole() {
     return getUserRoleRef();
   }
-
 }

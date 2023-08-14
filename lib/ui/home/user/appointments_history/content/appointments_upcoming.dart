@@ -1,17 +1,13 @@
 
 import 'package:appointment_app_v2/model/appointment_model.dart';
 import 'package:appointment_app_v2/style/general_style.dart';
-import 'package:appointment_app_v2/ui/home/user/appointments_history/appointments_history.dart';
-import 'package:appointment_app_v2/ui_items/my_divider.dart';
 import 'package:appointment_app_v2/ui_items/my_modal_bottom_sheet.dart';
 import 'package:appointment_app_v2/utils/enums.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:appointment_app_v2/utils/method_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:iconly/iconly.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
-
 import '../../../../../data_ref/appointment_ref.dart';
 import '../../../../../state_management/make_appointments_state.dart';
 import '../../../../../ui_items/my_appointment_tile.dart';
@@ -36,6 +32,7 @@ class AppointmentsUpcomingState extends ConsumerState<AppointmentsUpcoming> with
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody());
   }
 
@@ -46,8 +43,7 @@ class AppointmentsUpcomingState extends ConsumerState<AppointmentsUpcoming> with
       separatorBuilder: (context, index) => SizedBox(height: 20.h),
       itemCount: 5,
       itemBuilder: (context, index) {
-
-        return MyAppointmentTile(
+        return const MyAppointmentTile(
             type: MyAppointmentTileType.SHIMMER,
             hasButtons: true
         );
@@ -68,7 +64,7 @@ class AppointmentsUpcomingState extends ConsumerState<AppointmentsUpcoming> with
             color: red,
           ),
           SizedBox(height: 24.h),
-          MyLabel(
+          const MyLabel(
             type: MyLabelType.BODY_XLARGE,
             fontWeight: MyLabel.MEDIUM,
             label: 'Are you sure you want to cancel your appointment?',
@@ -142,13 +138,7 @@ class AppointmentsUpcomingState extends ConsumerState<AppointmentsUpcoming> with
             AppointmentsHistoryModelImp().setValue(currentAppointmentIndexProvider.notifier, ref, 2);
             AppointmentsHistoryModelImp().setValue(isNavigationFromHomeProvider.notifier, ref, true);
             AppointmentsHistoryModelImp().setValue(appointmentFromAppointmentsHistoryProvider.notifier, ref, appointment);
-
-            pushNewScreen(
-              context,
-              screen: ChooseScreen(),
-              withNavBar: false,
-              pageTransitionAnimation: PageTransitionAnimation.cupertino,
-            );
+            MethodHelper.switchPage(context, PageNavigatorType.PUSH_NEW_PAGE, const ChooseScreen(), null);
           },
         );
       },
@@ -159,14 +149,14 @@ class AppointmentsUpcomingState extends ConsumerState<AppointmentsUpcoming> with
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: StreamBuilder(
-        stream: getUserAppointmentsRef(AppointmentStatus.BOOKED),
+        stream: getAppointmentsByUserRef(AppointmentStatus.BOOKED),
         builder: (BuildContext context, AsyncSnapshot<List<AppointmentModel>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return _bookedAppointmentListShimmer();
           } else if (snapshot.hasError) {
-            return MyException(type: MyExceptionType.GENERAL,imagePath: 'images/blue/warning_image.svg',firstLabel: 'Something went wrong',secondLabel: 'Please try again later.',);
+            return const MyException(type: MyExceptionType.GENERAL,imagePath: 'images/blue/warning_image.svg',firstLabel: 'Something went wrong',secondLabel: 'Please try again later.',);
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return MyException(type: MyExceptionType.GENERAL,imagePath: 'images/blue/no_data_image.svg',firstLabel: 'There is no data available',secondLabel: 'You have no appointments booked at the moment.',);
+            return const MyException(type: MyExceptionType.GENERAL,imagePath: 'images/blue/no_data_image.svg',firstLabel: 'There is no data available',secondLabel: 'You have no appointments booked at the moment.',);
           } else {
             List<AppointmentModel> list = snapshot.data!;
             return _bookedAppointmentList(list);

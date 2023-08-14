@@ -4,15 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:iconly/iconly.dart';
-
 import '../../../../../data_ref/appointment_ref.dart';
 import '../../../../../model/appointment_model.dart';
-import '../../../../../style/general_style.dart';
 import '../../../../../ui_items/my_appointment_tile.dart';
 import '../../../../../ui_items/my_exception.dart';
 import '../../../../../ui_items/my_responsive_layout.dart';
-import '../../../../../view_model/appointments_history/appointments_history_view_model_imp.dart';
 
 class AppointmentsCancelled extends ConsumerStatefulWidget {
   const AppointmentsCancelled({Key? key}): super(key: key);
@@ -28,6 +24,7 @@ class AppointmentsHistoryState extends ConsumerState<AppointmentsCancelled> with
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody());
   }
 
@@ -38,8 +35,7 @@ class AppointmentsHistoryState extends ConsumerState<AppointmentsCancelled> with
       separatorBuilder: (context, index) => SizedBox(height: 20.h),
       itemCount: 5,
       itemBuilder: (context, index) {
-
-        return MyAppointmentTile(
+        return const MyAppointmentTile(
           type: MyAppointmentTileType.SHIMMER,
         );
       },
@@ -52,9 +48,7 @@ class AppointmentsHistoryState extends ConsumerState<AppointmentsCancelled> with
       separatorBuilder: (context, index) => SizedBox(height: 20.h),
       itemCount: list.length,
       itemBuilder: (context, index) {
-
         AppointmentModel appointment = list[index];
-
         return MyAppointmentTile(
           type: MyAppointmentTileType.CANCELLED,
           index: index,
@@ -68,14 +62,14 @@ class AppointmentsHistoryState extends ConsumerState<AppointmentsCancelled> with
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: StreamBuilder(
-          stream: getUserAppointmentsRef(AppointmentStatus.CANCELLED),
+          stream: getAppointmentsByUserRef(AppointmentStatus.CANCELLED),
           builder: (BuildContext context, AsyncSnapshot<List<AppointmentModel>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return _cancelledAppointmentListShimmer();
             } else if (snapshot.hasError) {
-              return MyException(type: MyExceptionType.GENERAL,imagePath: 'images/blue/warning_image.svg',firstLabel: 'Something went wrong',secondLabel: 'Please try again later.',);
+              return const MyException(type: MyExceptionType.GENERAL,imagePath: 'images/blue/warning_image.svg',firstLabel: 'Something went wrong',secondLabel: 'Please try again later.',);
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return MyException(type: MyExceptionType.GENERAL,imagePath: 'images/blue/no_data_image.svg',firstLabel: 'There is no data available',secondLabel: 'You have no appointments cancelled at the moment.',);
+              return const MyException(type: MyExceptionType.GENERAL,imagePath: 'images/blue/no_data_image.svg',firstLabel: 'There is no data available',secondLabel: 'You have no appointments cancelled at the moment.',);
             } else {
               List<AppointmentModel> list = snapshot.data!;
               return _cancelledAppointmentList(list);

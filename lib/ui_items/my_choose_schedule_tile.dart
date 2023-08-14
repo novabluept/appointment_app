@@ -29,12 +29,10 @@ class MyChooseScheduleTile extends ConsumerWidget {
   final TimeSlotModel? timeSlot;
   final Function()? onTap;
 
-
   const MyChooseScheduleTile({super.key, required this.type,this.index,this.timeSlot,this.onTap});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     switch (type) {
       case MyChooseScheduleTileType.GENERAL:
         return generalChooseScheduleTile(index!,timeSlot!,ref,onTap);
@@ -43,7 +41,6 @@ class MyChooseScheduleTile extends ConsumerWidget {
       default:
         return Container();
     }
-
   }
 
   Widget generalChooseScheduleTile(int index,TimeSlotModel slot,WidgetRef ref,Function()? onTap){
@@ -55,32 +52,30 @@ class MyChooseScheduleTile extends ConsumerWidget {
     return MyInkwell(
       type: MyInkwellType.GENERAL,
       widget: Center(
-          child: Container(
-            width: 118.w,
-            height: 45.h,
-            decoration: BoxDecoration(
-              color: index == currentIndex ? blue : light1,
-              borderRadius: BorderRadius.circular(100.0).r,
-              border: Border.all(
-                  width: 2.w,
-                  color: blue,
-                  strokeAlign: BorderSide.strokeAlignCenter),
+        child: Container(
+          width: 118.w,
+          height: 45.h,
+          decoration: BoxDecoration(
+            color: index == currentIndex ? blue : light1,
+            borderRadius: BorderRadius.circular(100.0).r,
+            border: Border.all(
+                width: 2.w,
+                color: blue,
+                strokeAlign: BorderSide.strokeAlignCenter),
+          ),
+          child: Center(
+            child: MyLabel(
+              type: MyLabelType.BODY_XLARGE,
+              fontWeight: MyLabel.BOLD,
+              label: '$startDate - $endDate',
+              color: index == currentIndex ? light1 : blue,
             ),
-            child: Center(
-              child: MyLabel(
-                type: MyLabelType.BODY_XLARGE,
-                fontWeight: MyLabel.BOLD,
-                label: '$startDate - $endDate',
-                color: index == currentIndex ? light1 : blue,
-              ),
-            ),
-          )
+          ),
+        )
       ),
       onTap: onTap,
     );
   }
-
-
 
   Widget shimmerChooseShopTile(){
     return Shimmer.fromColors(
@@ -110,6 +105,4 @@ class MyChooseScheduleTile extends ConsumerWidget {
       ),
     );
   }
-
-
 }

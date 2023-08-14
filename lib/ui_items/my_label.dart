@@ -53,9 +53,7 @@ class MyLabel extends ConsumerWidget {
       default:
         return Container();
     }
-
   }
-
 
   Widget generalText(String label,FontWeight fontWeight,int fontSize,Color color,double height,TextAlign textAlign,TextOverflow overflow){
     return Text(
@@ -71,6 +69,4 @@ class MyLabel extends ConsumerWidget {
       overflow: overflow,
     );
   }
-
-
 }

@@ -38,7 +38,6 @@ class MyTextFormField extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     switch (type) {
       case MyTextFormFieldType.GENERAL:
         return generalTextFormField(textEditingController,null,null,label,showObscureText,isObscure,hasError,errorText,isDate,isReadOnly,isFieldFocused,contentPaddingWidth ?? 20,contentPaddingHeight ?? 20,validator,null,showDateDialog,onFocusChange);
@@ -53,7 +52,6 @@ class MyTextFormField extends ConsumerWidget {
       default:
         return Container();
     }
-
   }
 
   _suffixIcon(){

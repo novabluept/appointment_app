@@ -36,8 +36,7 @@ class VerifyEmailState extends ConsumerState<VerifyEmail> {
     _isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
 
     if(!_isEmailVerified){
-      _sendVerificationEmail();
-      _timer = Timer.periodic(Duration(seconds: 3),(_) => _checkEmailVerified());
+      _timer = Timer.periodic(Duration(seconds: 5),(_) => _checkEmailVerified());
     }
   }
 
@@ -47,31 +46,52 @@ class VerifyEmailState extends ConsumerState<VerifyEmail> {
     super.dispose();
   }
 
-  Future _sendVerificationEmail() async{
-    await VerifyEmailModelImp().sendEmailVerification().catchError((e){
-      MethodHelper.showSnackBar(context, SnackBarType.WARNING, 'Ocorreu algo inesperado. Por favor, tente mais tarde.');
+  /// Initiates the process of sending a verification email.
+  ///
+  /// This function initiates the process of sending a verification email using [VerifyEmailModelImp().sendEmailVerification()].
+  /// If an error occurs during the verification email sending process, a generic error message is shown.
+  ///
+  /// Returns: A [Future] that completes when the verification email sending process is finished.
+  Future<void> _sendVerificationEmail() async {
+    // Initiate the process of sending a verification email using VerifyEmailModelImp().
+    await VerifyEmailModelImp().sendEmailVerification().catchError((e) {
+      MethodHelper.showDialogAlert(context, MyDialogType.WARNING, 'Something went wrong. Please try again later.');
     });
   }
 
-  Future _checkEmailVerified() async{
-
-    /// callback after email verification
+  /// Checks whether the current user's email is verified.
+  ///
+  /// This function reloads the current user's information using [FirebaseAuth.instance.currentUser!.reload()] to ensure
+  /// that the latest email verification status is obtained. The [_isEmailVerified] state variable is then updated based on
+  /// the current user's email verification status. If the email is verified, any active timer is cancelled.
+  ///
+  /// Returns: A [Future] that completes when the email verification check is finished.
+  Future<void> _checkEmailVerified() async {
+    // Reload the current user's information to ensure the latest email verification status.
     await FirebaseAuth.instance.currentUser!.reload();
 
+    // Update the _isEmailVerified state variable based on the user's email verification status.
     setState(() {
       _isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
     });
 
-    if(_isEmailVerified) _timer?.cancel();
+    // If the email is verified, cancel any active timer.
+    if (_isEmailVerified) _timer?.cancel();
   }
 
-  Future _signOut() async{
-    await FirebaseAuth.instance.signOut();
+  /// Signs out the current user from the application.
+  ///
+  /// This function initiates the sign-out process using [VerifyEmailModelImp().signOut()].
+  ///
+  /// Returns: A [Future] that completes when the sign-out process is finished.
+  Future<void> _signOut() async {
+    // Initiate the sign-out process using VerifyEmailModelImp().
+    await VerifyEmailModelImp().signOut();
   }
 
   @override
   Widget build(BuildContext context) {
-    return _isEmailVerified ? PersistentBottomNavbar() : WillPopScope(
+    return _isEmailVerified ? const PersistentBottomNavbar() : WillPopScope(
       onWillPop: () async{
         await _signOut();
         return false;
@@ -99,11 +119,8 @@ class VerifyEmailState extends ConsumerState<VerifyEmail> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(height: 43.h),
-
           SvgPicture.asset('images/blue/verify_email_image.svg',width: 237.w,height: 200.h),
-
           SizedBox(height: 33.h),
-
           Align(
             alignment: Alignment.centerLeft,
             child: MyLabel(
@@ -113,16 +130,10 @@ class VerifyEmailState extends ConsumerState<VerifyEmail> {
               color: grey900,
             ),
           ),
-
           SizedBox(height: 24.h),
-
           MyButton(type: MyButtonType.FILLED,labelColor: light1,backgroundColor: blue,foregroundColor: light1, label: 'Resend email',onPressed: _sendVerificationEmail),
-
           SizedBox(height: 24.h),
-
           MyButton(type: MyButtonType.OUTLINED,labelColor: blue,backgroundColor: Colors.transparent,foregroundColor: blue, label: 'Cancel',onPressed: _signOut),
-
-
         ],
       ),
     );

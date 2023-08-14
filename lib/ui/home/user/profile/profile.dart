@@ -24,6 +24,7 @@ import '../../../../ui_items/my_label.dart';
 import '../../../../ui_items/my_profile_tile.dart';
 import '../../../../ui_items/my_responsive_layout.dart';
 import '../../../../utils/constants.dart';
+import '../../../../utils/method_helper.dart';
 import '../appointments_history/content/appointments_cancelled.dart';
 import 'content/security.dart';
 
@@ -40,7 +41,6 @@ class ProfileState extends ConsumerState<Profile> {
   void dispose() {
     super.dispose();
   }
-
 
   Future pickImage() async{
     ///TODO: Fazer try catch e tratar de configurações
@@ -90,112 +90,67 @@ class ProfileState extends ConsumerState<Profile> {
                   backgroundColor: light1,
                   backgroundImage: ref.watch(imagePathProvider) != PROFILE_IMAGE_DIRECTORY ? Image.file(File(ref.watch(imagePathProvider))).image : Image.asset(PROFILE_IMAGE_DIRECTORY).image,
                   child: Stack(
-                      children: [
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: SizedBox(
-                            width: 30.w,
-                            height: 30.h,
-                            child: CircleAvatar(
-                              radius: 18,
-                              backgroundColor: blue,
-                              child: Icon(IconlyBold.edit,color: light1,size: 16.sp),
-                            ),
+                    children: [
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: SizedBox(
+                          width: 30.w,
+                          height: 30.h,
+                          child: CircleAvatar(
+                            radius: 18,
+                            backgroundColor: blue,
+                            child: Icon(IconlyBold.edit,color: light1,size: 16.sp),
                           ),
                         ),
-                      ]
+                      ),
+                    ]
                   ),
                 ),
               ),
             ),
-
             SizedBox(height: 12.h),
-
             MyLabel(
               type: MyLabelType.H4,
               fontWeight: MyLabel.BOLD,
               label: 'Andrew Ainsley',
               color: grey900,
             ),
-
             SizedBox(height: 8.h),
-
             MyLabel(
               type: MyLabelType.BODY_MEDIUM,
               fontWeight: MyLabel.SEMI_BOLD,
               label: '+1 111 467 378 399',
               color: grey900,
             ),
-
             SizedBox(height: 24.h),
-
             Divider(
               color: grey200,
               thickness: 1.0,
             ),
-
             SizedBox(height: 24.h),
-
             Column(
               children: [
-
                 MyProfileTile(type: MyProfileTileType.GENERAL,icon: IconlyLight.profile,label: 'Edit Profile',onTap: (){
-                  pushNewScreen(
-                    context,
-                    screen: EditProfile(),
-                    withNavBar: false,
-                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                  );
+                  MethodHelper.switchPage(context, PageNavigatorType.PUSH_NEW_PAGE, const EditProfile(), null);
                 }),
-
                 SizedBox(height: 20.h),
-
                 MyProfileTile(type: MyProfileTileType.GENERAL,icon: IconlyLight.notification,label: 'Notifications',onTap: (){
-                  pushNewScreen(
-                    context,
-                    screen: EditNotifications(),
-                    withNavBar: false,
-                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                  );
+                  MethodHelper.switchPage(context, PageNavigatorType.PUSH_NEW_PAGE, const EditNotifications(), null);
                 }),
-
                 SizedBox(height: 20.h),
-
                 MyProfileTile(type: MyProfileTileType.GENERAL,icon: IconlyLight.shield_done,label: 'Security',onTap: (){
-                  pushNewScreen(
-                    context,
-                    screen: Security(),
-                    withNavBar: false,
-                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                  );
+                  MethodHelper.switchPage(context, PageNavigatorType.PUSH_NEW_PAGE, const Security(), null);
                 }),
-
                 SizedBox(height: 20.h),
-
                 MyProfileTile(type: MyProfileTileType.GENERAL,icon: IconlyLight.more_square,label: 'Language',onTap: (){
-                  pushNewScreen(
-                    context,
-                    screen: EditLanguage(),
-                    withNavBar: false,
-                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                  );
+                  MethodHelper.switchPage(context, PageNavigatorType.PUSH_NEW_PAGE, const EditLanguage(), null);
                 }),
-
                 SizedBox(height: 20.h),
-
                 MyProfileTile(type: MyProfileTileType.GENERAL,icon: IconlyLight.user_1,label: 'Invite Friends',onTap: (){
-                  pushNewScreen(
-                    context,
-                    screen: InviteFriends(),
-                    withNavBar: false,
-                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                  );
+                  MethodHelper.switchPage(context, PageNavigatorType.PUSH_NEW_PAGE, const InviteFriends(), null);
                 }),
-
                 SizedBox(height: 20.h),
-
                 MyProfileTile(type: MyProfileTileType.GENERAL,icon: IconlyLight.logout,label: 'Logout',isLogout: true,onTap: _signOut),
-
               ],
             )
           ],
@@ -203,5 +158,4 @@ class ProfileState extends ConsumerState<Profile> {
       ),
     );
   }
-
 }
