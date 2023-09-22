@@ -33,17 +33,17 @@ class FillProfileState extends ConsumerState<FillProfile> {
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _dateOfBirthController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _phoneNumberController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
   bool _firstNameHasError = false;
   bool _lastNameHasError = false;
   bool _dateOfBirthHasError = false;
   bool _emailHasError = false;
-  bool _phoneNumberHasError = false;
+  bool _phoneHasError = false;
   bool _isFirstNameFocused = false;
   bool _isLastNameFocused = false;
   bool _isDateOfBirthFocused = false;
   bool _isEmailFocused = false;
-  bool _isPhoneNumberFocused = false;
+  bool _isPhoneFocused = false;
 
   @override
   void initState() {
@@ -59,7 +59,7 @@ class FillProfileState extends ConsumerState<FillProfile> {
     _lastNameController.dispose();
     _dateOfBirthController.dispose();
     _emailController.dispose();
-    _phoneNumberController.dispose();
+    _phoneController.dispose();
     super.dispose();
   }
 
@@ -67,7 +67,7 @@ class FillProfileState extends ConsumerState<FillProfile> {
   ///
   /// This function retrieves data from context providers and inserts the initial values
   /// into the corresponding text editing controllers, such as [_firstNameController],
-  /// [_lastNameController], [_dateOfBirthController], [_emailController], and [_phoneNumberController].
+  /// [_lastNameController], [_dateOfBirthController], [_emailController], and [_phoneController].
   ///
   /// Returns: void
   void _insertInitialTextEditingControllersValues() {
@@ -76,14 +76,14 @@ class FillProfileState extends ConsumerState<FillProfile> {
     String lastName = ref.read(lastNameProvider);
     String dateOfBirth = ref.read(dateOfBirthProvider);
     String email = ref.read(emailProvider);
-    String phoneNumber = ref.read(phoneNumberProvider);
+    String phone = ref.read(phoneProvider);
 
     // Insert values into text editing controllers.
     _firstNameController.text = firstName;
     _lastNameController.text = lastName;
     _dateOfBirthController.text = dateOfBirth;
     _emailController.text = email;
-    _phoneNumberController.text = phoneNumber;
+    _phoneController.text = phone;
   }
 
   /// Saves form values and navigates to the next page if form validation is successful.
@@ -93,14 +93,14 @@ class FillProfileState extends ConsumerState<FillProfile> {
   /// After saving the values, it navigates to the [CreatePassword] page.
   ///
   /// Returns: A [Future] that completes when the form values are saved and navigation is performed.
-  Future<void> _saveValues() async {
+  Future _saveValues() async {
     if (_formKey.currentState!.validate()) {
       // Save form values to corresponding providers.
       FillProfileModelImp().setValue(firstNameProvider.notifier, ref, _firstNameController.text.trim());
       FillProfileModelImp().setValue(lastNameProvider.notifier, ref, _lastNameController.text.trim());
       FillProfileModelImp().setValue(dateOfBirthProvider.notifier, ref, _dateOfBirthController.text.trim());
       FillProfileModelImp().setValue(emailProvider.notifier, ref, _emailController.text.trim());
-      FillProfileModelImp().setValue(phoneNumberProvider.notifier, ref, _phoneNumberController.text.trim());
+      FillProfileModelImp().setValue(phoneProvider.notifier, ref, _phoneController.text.trim());
 
       // Navigate to the next page.
       MethodHelper.switchPage(context, PageNavigatorType.PUSH, const CreatePassword(), widget);
@@ -120,18 +120,35 @@ class FillProfileState extends ConsumerState<FillProfile> {
     // Use ImagePicker to pick an image from the gallery.
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
 
+    // Define the maximum file size in bytes.
+    var maxFileSizeInBytes = MAX_FILE_SIZE_UPLOAD_IN_BYTES;
+
     // If no image is picked, return.
     if (image == null) return;
 
-    // Get the selected image's path.
-    String imagePath = image.path;
+    // Read the image as bytes.
+    var imageAsBytes = await image.readAsBytes();
 
-    // Update the image path provider using FillProfileModelImp().
-    FillProfileModelImp().setValue(imagePathProvider.notifier, ref, imagePath);
+    // Check if the image size is within the allowed limit.
+    if (imageAsBytes.length <= maxFileSizeInBytes) {
+      // Get the selected image's path.
+      String imagePath = image.path;
 
-    // Update the widget state to reflect the change.
-    setState(() {});
+      // Update the image path provider using FillProfileModelImp().
+      FillProfileModelImp().setValue(imagePathProvider.notifier, ref, imagePath);
+
+      // Update the widget state to reflect the change.
+      setState(() {});
+    } else {
+      // Display a warning dialog if the image size exceeds the limit.
+      MethodHelper.showDialogAlert(
+        context,
+        MyDialogType.WARNING,
+        'The size of the picture should be under $MAX_FILE_SIZE MB.',
+      );
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -302,21 +319,21 @@ class FillProfileState extends ConsumerState<FillProfile> {
                   SizedBox(height: 24.h),
                   MyTextFormField(
                     type: MyTextFormFieldType.PHONE,
-                    textEditingController: _phoneNumberController,
+                    textEditingController: _phoneController,
                     label: 'Phone number',
                     contentPaddingHeight: 18,
-                    hasError: _phoneNumberHasError,
+                    hasError: _phoneHasError,
                     errorText: 'Phone number should have the format: 9XYYYYYYY',
-                    isFieldFocused: _isPhoneNumberFocused,
+                    isFieldFocused: _isPhoneFocused,
                     onFocusChange: (hasFocus){
-                      setState(() {_isPhoneNumberFocused = hasFocus;});
+                      setState(() {_isPhoneFocused = hasFocus;});
                     },
                     validator: (value){
                       if(value == null || value.isEmpty || !Validators.isPhoneValid(value)){
-                        setState(() {_phoneNumberHasError = true;});
+                        setState(() {_phoneHasError = true;});
                         return '';
                       }
-                      setState(() {_phoneNumberHasError = false;});
+                      setState(() {_phoneHasError = false;});
                       return null;
                     }
                   ),

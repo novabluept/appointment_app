@@ -34,23 +34,23 @@ class AuthObserverState extends ConsumerState<AuthObserver> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         body: StreamBuilder<User?>(
-            stream: FirebaseAuth.instance.authStateChanges(),
-            builder: (context,snapshot){
-              if(snapshot.connectionState == ConnectionState.waiting){
-                return Center(
-                  child: SpinKitRing(
-                    color: blue,
-                    size: 60.w,
-                  ),
-                );
-              }else if(snapshot.hasError) {
-                return const Text('has error');
-              }else if(snapshot.hasData){
-                return const VerifyEmail();
-              }else{
-                return const Login();
-              }
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context,snapshot){
+            if(snapshot.connectionState == ConnectionState.waiting){
+              return Center(
+                child: SpinKitRing(
+                  color: blue,
+                  size: 60.w,
+                ),
+              );
+            }else if(snapshot.hasError) {
+              return const Text('has error');
+            }else if(snapshot.hasData){
+              return const VerifyEmail();
+            }else{
+              return const Login();
             }
+          }
         ),
       ),
     );

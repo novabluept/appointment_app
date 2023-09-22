@@ -59,8 +59,8 @@ class ChooseShopState extends ConsumerState<ChooseShop> {
     ChooseShopViewModelImp().setValue(currentShopIndexProvider.notifier, ref, index);
 
     // Clear the lists of professionals and services
-    ChooseShopViewModelImp().setValue(listProfessionals.notifier, ref, <UserModel>[]);
-    ChooseShopViewModelImp().setValue(listServices.notifier, ref, <ServiceModel>[]);
+    ChooseShopViewModelImp().setValue(listProfessionalsProvider.notifier, ref, <UserModel>[]);
+    ChooseShopViewModelImp().setValue(listServicesProvider.notifier, ref, <ServiceModel>[]);
 
     // Navigate back after a delay
     Timer(Duration(milliseconds: TRANSITION_DURATION), () {
@@ -88,7 +88,7 @@ class ChooseShopState extends ConsumerState<ChooseShop> {
   Widget mobileBody(){
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 24.w),
-      child: _shopsList(ref.read(listShops))
+      child: _shopsList(ref.read(listShopsProvider))
     );
   }
 

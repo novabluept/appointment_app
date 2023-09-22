@@ -29,8 +29,9 @@ class MyProfileTile extends ConsumerWidget {
   }
 
   Widget generalProfileTile(){
-    return GestureDetector(
+    return InkWell(
       onTap: onTap,
+      overlayColor: MaterialStateProperty.all(light1),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

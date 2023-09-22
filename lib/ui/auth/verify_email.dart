@@ -52,7 +52,7 @@ class VerifyEmailState extends ConsumerState<VerifyEmail> {
   /// If an error occurs during the verification email sending process, a generic error message is shown.
   ///
   /// Returns: A [Future] that completes when the verification email sending process is finished.
-  Future<void> _sendVerificationEmail() async {
+  Future _sendVerificationEmail() async {
     // Initiate the process of sending a verification email using VerifyEmailModelImp().
     await VerifyEmailModelImp().sendEmailVerification().catchError((e) {
       MethodHelper.showDialogAlert(context, MyDialogType.WARNING, 'Something went wrong. Please try again later.');
@@ -66,7 +66,7 @@ class VerifyEmailState extends ConsumerState<VerifyEmail> {
   /// the current user's email verification status. If the email is verified, any active timer is cancelled.
   ///
   /// Returns: A [Future] that completes when the email verification check is finished.
-  Future<void> _checkEmailVerified() async {
+  Future _checkEmailVerified() async {
     // Reload the current user's information to ensure the latest email verification status.
     await FirebaseAuth.instance.currentUser!.reload();
 
@@ -84,7 +84,7 @@ class VerifyEmailState extends ConsumerState<VerifyEmail> {
   /// This function initiates the sign-out process using [VerifyEmailModelImp().signOut()].
   ///
   /// Returns: A [Future] that completes when the sign-out process is finished.
-  Future<void> _signOut() async {
+  Future _signOut() async {
     // Initiate the sign-out process using VerifyEmailModelImp().
     await VerifyEmailModelImp().signOut();
   }

@@ -20,8 +20,9 @@ class MyAppointmentTile extends ConsumerWidget {
   final bool hasButtons;
   final Function()? negativeButtonOnPressed;
   final Function()? positiveButtonOnPressed;
+  final Function()? sendSms;
 
-  const MyAppointmentTile({super.key, required this.type, this.index,this.appointment,this.hasButtons = false,this.negativeButtonOnPressed,this.positiveButtonOnPressed});
+  const MyAppointmentTile({super.key, required this.type, this.index,this.appointment,this.hasButtons = false,this.negativeButtonOnPressed,this.positiveButtonOnPressed,this.sendSms});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -133,7 +134,7 @@ class MyAppointmentTile extends ConsumerWidget {
                           size: 24.sp,
                           color: blue,
                         ),
-                        onPressed: () {},
+                        onPressed: sendSms,
                       ),
                     ),
                   )
@@ -319,7 +320,7 @@ class MyAppointmentTile extends ConsumerWidget {
                         child: MyButton(
                           type: MyButtonType.FILLED,
                           labelColor: light1,
-                          backgroundColor: blue,
+                          backgroundColor: light1,
                           foregroundColor: light1,
                           label: 'Cancel Appointment',
                           height: 32,
@@ -338,7 +339,7 @@ class MyAppointmentTile extends ConsumerWidget {
                         child: MyButton(
                           type: MyButtonType.FILLED,
                           labelColor: light1,
-                          backgroundColor: blue,
+                          backgroundColor: light1,
                           foregroundColor: light1,
                           label: 'Reschedule',
                           height: 32,

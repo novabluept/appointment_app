@@ -46,7 +46,7 @@ class ForgotPasswordState extends ConsumerState<ForgotPassword> {
   /// - [email]: The email address to which the password reset email will be sent.
   ///
   /// Returns: A [Future] that completes when the password reset email sending process is finished.
-  Future<void> _sendPasswordResetByEmail(String email) async {
+  Future _sendPasswordResetByEmail(String email) async {
     // Check if the device has an internet connection.
     if (await MethodHelper.hasInternetConnection()) {
       // Validate the form using _formKey.

@@ -37,7 +37,7 @@ class ChooseServiceState extends ConsumerState<ChooseService> with AutomaticKeep
 
   /// Fetches a list of service models associated with a specific professional and shop from the database.
   ///
-  /// This function retrieves the current professional's [userId] and the current shop's [shopId] from the context's providers. It then uses the [ChooseServiceViewModelImp] to get the services by professional and shop, and updates the [listServices] notifier using [MakeAppointmentScreenViewModelImp]. It returns a list of [ServiceModel] instances after a delay of [LOAD_DATA_DURATION] milliseconds.
+  /// This function retrieves the current professional's [userId] and the current shop's [shopId] from the context's providers. It then uses the [ChooseServiceViewModelImp] to get the services by professional and shop, and updates the [listServicesProvider] notifier using [MakeAppointmentScreenViewModelImp]. It returns a list of [ServiceModel] instances after a delay of [LOAD_DATA_DURATION] milliseconds.
   ///
   /// Returns:
   ///   - A future containing a list of [ServiceModel] instances.
@@ -48,7 +48,7 @@ class ChooseServiceState extends ConsumerState<ChooseService> with AutomaticKeep
     List<ServiceModel> list = await ChooseServiceViewModelImp().getServicesByProfessionalShop(userId, shopId);
 
     // Update the list of services in the notifier
-    ChooseServiceViewModelImp().setValue(listServices.notifier, ref, list);
+    ChooseServiceViewModelImp().setValue(listServicesProvider.notifier, ref, list);
 
     // Return the list of services after a delay
     return await Future.delayed(Duration(milliseconds: LOAD_DATA_DURATION), () => list);
@@ -112,7 +112,7 @@ class ChooseServiceState extends ConsumerState<ChooseService> with AutomaticKeep
 
   Widget mobileBody(){
 
-    List<ServiceModel> list = ref.read(listServices);
+    List<ServiceModel> list = ref.read(listServicesProvider);
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 24.w),

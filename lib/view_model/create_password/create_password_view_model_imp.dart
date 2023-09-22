@@ -25,5 +25,4 @@ class CreatePasswordModelImp implements CreatePasswordViewModel{
   Future sendEmailVerification() async{
     return await sendEmailVerificationRef();
   }
-
 }

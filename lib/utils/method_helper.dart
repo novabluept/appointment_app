@@ -135,7 +135,7 @@ class MethodHelper{
         format: fileFormat == 'png' ? CompressFormat.png : CompressFormat.jpeg,
         file.absolute.path,
         targetPath,
-        quality: 80,
+        quality: 50,
       );
     } catch (e) {
       debugPrint(e.toString());
@@ -159,7 +159,7 @@ class MethodHelper{
     FillProfileModelImp().setValue(lastNameProvider.notifier, ref, '');
     FillProfileModelImp().setValue(dateOfBirthProvider.notifier, ref, '');
     FillProfileModelImp().setValue(emailProvider.notifier, ref, '');
-    FillProfileModelImp().setValue(phoneNumberProvider.notifier, ref, '');
+    FillProfileModelImp().setValue(phoneProvider.notifier, ref, '');
   }
 
   /// Returns a File object representing a default profile image.

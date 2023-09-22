@@ -62,19 +62,19 @@ class AppointmentsCompletedState extends ConsumerState<AppointmentsCompleted> wi
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: StreamBuilder(
-          stream: getAppointmentsByUserRef(AppointmentStatus.COMPLETED),
-          builder: (BuildContext context, AsyncSnapshot<List<AppointmentModel>> snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return _completedAppointmentListShimmer();
-            } else if (snapshot.hasError) {
-              return const MyException(type: MyExceptionType.GENERAL,imagePath: 'images/blue/warning_image.svg',firstLabel: 'Something went wrong',secondLabel: 'Please try again later.',);
-            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return const MyException(type: MyExceptionType.GENERAL,imagePath: 'images/blue/no_data_image.svg',firstLabel: 'There is no data available',secondLabel: 'You have no appointments completed at the moment.',);
-            } else {
-              List<AppointmentModel> list = snapshot.data!;
-              return _completedAppointmentList(list);
-            }
+        stream: getAppointmentsByUserRef(AppointmentStatus.COMPLETED),
+        builder: (BuildContext context, AsyncSnapshot<List<AppointmentModel>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return _completedAppointmentListShimmer();
+          } else if (snapshot.hasError) {
+            return const MyException(type: MyExceptionType.GENERAL,imagePath: 'images/blue/warning_image.svg',firstLabel: 'Something went wrong',secondLabel: 'Please try again later.',);
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const MyException(type: MyExceptionType.GENERAL,imagePath: 'images/blue/no_data_image.svg',firstLabel: 'There is no data available',secondLabel: 'You have no appointments completed at the moment.',);
+          } else {
+            List<AppointmentModel> list = snapshot.data!;
+            return _completedAppointmentList(list);
           }
+        }
       ),
     );
   }

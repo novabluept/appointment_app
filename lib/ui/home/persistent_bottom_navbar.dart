@@ -11,6 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:iconly/iconly.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
+import '../../data_ref/users_ref.dart';
 import '../../state_management/persistent_bottom_navbar_state.dart';
 import '../../style/general_style.dart';
 import '../../ui_items/my_label.dart';
@@ -25,8 +26,6 @@ class PersistentBottomNavbar extends ConsumerStatefulWidget {
 }
 
 class PersistentBottomNavbarState extends ConsumerState<PersistentBottomNavbar> {
-
-  final PersistentTabController _controller = PersistentTabController(initialIndex: 0);
 
   @override
   void initState() {
@@ -138,16 +137,17 @@ class PersistentBottomNavbarState extends ConsumerState<PersistentBottomNavbar> 
     );
   }
 
-  Future<UserModel> getUser() async{
-    UserModel user = await PersistentBottomNavbarViewModelImp().getUser();
-    PersistentBottomNavbarViewModelImp().setValue(currentUserProvider.notifier, ref, user);
-    return user;
+
+  Future<UserRole> getUserStatusAndSetImage(WidgetRef ref) async{
+    UserRole role = await PersistentBottomNavbarViewModelImp().getUserStatusAndSetImage(ref);
+    return role;
   }
+
 
   Widget mobileBody(){
     return FutureBuilder(
-      future: getUser(),
-      builder: (BuildContext context, AsyncSnapshot<UserModel> snapshot) {
+      future: getUserStatusAndSetImageRef(ref),
+      builder: (BuildContext context, AsyncSnapshot<UserRole> snapshot) {
         if(snapshot.connectionState == ConnectionState.waiting){
           return Center(
             child: SpinKitRing(
@@ -159,14 +159,14 @@ class PersistentBottomNavbarState extends ConsumerState<PersistentBottomNavbar> 
           return const Text('has error');
         }else{
 
-          UserModel? user = snapshot.data;
+          UserRole? role = snapshot.data;
 
-          List<Widget> screens = user?.role == UserRole.USER.name ? _buildScreensUser() : _buildScreensTest();
-          List<PersistentBottomNavBarItem> navBarsItems = user?.role == UserRole.USER.name ? _navBarsItemsUser() : _navBarsItemsTest();
+          List<Widget> screens = role == UserRole.USER ? _buildScreensUser() : _buildScreensTest();
+          List<PersistentBottomNavBarItem> navBarsItems = role == UserRole.USER ? _navBarsItemsUser() : _navBarsItemsTest();
 
           return PersistentTabView(
             context,
-            controller: _controller,
+            controller: ref.watch(controllerPersistentBottomNavbarProvider),
             screens: screens,
             items: navBarsItems,
             navBarHeight: kBottomNavigationBarHeight.h,

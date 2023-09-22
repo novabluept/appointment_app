@@ -24,7 +24,7 @@ import '../utils/method_helper.dart';
 /// Returns: A [Stream] that emits lists of [AppointmentModel] instances matching the criteria.
 Stream<List<AppointmentModel>> getAppointmentsByProfessionalShopStatusDateRef(String professionalId,String shopId,AppointmentStatus status,String date) async*{
 
-  var db = await FirebaseFirestore.instance;
+  var db = FirebaseFirestore.instance;
 
   debugPrint("col_professionalId: "+professionalId);
   debugPrint("col_shopId: "+shopId);
@@ -52,7 +52,7 @@ Stream<List<AppointmentModel>> getAppointmentsByProfessionalShopStatusDateRef(St
 /// - [appointment]: The [AppointmentModel] instance representing the appointment to be added.
 ///
 /// Returns: A [Future] that completes when the appointment is successfully added.
-Future<void> addAppointmentRef(AppointmentModel appointment) async {
+Future addAppointmentRef(AppointmentModel appointment) async {
   // Create a new document reference within the "appointments" collection.
   final docAppointment = FirebaseFirestore.instance.collection(FirebaseCollections.APPOINTMENT.name).doc();
 
@@ -86,7 +86,7 @@ Stream<List<AppointmentModel>> getAppointmentsByUserRef(AppointmentStatus status
   List<AppointmentModel> list = [];
 
   // Get a reference to the Firebase Firestore instance.
-  var db = await FirebaseFirestore.instance;
+  var db = FirebaseFirestore.instance;
 
   // Listen to snapshots from the Firestore collection based on user's appointments.
   await for (var querySnapshot in db
@@ -122,9 +122,9 @@ Stream<List<AppointmentModel>> getAppointmentsByUserRef(AppointmentStatus status
 /// - [fields]: A [Map] containing the fields and their updated values.
 ///
 /// Returns: A [Future] that completes when the appointment fields are successfully updated.
-Future<void> updateAppointmentRef(String appointmentId, Map<String, dynamic> fields) async {
+Future updateAppointmentRef(String appointmentId, Map<String, dynamic> fields) async {
   // Get a reference to the Firebase Firestore instance.
-  var db = await FirebaseFirestore.instance;
+  var db = FirebaseFirestore.instance;
 
   // Update the specified fields of the appointment document.
   await db.collection(FirebaseCollections.APPOINTMENT.name)

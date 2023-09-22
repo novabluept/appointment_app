@@ -23,15 +23,14 @@ Future<List<ServiceModel>> getServicesByUserShopRef(
   List<ServiceModel> list = [];
 
   // Get a reference to the Firebase Firestore instance.
-  var db = await FirebaseFirestore.instance;
+  var db = FirebaseFirestore.instance;
 
   // Fetch services based on professional and shop IDs.
   await db.collection(FirebaseCollections.SERVICE.name)
       .where(ServiceModel.col_professionalId, isEqualTo: professionalId)
       .where(ServiceModel.col_shopId, isEqualTo: shopId)
       .get()
-      .then(
-        (querySnapshot) {
+      .then((querySnapshot) {
       for (var docSnapshot in querySnapshot.docs) {
         // Add the fetched service details to the list.
         list.add(ServiceModel.fromJson(docSnapshot.data()));

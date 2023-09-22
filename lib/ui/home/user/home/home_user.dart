@@ -40,7 +40,7 @@ class HomeUserState extends ConsumerState<HomeUser> {
   Future<List<ShopModel>> _getShops() async{
     List<ShopModel> list = [];
     list = await HomeUserModelImp().getShops();
-    HomeUserModelImp().setValue(listShops.notifier, ref, list);
+    HomeUserModelImp().setValue(listShopsProvider.notifier, ref, list);
     /// Selecionar a shop
     ShopModel shop = ref.read(currentShopProvider) != ShopModel(imagePath: '', imageUnit8list: null, name: '', city: '', state: '', streetName: '', zipCode: '',professionals: []) ? ref.read(currentShopProvider) : list[0];
 
@@ -51,21 +51,20 @@ class HomeUserState extends ConsumerState<HomeUser> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: grey50,
+      appBar: MyAppBar(
+        type: MyAppBarType.LEADING_SUFFIX_ICON,
+        label: 'Profile',
         backgroundColor: grey50,
-        appBar: MyAppBar(
-          type: MyAppBarType.LEADING_SUFFIX_ICON,
-          label: 'Profile',
-          backgroundColor: grey50,
-          height: kToolbarHeight,
-          leadingIcon: IconlyLight.notification,
-          suffixIcon: IconlyLight.notification,
-          user: ref.watch(currentUserProvider),
-          onTap: (){
-            MethodHelper.switchPage(context, PageNavigatorType.PUSH_NEW_PAGE, const Notifications(), null);
-          },
-        ),
-        resizeToAvoidBottomInset : true,
-        body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())
+        height: kToolbarHeight,
+        leadingIcon: IconlyLight.notification,
+        suffixIcon: IconlyLight.notification,
+        onTap: (){
+          MethodHelper.switchPage(context, PageNavigatorType.PUSH_NEW_PAGE, const Notifications(), null);
+        },
+      ),
+      resizeToAvoidBottomInset : true,
+      body: MyResponsiveLayout(mobileBody: mobileBody(), tabletBody: mobileBody())
     );
   }
 
@@ -144,7 +143,7 @@ class HomeUserState extends ConsumerState<HomeUser> {
   }
 
   Widget mobileBody(){
-    List<ShopModel> list = ref.watch(listShops);
+    List<ShopModel> list = ref.watch(listShopsProvider);
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: Column(

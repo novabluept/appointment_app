@@ -72,7 +72,7 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
   /// If successful, the user's details are added in Firebase Authentication.
   ///
   /// Returns: A [Future] that completes when the sign-up and user details addition are finished.
-  Future<void> _signUpAndAddUserDetails() async {
+  Future _signUpAndAddUserDetails() async {
     // Check for internet connection using MethodHelper.
     if (await MethodHelper.hasInternetConnection()) {
       // Validate the form input using the _formKey.
@@ -101,7 +101,7 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
   /// - [password]: The password for the new user account.
   ///
   /// Returns: A [Future] that completes when the sign-up and user details addition are finished.
-  Future<void> _signUp(String email, String password) async {
+  Future _signUp(String email, String password) async {
     await CreatePasswordModelImp().signUp(email.trim(), password.trim()).then((value) async {
       String imagePath = ref.read(imagePathProvider);
       final image = File(imagePath);
@@ -109,7 +109,7 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
       final lastName = ref.read(lastNameProvider);
       final dateOfBirth = ref.read(dateOfBirthProvider);
       final email = ref.read(emailProvider);
-      final phone = ref.read(phoneNumberProvider);
+      final phone = ref.read(phoneProvider);
 
       final userId = FirebaseAuth.instance.currentUser?.uid;
 
@@ -145,7 +145,7 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
   ///
   /// Returns: A [Future] that completes when the user details addition, profile picture addition,
   /// and email verification process are finished.
-  Future<void> _addUserDetails(
+  Future _addUserDetails(
       String userId, File image, String firstName, String lastName,
       String dateOfBirth, String email, String phone
       ) async {
@@ -182,7 +182,7 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
   /// - [pathToSave]: The path under which the profile picture should be saved in Firebase Storage.
   ///
   /// Returns: A [Future] that completes when the profile picture addition process is finished.
-  Future<void> _addProfilePicture(File file, String pathToSave) async {
+  Future _addProfilePicture(File file, String pathToSave) async {
     await CreatePasswordModelImp().addUserPicture(file, pathToSave).catchError((onError) {
       MethodHelper.showDialogAlert(context, MyDialogType.WARNING, 'Something went wrong. Please try again later.');
     });
@@ -196,7 +196,7 @@ class CreatePasswordState extends ConsumerState<CreatePassword> {
   /// and removes the current page from the navigation stack.
   ///
   /// Returns: A [Future] that completes when the email verification process is finished.
-  Future<void> _sendEmailVerification() async {
+  Future _sendEmailVerification() async {
     await CreatePasswordModelImp().sendEmailVerification().then((value) {
       MethodHelper.clearFillProfileControllers(ref);
       MethodHelper.switchPage(context, PageNavigatorType.PUSH_REMOVE_UNTIL, const AuthObserver(), widget);

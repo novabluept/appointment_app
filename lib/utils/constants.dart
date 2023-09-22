@@ -14,5 +14,9 @@ const DATE_HOUR_MINUTE_FORMAT = 'HH:mm';
 /// Default profile image directory
 const PROFILE_IMAGE_DIRECTORY = 'images/fill_profile_image.png';
 
-///
+/// Appointments
 const INTERVAL_SLOT = 5;
+
+/// Max file size upload
+const MAX_FILE_SIZE = 1;
+const MAX_FILE_SIZE_UPLOAD_IN_BYTES = MAX_FILE_SIZE * 1048576; // MAX_SIZE_FILE * 1MB

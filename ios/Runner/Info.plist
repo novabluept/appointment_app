@@ -53,5 +53,10 @@
     <string>Please grant camera access</string>
     <key>NSMicrophoneUsageDescription</key>
     <string>Please grant microphone access</string>
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+      <string>sms</string>
+      <string>tel</string>
+    </array>
 </dict>
 </plist>

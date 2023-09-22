@@ -39,7 +39,7 @@ class ChooseProfessionalState extends ConsumerState<ChooseProfessional> with Aut
   /// Retrieves a list of professional users associated with the current shop from Firebase.
   ///
   /// This function retrieves a list of [UserModel] instances using [ChooseProfessionalViewModelImp().getProfessionalUsersByShop(ref)].
-  /// The retrieved list of professionals is then stored in the [listProfessionals] state variable using [MakeAppointmentScreenViewModelImp().setValue()].
+  /// The retrieved list of professionals is then stored in the [listProfessionalsProvider] state variable using [MakeAppointmentScreenViewModelImp().setValue()].
   /// The function returns the list of professional users after a delay of [LOAD_DATA_DURATION] milliseconds.
   ///
   /// Returns: A [Future] containing the list of professional users associated with the current shop.
@@ -47,7 +47,7 @@ class ChooseProfessionalState extends ConsumerState<ChooseProfessional> with Aut
     // Retrieve the list of professional users associated with the current shop.
     List<UserModel> list = await ChooseProfessionalViewModelImp().getProfessionalUsersByShop(ref);
     // Store the retrieved list of professionals in the listProfessionals state variable.
-    ChooseProfessionalViewModelImp().setValue(listProfessionals.notifier, ref, list);
+    ChooseProfessionalViewModelImp().setValue(listProfessionalsProvider.notifier, ref, list);
     // Return the list of professional users after a delay.
     return await Future.delayed(Duration(milliseconds: LOAD_DATA_DURATION), () => list);
   }
@@ -85,7 +85,7 @@ class ChooseProfessionalState extends ConsumerState<ChooseProfessional> with Aut
   /// Debug information is printed for the [currentAppointmentIndexProvider].
   void _chooseProfessional(UserModel user, int index) {
     if (ref.read(currentProfessionalIndexProvider) != -1 && ref.read(currentProfessionalIndexProvider) != index) {
-      ChooseProfessionalViewModelImp().setValue(listServices.notifier, ref, <ServiceModel>[]);
+      ChooseProfessionalViewModelImp().setValue(listServicesProvider.notifier, ref, <ServiceModel>[]);
     }
     ChooseProfessionalViewModelImp().setValue(currentProfessionalProvider.notifier, ref, user);
     ChooseProfessionalViewModelImp().setValue(currentProfessionalIndexProvider.notifier, ref, index);
@@ -119,7 +119,7 @@ class ChooseProfessionalState extends ConsumerState<ChooseProfessional> with Aut
   }
 
   Widget mobileBody(){
-    List<UserModel> list = ref.read(listProfessionals);
+    List<UserModel> list = ref.read(listProfessionalsProvider);
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: list.isEmpty ? FutureBuilder(

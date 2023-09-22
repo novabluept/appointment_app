@@ -15,15 +15,16 @@ Future<List<ShopModel>> getShopsRef() async {
   List<ShopModel> list = [];
 
   // Get a reference to the Firebase Firestore instance.
-  var db = await FirebaseFirestore.instance;
+  var db = FirebaseFirestore.instance;
 
   // Fetch shops from the Firestore collection.
-  await db.collection(FirebaseCollections.SHOP.name).get().then(
-        (querySnapshot) {
-      for (var docSnapshot in querySnapshot.docs) {
-        // Add the fetched shop details to the list.
-        list.add(ShopModel.fromJson(docSnapshot.data()));
-      }
+  await db.collection(FirebaseCollections.SHOP.name)
+      .get()
+      .then((querySnapshot) {
+        for (var docSnapshot in querySnapshot.docs) {
+          // Add the fetched shop details to the list.
+          list.add(ShopModel.fromJson(docSnapshot.data()));
+        }
     },
     onError: (e) => debugPrint("Error completing: $e"),
   );

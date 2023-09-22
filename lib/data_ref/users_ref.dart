@@ -10,8 +10,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../model/user_model.dart';
 import '../state_management/choose_shop_state.dart';
+import '../state_management/persistent_bottom_navbar_state.dart';
 import '../utils/constants.dart';
 import '../utils/enums.dart';
+import '../view_model/persistent_bottom_navbar/persistent_bottom_navbar_view_model_imp.dart';
 
 /// Signs in a user using their email and password.
 ///
@@ -24,7 +26,7 @@ import '../utils/enums.dart';
 /// - [password]: The user's password.
 ///
 /// Returns: A [Future] that completes when the sign-in process is finished.
-Future<void> signInRef(String email, String password) async {
+Future signInRef(String email, String password) async {
   // Attempt to sign in the user using FirebaseAuth.
   await FirebaseAuth.instance.signInWithEmailAndPassword(
     email: email,
@@ -39,7 +41,7 @@ Future<void> signInRef(String email, String password) async {
 /// the user's information is retrieved and stored in Firebase Firestore.
 ///
 /// Returns: A [Future] that completes when the Google sign-in process is finished.
-Future<void> signInWithGoogleRef() async {
+Future signInWithGoogleRef() async {
   // Trigger the Google authentication flow
   final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
@@ -96,7 +98,7 @@ Future<void> signInWithGoogleRef() async {
 /// - [password]: The password for the new user account.
 ///
 /// Returns: A [Future] that completes when the account creation process is finished.
-Future<void> signUpRef(String email, String password) async {
+Future signUpRef(String email, String password) async {
   // Attempt to create a new user account using FirebaseAuth.
   await FirebaseAuth.instance.createUserWithEmailAndPassword(
     email: email,
@@ -113,7 +115,7 @@ Future<void> signUpRef(String email, String password) async {
 /// - [user]: The [UserModel] instance representing the user to be added.
 ///
 /// Returns: A [Future] that completes when the user is successfully added.
-Future<void> addUserRef(UserModel user) async {
+Future addUserRef(UserModel user) async {
   // Use the user's userId as the document ID.
   final docUser = FirebaseFirestore.instance
       .collection(FirebaseCollections.USER.name)
@@ -140,7 +142,7 @@ Future<void> addUserRef(UserModel user) async {
 /// - [pathToSave]: The path under which the image should be saved in Firebase Storage.
 ///
 /// Returns: A [Future] that completes when the image upload is finished.
-Future<void> addUserPictureRef(File file, String pathToSave) async {
+Future addUserPictureRef(File file, String pathToSave) async {
   // Check if the provided file represents the default profile image.
   if (file.path == PROFILE_IMAGE_DIRECTORY) {
     // Convert to an actual file representing the default profile image.
@@ -167,7 +169,7 @@ Future<void> addUserPictureRef(File file, String pathToSave) async {
 /// - [email]: The email address to which the password reset email will be sent.
 ///
 /// Returns: A [Future] that completes when the password reset email is sent.
-Future<void> sendPasswordResetEmailRef(String email) async {
+Future sendPasswordResetEmailRef(String email) async {
   // Send a password reset email using FirebaseAuth.
   await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
 }
@@ -179,7 +181,7 @@ Future<void> sendPasswordResetEmailRef(String email) async {
 /// email containing a link to verify their email address.
 ///
 /// Returns: A [Future] that completes when the email verification link is sent.
-Future<void> sendEmailVerificationRef() async {
+Future sendEmailVerificationRef() async {
   // Get the current user's information from FirebaseAuth.
   final user = FirebaseAuth.instance.currentUser!;
 
@@ -187,28 +189,54 @@ Future<void> sendEmailVerificationRef() async {
   await user.sendEmailVerification();
 }
 
-Future<UserModel> getUserRef() async {
-  // Get the UID of the current user from FirebaseAuth.
+Future<UserRole> getUserStatusAndSetImageRef(WidgetRef ref) async{
+
   String userId = FirebaseAuth.instance.currentUser!.uid;
+  var db = FirebaseFirestore.instance;
 
-  // Get a reference to the Firebase Firestore instance.
-  return await FirebaseFirestore.instance
-      .collection(FirebaseCollections.USER.name)
-      .doc(userId)
-      .get()
-      .then((documentSnapshot) async{
+  UserModel user;
 
-        Map<String, dynamic>? data = documentSnapshot.data();
-        UserModel user = UserModel.fromJson(data!);
+  return await db.collection(FirebaseCollections.USER.name)
+    .doc(userId)
+    .get()
+    .then((querySnapshot) async{
 
-        Uint8List? image = await MethodHelper.getImageAndConvertToUint8List(user.imagePath);
-        image != null ? user.imageUnit8list = image : user.imageUnit8list = null;
+      user = UserModel.fromJson(querySnapshot.data()!);
 
-        return user;
-      }
-    );
+      PersistentBottomNavbarViewModelImp().setValue(currentUserProvider.notifier, ref, user);
+
+      Uint8List? image = await MethodHelper.getImageAndConvertToUint8List(user.imagePath);
+      PersistentBottomNavbarViewModelImp().setValue(currentUserPictureProvider.notifier, ref, image);
+
+      return user.role == UserRole.USER.name ? UserRole.USER :
+      user.role == UserRole.USER.name ? UserRole.PROFESSIONAL :
+      UserRole.ADMIN;
+    },
+    onError: (e) => debugPrint("Error completing: $e"),
+  );
 
 }
+
+Future<Uint8List> getUserImage() async {
+  String userId = FirebaseAuth.instance.currentUser!.uid;
+
+  final documentSnapshot = await FirebaseFirestore.instance
+      .collection(FirebaseCollections.USER.name)
+      .doc(userId)
+      .get();
+
+  Map<String, dynamic>? data = documentSnapshot.data();
+  if (data != null) {
+    UserModel user = UserModel.fromJson(data);
+    Uint8List? image = await MethodHelper.getImageAndConvertToUint8List(user.imagePath);
+    return image ?? Uint8List(0);
+  } else {
+    return Uint8List(0);
+  }
+}
+
+
+
 
 /// Retrieves a list of users associated with the current shop from Firebase Firestore.
 ///
@@ -227,7 +255,7 @@ Future<List<UserModel>> getProfessionalUsersByShopRef(WidgetRef ref) async {
   List<UserModel> list = [];
 
   // Get a reference to the Firebase Firestore instance.
-  var db = await FirebaseFirestore.instance;
+  var db = FirebaseFirestore.instance;
 
   // Fetch users associated with the shop from the Firestore collection.
   await db.collection(FirebaseCollections.USER.name)
@@ -245,4 +273,16 @@ Future<List<UserModel>> getProfessionalUsersByShopRef(WidgetRef ref) async {
 
   // Return the list of fetched user models.
   return list;
+}
+
+Future updateUserRef(Map<String, dynamic> fields) async {
+
+  var db = FirebaseFirestore.instance;
+  var currentUser = FirebaseAuth.instance.currentUser!;
+
+  await db.collection(FirebaseCollections.USER.name)
+      .doc(currentUser.uid)
+      .update(fields)
+      .then((_) => debugPrint('Success'))
+      .catchError((error) => debugPrint('Failed: $error'));
 }

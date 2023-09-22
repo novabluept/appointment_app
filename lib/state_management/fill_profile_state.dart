@@ -7,5 +7,5 @@ final firstNameProvider = StateProvider<String>((ref) => '');
 final lastNameProvider = StateProvider<String>((ref) => '');
 final dateOfBirthProvider = StateProvider<String>((ref) => '');
 final emailProvider = StateProvider<String>((ref) => '');
-final phoneNumberProvider = StateProvider<String>((ref) => '');
+final phoneProvider = StateProvider<String>((ref) => '');
 

@@ -64,7 +64,7 @@ class LoginState extends ConsumerState<Login> {
   /// If an error occurs during the sign-in process, specific error messages are shown based on the error code.
   ///
   /// Returns: A [Future] that completes when the sign-in process is finished.
-  Future<void> _signIn() async {
+  Future _signIn() async {
     // Check if the device has an internet connection.
     if (await MethodHelper.hasInternetConnection()) {
       // Validate the form using _formKey.
@@ -99,7 +99,7 @@ class LoginState extends ConsumerState<Login> {
   /// If an error occurs during the sign-in process, the error is printed to the console.
   ///
   /// Returns: A [Future] that completes when the Google sign-in process is finished.
-  Future<void> _signInWithGoogle() async {
+  Future _signInWithGoogle() async {
     // Check if the device has an internet connection.
     if (await MethodHelper.hasInternetConnection()) {
       // Initiate the Google sign-in process using LoginViewModelImp().
